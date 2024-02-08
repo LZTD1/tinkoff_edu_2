@@ -1,6 +1,6 @@
 app:
-  telegramToken: ${TOKEN_TELEGRAM}
-  telegramName: ${NAME_TELEGRAM}
+  telegramToken: ${TELEGRAM_KEY}
+  telegramName: ${TELEGRAM_NAME}
 
 spring:
   application:

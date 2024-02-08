@@ -1,7 +1,7 @@
 package processor;
 
-import database.SimpleDatabase;
+import database.Database;
 
 @FunctionalInterface public interface MethodProcessor {
-    String get(String[] param, Long chatId, SimpleDatabase database);
+    String get(String[] param, Long chatId, Database database);
 }

@@ -2,6 +2,8 @@ package edu.java.bot;
 
 import database.SimpleDatabase;
 import edu.java.bot.configuration.ApplicationConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -13,6 +15,7 @@ import static processor.Processor.getAnswer;
 @Component
 public class BotComponent extends TelegramLongPollingBot {
 
+    private final static Logger LOGGER = LogManager.getLogger();
     private final ApplicationConfig config;
     private final SimpleDatabase database;
 
@@ -30,8 +33,7 @@ public class BotComponent extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "6375608618:AAEKmvE9RmWpGKY2L0Qam7CLTjvQOXfuZ1w";
-//        return config.telegramToken();
+        return config.telegramToken();
     }
 
     @Override
@@ -39,6 +41,8 @@ public class BotComponent extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
+
+            LOGGER.info("Пользователь {}, отправил - {}", chatId, messageText);
 
             sendMessage(
                 chatId,

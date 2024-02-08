@@ -50,6 +50,9 @@
             <version>6.9.7.0</version>
         </dependency>
 
+        <!-- Logging -->
+
+
         <!-- Dev Tools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

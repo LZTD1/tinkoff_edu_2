@@ -1,12 +1,13 @@
 package processor.methods;
 
-import database.SimpleDatabase;
+import database.Database;
 import processor.MethodProcessor;
+import static processor.Constants.DEFAULT_MESSAGE;
 
 public class Default implements MethodProcessor {
 
     @Override
-    public String get(String[] param, Long chatId, SimpleDatabase database) {
-        return "Упс, какая-то не ожиданная команда!";
+    public String get(String[] param, Long chatId, Database database) {
+        return DEFAULT_MESSAGE;
     }
 }

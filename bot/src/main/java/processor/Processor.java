@@ -1,6 +1,6 @@
 package processor;
 
-import database.SimpleDatabase;
+import database.Database;
 import java.util.HashMap;
 import java.util.Map;
 import processor.methods.Default;
@@ -12,9 +12,6 @@ import processor.methods.Untrack;
 
 public class Processor {
 
-    private Processor() {
-    }
-
     static Map<String, MethodProcessor> roads = new HashMap<>() {{
         put("/start", new Start());
         put("/help", new Help());
@@ -23,7 +20,10 @@ public class Processor {
         put("/list", new List());
     }};
 
-    public static String getAnswer(String text, Long chatId, SimpleDatabase database) {
+    private Processor() {
+    }
+
+    public static String getAnswer(String text, Long chatId, Database database) {
         String[] separated = separator(text);
         MethodProcessor answer = roads.getOrDefault(separated[0], new Default());
         return answer.get(separated, chatId, database);

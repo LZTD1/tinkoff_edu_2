@@ -1,5 +1,7 @@
 package edu.java.bot;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -10,7 +12,9 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Component
 public class Initializer {
+
     @Autowired BotComponent bot;
+    private final static Logger LOGGER = LogManager.getLogger();
 
     @EventListener({ContextRefreshedEvent.class})
     public void init() {
@@ -18,7 +22,7 @@ public class Initializer {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(bot);
         } catch (TelegramApiException e) {
-            // TODO logger
+            LOGGER.warn(e.getMessage());
         }
     }
 }
