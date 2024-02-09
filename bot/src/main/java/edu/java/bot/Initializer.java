@@ -13,8 +13,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @Component
 public class Initializer {
 
-    @Autowired BotComponent bot;
     private final static Logger LOGGER = LogManager.getLogger();
+    @Autowired BotComponent bot;
 
     @EventListener({ContextRefreshedEvent.class})
     public void init() {

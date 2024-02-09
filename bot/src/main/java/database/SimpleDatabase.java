@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SimpleDatabase implements Database {
 
-    private final Map<Long, List<String>> database;
     private final static Logger LOGGER = LogManager.getLogger();
+    private final Map<Long, List<String>> database;
 
     public SimpleDatabase() {
         this.database = new HashMap();
