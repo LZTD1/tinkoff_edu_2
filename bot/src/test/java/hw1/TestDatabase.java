@@ -1,7 +1,7 @@
 package hw1;
 
-import database.Database;
-import database.SimpleDatabase;
+import edu.java.database.Database;
+import edu.java.database.SimpleDatabase;
 import org.junit.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

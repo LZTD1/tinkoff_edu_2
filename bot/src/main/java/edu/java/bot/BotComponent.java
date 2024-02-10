@@ -1,7 +1,8 @@
 package edu.java.bot;
 
-import database.SimpleDatabase;
 import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.database.SimpleDatabase;
+import edu.java.processor.MethodProcessor;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +14,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import static processor.Processor.getAnswer;
+import static edu.java.processor.Processor.getAllCommands;
+import static edu.java.processor.Processor.getCommandByQuery;
 
 @Component
 public class BotComponent extends TelegramLongPollingBot {
@@ -49,21 +51,21 @@ public class BotComponent extends TelegramLongPollingBot {
 
             LOGGER.info("Пользователь {}, отправил - {}", chatId, messageText);
 
+            MethodProcessor processor = getCommandByQuery(messageText);
+
             sendMessage(
                 chatId,
-                getAnswer(messageText, chatId, database)
+                processor.get(update, database)
             ); // вот тут колхозно приходиться ее опрокидывать в методы
         }
     }
 
     private void setCommands() {
-        List<BotCommand> list = List.of(
-            new BotCommand("start", "зарегистрировать пользователя"),
-            new BotCommand("help", "вывести окно с командами"),
-            new BotCommand("track", "начать отслеживание ссылки"),
-            new BotCommand("untrack", "прекратить отслеживание ссылки"),
-            new BotCommand("list", "показать список отслеживаемых ссылок")
-        );
+        List<BotCommand> list = getAllCommands()
+            .entrySet()
+            .stream()
+            .map(entry -> new BotCommand(entry.getKey(), entry.getValue().getDescription()))
+            .toList();
 
         SetMyCommands commandsList = new SetMyCommands();
         commandsList.setCommands(list);
@@ -77,9 +79,7 @@ public class BotComponent extends TelegramLongPollingBot {
 
     private void sendMessage(long chatId, String text) {
 
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(text);
+        SendMessage message = new SendMessage(String.valueOf(chatId), text);
 
         try {
             execute(message);

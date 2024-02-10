@@ -1,4 +1,4 @@
-package database;
+package edu.java.database;
 
 import java.util.List;
 

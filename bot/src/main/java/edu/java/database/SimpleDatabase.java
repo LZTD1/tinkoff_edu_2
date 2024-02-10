@@ -1,4 +1,4 @@
-package database;
+package edu.java.database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +20,8 @@ public class SimpleDatabase implements Database {
 
     @Override
     public void registerUser(Long userId) {
-        database.put(userId, List.of());
-        LOGGER.info("Пользователь {}, зарегестрировался", userId);
+        database.put(userId, new ArrayList<>());
+        LOGGER.info("Пользователь {}, зарегистрировался", userId);
     }
 
     @Override
@@ -31,9 +31,9 @@ public class SimpleDatabase implements Database {
 
     @Override
     public void addLink(Long userId, String url) {
-        List<String> user = database.getOrDefault(userId, new ArrayList<String>());
-        user.add(url);
-        database.put(userId, user);
+        List<String> userLinks = database.getOrDefault(userId, new ArrayList<String>());
+        userLinks.add(url);
+        database.put(userId, userLinks);
         LOGGER.info("Пользователь {}, добавил ссылку - {}", userId, url);
     }
 
