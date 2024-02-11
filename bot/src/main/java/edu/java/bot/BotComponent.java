@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import static edu.java.processor.Processor.getAllCommands;
-import static edu.java.processor.Processor.getCommandByQuery;
+import static edu.java.processor.Processor.getCommandByName;
 
 @Component
 public class BotComponent extends TelegramLongPollingBot {
@@ -47,7 +47,7 @@ public class BotComponent extends TelegramLongPollingBot {
 
             LOGGER.info("Пользователь {}, отправил - {}", chatId, messageText);
 
-            MethodProcessor processor = getCommandByQuery(messageText);
+            MethodProcessor processor = getCommandByName(messageText.split(" ")[0]);
 
             sendMessage(
                 chatId,

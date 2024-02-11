@@ -22,8 +22,8 @@ public class Processor {
     private Processor() {
     }
 
-    public static MethodProcessor getCommandByQuery(String query) {
-        return ROADS.getOrDefault(query.split(" ")[0], new Default());
+    public static MethodProcessor getCommandByName(String name) {
+        return ROADS.getOrDefault(name, new Default());
     }
 
     public static Map<String, MethodProcessor> getAllCommands() {
