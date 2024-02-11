@@ -6,16 +6,26 @@ import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
 
-@Component
 public class SimpleDatabase implements Database {
 
     private final static Logger LOGGER = LogManager.getLogger();
+    private static SimpleDatabase instance;
     private final Map<Long, List<String>> database;
 
-    public SimpleDatabase() {
+    private SimpleDatabase() {
         this.database = new HashMap();
+    }
+
+    public static SimpleDatabase getInstance() {
+        if (instance == null) {
+            synchronized (SimpleDatabase.class) {
+                if (instance == null) {
+                    instance = new SimpleDatabase();
+                }
+            }
+        }
+        return instance;
     }
 
     @Override
@@ -48,5 +58,9 @@ public class SimpleDatabase implements Database {
     @Override
     public boolean isUserRegister(Long userId) {
         return database.containsKey(userId);
+    }
+
+    public void dropAll() {
+        instance.database.clear();
     }
 }

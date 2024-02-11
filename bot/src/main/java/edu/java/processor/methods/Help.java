@@ -1,6 +1,5 @@
 package edu.java.processor.methods;
 
-import edu.java.database.Database;
 import edu.java.processor.Constants;
 import edu.java.processor.MethodProcessor;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -8,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class Help implements MethodProcessor {
 
     @Override
-    public String get(Update update, Database database) {
+    public String get(Update update) {
         return Constants.HELP_MESSAGE;
     }
 

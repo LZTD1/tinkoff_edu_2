@@ -1,7 +1,6 @@
 package edu.java.bot;
 
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.database.SimpleDatabase;
 import edu.java.processor.MethodProcessor;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -22,13 +21,10 @@ public class BotComponent extends TelegramLongPollingBot {
 
     private final static Logger LOGGER = LogManager.getLogger();
     private final ApplicationConfig config;
-    private final SimpleDatabase database;
 
     @SuppressWarnings("LineLength")
     public BotComponent(ApplicationConfig applicationConfig) {
         this.config = applicationConfig;
-        this.database =
-            new SimpleDatabase(); // Не могу понять, как не создавать базу тут, а протянуть на прямую в методы использующие ее
     }
 
     @Override
@@ -55,7 +51,7 @@ public class BotComponent extends TelegramLongPollingBot {
 
             sendMessage(
                 chatId,
-                processor.get(update, database)
+                processor.get(update)
             ); // вот тут колхозно приходиться ее опрокидывать в методы
         }
     }

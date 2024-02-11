@@ -14,7 +14,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class Initializer {
 
     private final static Logger LOGGER = LogManager.getLogger();
-    @Autowired BotComponent bot;
+    @Autowired private BotComponent bot;
 
     @EventListener({ContextRefreshedEvent.class})
     public void init() {

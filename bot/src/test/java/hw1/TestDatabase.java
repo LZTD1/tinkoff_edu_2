@@ -1,44 +1,49 @@
 package hw1;
 
-import edu.java.database.Database;
 import edu.java.database.SimpleDatabase;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class TestDatabase {
 
-    private Database database = new SimpleDatabase();
+    public final SimpleDatabase db = SimpleDatabase.getInstance();
+
+    @AfterEach
+    public void dropBase() {
+        db.dropAll();
+    }
 
     @Test
     public void testRegisterUserDatabase() {
         Long userId = 1L;
 
-        assertThat(database.isUserRegister(userId)).isFalse();
+        assertThat(db.isUserRegister(userId)).isFalse();
 
-        database.registerUser(userId);
+        db.registerUser(userId);
 
-        assertThat(database.isUserRegister(userId)).isTrue();
+        assertThat(db.isUserRegister(userId)).isTrue();
     }
 
     @Test
     public void testAddLink() {
-        Long userId = 2L;
+        Long userId = 1L;
 
-        assertThat(database.getUserLinksById(userId).size()).isEqualTo(0);
+        assertThat(db.getUserLinksById(userId).size()).isEqualTo(0);
 
-        database.addLink(userId, "test");
+        db.addLink(userId, "test");
 
-        assertThat(database.getUserLinksById(userId).size()).isEqualTo(1);
+        assertThat(db.getUserLinksById(userId).size()).isEqualTo(1);
     }
 
     @Test
     public void testRemoveLink() {
-        Long userId = 3L;
+        Long userId = 1L;
 
-        database.addLink(userId, "test");
-        assertThat(database.getUserLinksById(userId).size()).isEqualTo(1);
+        db.addLink(userId, "test");
+        assertThat(db.getUserLinksById(userId).size()).isEqualTo(1);
 
-        database.removeLink(userId, "test");
-        assertThat(database.getUserLinksById(userId).size()).isEqualTo(0);
+        db.removeLink(userId, "test");
+        assertThat(db.getUserLinksById(userId).size()).isEqualTo(0);
     }
 }

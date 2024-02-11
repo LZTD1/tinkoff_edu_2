@@ -1,6 +1,5 @@
 package edu.java.processor.methods;
 
-import edu.java.database.Database;
 import edu.java.processor.MethodProcessor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.processor.Constants.DEFAULT_MESSAGE;
@@ -8,7 +7,7 @@ import static edu.java.processor.Constants.DEFAULT_MESSAGE;
 public class Default implements MethodProcessor {
 
     @Override
-    public String get(Update update, Database database) {
+    public String get(Update update) {
         return DEFAULT_MESSAGE;
     }
 
