@@ -13,8 +13,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import static edu.java.processor.Processor.getAllCommands;
-import static edu.java.processor.Processor.getCommandByName;
+import static edu.java.processor.ProcessorHolder.getAllCommands;
+import static edu.java.processor.ProcessorHolder.getCommandByName;
 
 @Component
 public class BotComponent extends TelegramLongPollingBot {
@@ -22,7 +22,6 @@ public class BotComponent extends TelegramLongPollingBot {
     private final static Logger LOGGER = LogManager.getLogger();
     private final ApplicationConfig config;
 
-    @SuppressWarnings("LineLength")
     public BotComponent(ApplicationConfig applicationConfig) {
         this.config = applicationConfig;
     }
@@ -49,18 +48,14 @@ public class BotComponent extends TelegramLongPollingBot {
 
             MethodProcessor processor = getCommandByName(messageText.split(" ")[0]);
 
-            sendMessage(
-                chatId,
-                processor.get(update)
-            ); // вот тут колхозно приходиться ее опрокидывать в методы
+            sendMessage(chatId, processor.handle(update));
         }
     }
 
     private void setCommands() {
         List<BotCommand> list = getAllCommands()
-            .entrySet()
             .stream()
-            .map(entry -> new BotCommand(entry.getKey(), entry.getValue().getDescription()))
+            .map(entry -> new BotCommand(entry.getName(), entry.getDescription()))
             .toList();
 
         SetMyCommands commandsList = new SetMyCommands();

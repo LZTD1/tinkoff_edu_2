@@ -1,19 +1,25 @@
-package edu.java.processor.methods;
+package edu.java.processor.processors;
 
+import edu.java.database.Database;
 import edu.java.processor.MethodProcessor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.database.SimpleDatabase.getInstance;
 import static edu.java.processor.Constants.FAIL_UNTRACK_MESSAGE;
 import static edu.java.processor.Constants.SUCCESSFUL_UNTRACK_MESSAGE;
 
-public class Untrack implements MethodProcessor {
+public class UntrackHandler implements MethodProcessor {
+
+    private final Database database;
+
+    public UntrackHandler() {
+        this.database = getInstance();
+    }
 
     @Override
-    public String get(Update update) {
-        var database = getInstance();
+    public String handle(Update update) {
         String[] param = update.getMessage().getText().split(" ");
         if (param.length == 2) {
-            database.removeLink(update.getMessage().getChatId(), param[1]);
+            this.database.removeLink(update.getMessage().getChatId(), param[1]);
             return SUCCESSFUL_UNTRACK_MESSAGE;
         } else {
             return FAIL_UNTRACK_MESSAGE;
