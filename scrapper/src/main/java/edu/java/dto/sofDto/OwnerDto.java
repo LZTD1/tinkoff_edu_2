@@ -1,8 +1,8 @@
-package edu.java.entity.sof;
+package edu.java.dto.sofDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Owner {
+public class OwnerDto {
     @JsonProperty("account_id")
     public int accountId;
     public int reputation;

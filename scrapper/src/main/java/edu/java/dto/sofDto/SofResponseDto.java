@@ -1,10 +1,10 @@
-package edu.java.entity.sof;
+package edu.java.dto.sofDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
-public class SofResponse {
-    public ArrayList<Item> items;
+public class SofResponseDto {
+    public ArrayList<ItemDto> items;
 
     @JsonProperty("has_more")
     public boolean hasMore;

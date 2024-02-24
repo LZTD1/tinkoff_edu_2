@@ -1,9 +1,9 @@
-package edu.java.entity.sof;
+package edu.java.dto.sofDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Item {
-    public Owner owner;
+public class ItemDto {
+    public OwnerDto owner;
     @JsonProperty("is_accepted")
     public boolean isAccepted;
     public int score;

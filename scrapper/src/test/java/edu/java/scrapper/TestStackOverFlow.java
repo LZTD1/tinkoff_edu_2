@@ -1,10 +1,10 @@
 package edu.java.scrapper;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import edu.java.StackoverflowClient;
-import edu.java.entity.sof.Item;
-import edu.java.entity.sof.Owner;
-import edu.java.entity.sof.SofResponse;
+import edu.java.clients.StackoverflowClient;
+import edu.java.dto.sofDto.ItemDto;
+import edu.java.dto.sofDto.OwnerDto;
+import edu.java.dto.sofDto.SofResponseDto;
 import java.util.ArrayList;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,12 +20,12 @@ import static wiremock.com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
 public class TestStackOverFlow {
 
-    public static final SofResponse IDEAL_RESPONSE = new SofResponse() {{
+    public static final SofResponseDto IDEAL_RESPONSE = new SofResponseDto() {{
         quotaMax = 300;
         quotaRemaining = 277;
         hasMore = false;
         items = new ArrayList<>() {{
-            add(new Item() {{
+            add(new ItemDto() {{
                 isAccepted = true;
                 score = 1;
                 lastActivityDate = 1586185945;
@@ -33,7 +33,7 @@ public class TestStackOverFlow {
                 answerId = 61062973;
                 questionId = 61033836;
                 contentLicense = "CC BY-SA 4.0";
-                owner = new Owner() {{
+                owner = new OwnerDto() {{
                     accountId = 7498967;
                     reputation = 200;
                     userId = 5698120;
@@ -53,7 +53,7 @@ public class TestStackOverFlow {
     public void sofTest() {
         configStub();
 
-        SofResponse response = new StackoverflowClient("localhost")
+        SofResponseDto response = new StackoverflowClient("localhost")
             .getAnswersByQuestion(1)
             .block();
 
