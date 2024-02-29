@@ -1,4 +1,4 @@
-package edu.java.processor;
+package edu.java.bot.processor;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 

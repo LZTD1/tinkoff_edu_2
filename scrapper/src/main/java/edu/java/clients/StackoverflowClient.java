@@ -1,6 +1,6 @@
 package edu.java.clients;
 
-import edu.java.dto.sofDto.SofResponseDto;
+import edu.java.clients.dto.sofDto.SofResponseDto;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 

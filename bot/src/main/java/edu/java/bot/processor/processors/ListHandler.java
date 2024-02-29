@@ -1,10 +1,10 @@
-package edu.java.processor.processors;
+package edu.java.bot.processor.processors;
 
 import edu.java.database.Database;
-import edu.java.processor.MethodProcessor;
+import edu.java.bot.processor.MethodProcessor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.database.SimpleDatabase.getInstance;
-import static edu.java.processor.Constants.EMPTY_LIST_MESSAGE;
+import static edu.java.bot.processor.Constants.EMPTY_LIST_MESSAGE;
 
 public class ListHandler implements MethodProcessor {
 

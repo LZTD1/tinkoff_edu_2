@@ -1,9 +1,9 @@
-package edu.java.processor.processors;
+package edu.java.bot.processor.processors;
 
-import edu.java.processor.MethodProcessor;
+import edu.java.bot.processor.MethodProcessor;
 import java.util.stream.Collectors;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import static edu.java.processor.ProcessorHolder.getAllCommands;
+import static edu.java.bot.processor.ProcessorHolder.getAllCommands;
 
 public class HelpHandler implements MethodProcessor {
 

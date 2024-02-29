@@ -1,4 +1,4 @@
-package edu.java.dto.sofDto;
+package edu.java.clients.dto.sofDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

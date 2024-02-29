@@ -1,4 +1,4 @@
-package edu.java.dto.githubDto;
+package edu.java.clients.dto.githubDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

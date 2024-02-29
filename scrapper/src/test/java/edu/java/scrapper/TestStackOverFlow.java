@@ -2,9 +2,9 @@ package edu.java.scrapper;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import edu.java.clients.StackoverflowClient;
-import edu.java.dto.sofDto.ItemDto;
-import edu.java.dto.sofDto.OwnerDto;
-import edu.java.dto.sofDto.SofResponseDto;
+import edu.java.clients.dto.sofDto.ItemDto;
+import edu.java.clients.dto.sofDto.OwnerDto;
+import edu.java.clients.dto.sofDto.SofResponseDto;
 import java.util.ArrayList;
 import org.junit.Rule;
 import org.junit.Test;

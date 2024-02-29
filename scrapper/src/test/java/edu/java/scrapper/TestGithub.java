@@ -2,8 +2,7 @@ package edu.java.scrapper;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import edu.java.clients.GithubClient;
-import edu.java.dto.githubDto.GitResponseDto;
-import java.time.OffsetDateTime;
+import edu.java.clients.dto.githubDto.GitResponseDto;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,10 +26,10 @@ public class TestGithub {
     public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(80));
 
     @Test
-    public void sofTest() {
+    public void gitTest() {
         configStub();
 
-        List<GitResponseDto> response = new GithubClient()
+        List<GitResponseDto> response = new GithubClient("localhost")
             .getAnswersByQuestion("LZTD1", "Voronezh-Hakaton")
             .collectList()
             .block();

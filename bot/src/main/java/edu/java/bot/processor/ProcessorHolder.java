@@ -1,11 +1,11 @@
-package edu.java.processor;
+package edu.java.bot.processor;
 
-import edu.java.processor.processors.DefaultHandler;
-import edu.java.processor.processors.HelpHandler;
-import edu.java.processor.processors.ListHandler;
-import edu.java.processor.processors.StartHandler;
-import edu.java.processor.processors.TrackHandler;
-import edu.java.processor.processors.UntrackHandler;
+import edu.java.bot.processor.processors.DefaultHandler;
+import edu.java.bot.processor.processors.HelpHandler;
+import edu.java.bot.processor.processors.ListHandler;
+import edu.java.bot.processor.processors.StartHandler;
+import edu.java.bot.processor.processors.TrackHandler;
+import edu.java.bot.processor.processors.UntrackHandler;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
