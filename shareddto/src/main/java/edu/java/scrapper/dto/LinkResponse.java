@@ -69,8 +69,8 @@ public class LinkResponse {
             return false;
         }
         LinkResponse linkResponse = (LinkResponse) o;
-        return Objects.equals(this.id, linkResponse.id) &&
-            Objects.equals(this.url, linkResponse.url);
+        return Objects.equals(this.id, linkResponse.id)
+            && Objects.equals(this.url, linkResponse.url);
     }
 
     @Override
@@ -80,10 +80,10 @@ public class LinkResponse {
 
     @Override
     public String toString() {
-        String sb = "class LinkResponse {\n" +
-            "    id: " + toIndentedString(id) + "\n" +
-            "    url: " + toIndentedString(url) + "\n" +
-            "}";
+        String sb = "class LinkResponse {\n"
+            + "    id: " + toIndentedString(id) + "\n"
+            + "    url: " + toIndentedString(url) + "\n"
+            + "}";
         return sb;
     }
 

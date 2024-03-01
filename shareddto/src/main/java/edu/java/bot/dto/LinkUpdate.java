@@ -126,10 +126,10 @@ public class LinkUpdate {
             return false;
         }
         LinkUpdate linkUpdate = (LinkUpdate) o;
-        return Objects.equals(this.id, linkUpdate.id) &&
-            Objects.equals(this.url, linkUpdate.url) &&
-            Objects.equals(this.description, linkUpdate.description) &&
-            Objects.equals(this.tgChatIds, linkUpdate.tgChatIds);
+        return Objects.equals(this.id, linkUpdate.id)
+            && Objects.equals(this.url, linkUpdate.url)
+            && Objects.equals(this.description, linkUpdate.description)
+            && Objects.equals(this.tgChatIds, linkUpdate.tgChatIds);
     }
 
     @Override
@@ -139,12 +139,12 @@ public class LinkUpdate {
 
     @Override
     public String toString() {
-        String sb = "class LinkUpdate {\n" +
-                "    id: " + toIndentedString(id) + "\n" +
-                "    url: " + toIndentedString(url) + "\n" +
-                "    description: " + toIndentedString(description) + "\n" +
-                "    tgChatIds: " + toIndentedString(tgChatIds) + "\n" +
-                "}";
+        String sb = "class LinkUpdate {\n"
+            + "    id: " + toIndentedString(id) + "\n"
+            + "    url: " + toIndentedString(url) + "\n"
+            + "    description: " + toIndentedString(description) + "\n"
+            + "    tgChatIds: " + toIndentedString(tgChatIds) + "\n"
+            + "}";
         return sb;
     }
 

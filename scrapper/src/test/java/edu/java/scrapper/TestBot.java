@@ -11,7 +11,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -38,7 +38,7 @@ public class TestBot {
     private void configStub() {
         configureFor("localhost", 80);
 
-        stubFor(post(urlEqualTo("/updates"))
+        stubFor(post(urlPathEqualTo("/updates"))
             .withRequestBody(equalToJson(
                 "{ \"id\": 1, \"url\": \"vk.com\", \"description\": \"desc\", \"tgChatIds\": [] }"))
             .willReturn(

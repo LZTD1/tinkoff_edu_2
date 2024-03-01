@@ -79,8 +79,8 @@ public class ListLinksResponse {
             return false;
         }
         ListLinksResponse listLinksResponse = (ListLinksResponse) o;
-        return Objects.equals(this.links, listLinksResponse.links) &&
-            Objects.equals(this.size, listLinksResponse.size);
+        return Objects.equals(this.links, listLinksResponse.links)
+            && Objects.equals(this.size, listLinksResponse.size);
     }
 
     @Override
@@ -90,10 +90,10 @@ public class ListLinksResponse {
 
     @Override
     public String toString() {
-        String sb = "class ListLinksResponse {\n" +
-            "    links: " + toIndentedString(links) + "\n" +
-            "    size: " + toIndentedString(size) + "\n" +
-            "}";
+        String sb = "class ListLinksResponse {\n"
+            + "    links: " + toIndentedString(links) + "\n"
+            + "    size: " + toIndentedString(size) + "\n"
+            + "}";
         return sb;
     }
 

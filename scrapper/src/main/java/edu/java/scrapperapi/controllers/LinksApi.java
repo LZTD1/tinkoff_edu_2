@@ -8,6 +8,7 @@ package edu.java.scrapperapi.controllers;
 
 import edu.java.scrapper.dto.AddLinkRequest;
 import edu.java.scrapper.dto.ApiErrorResponse;
+import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapper.dto.ListLinksResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,7 +65,10 @@ public interface LinksApi {
 
     default ResponseEntity<LinkResponse> linksDelete(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
-        @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId
+        @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
+
+        @Parameter(name = "DeleteLinkRequest", description = "", required = true)
+        @Valid @RequestBody DeleteLinkRequest deleteLinkRequest
     ) {
 
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
@@ -132,8 +136,8 @@ public interface LinksApi {
     default ResponseEntity<LinkResponse> linksPost(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
-        @Parameter(name = "AddLinkRequest", description = "", required = true) @Valid @RequestBody
-        AddLinkRequest addLinkRequest
+        @Parameter(name = "AddLinkRequest", description = "", required = true)
+        @Valid @RequestBody AddLinkRequest addLinkRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

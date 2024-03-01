@@ -12,11 +12,11 @@ import java.util.Objects;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-03-01T09:03:35.898778600Z[UTC]")
-public class AddLinkRequest {
+public class DeleteLinkRequest {
 
     private URI link;
 
-    public AddLinkRequest link(URI link) {
+    public DeleteLinkRequest link(URI link) {
         this.link = link;
         return this;
     }
@@ -45,7 +45,7 @@ public class AddLinkRequest {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        AddLinkRequest addLinkRequest = (AddLinkRequest) o;
+        DeleteLinkRequest addLinkRequest = (DeleteLinkRequest) o;
         return Objects.equals(this.link, addLinkRequest.link);
     }
 
@@ -56,7 +56,7 @@ public class AddLinkRequest {
 
     @Override
     public String toString() {
-        String sb = "class AddLinkRequest {\n"
+        String sb = "class DeleteLinkRequest {\n"
             + "    link: " + toIndentedString(link) + "\n"
             + "}";
         return sb;

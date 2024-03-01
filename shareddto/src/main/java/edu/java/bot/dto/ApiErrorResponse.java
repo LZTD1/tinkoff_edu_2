@@ -148,11 +148,11 @@ public class ApiErrorResponse {
             return false;
         }
         ApiErrorResponse apiErrorResponse = (ApiErrorResponse) o;
-        return Objects.equals(this.description, apiErrorResponse.description) &&
-            Objects.equals(this.code, apiErrorResponse.code) &&
-            Objects.equals(this.exceptionName, apiErrorResponse.exceptionName) &&
-            Objects.equals(this.exceptionMessage, apiErrorResponse.exceptionMessage) &&
-            Objects.equals(this.stacktrace, apiErrorResponse.stacktrace);
+        return Objects.equals(this.description, apiErrorResponse.description)
+            && Objects.equals(this.code, apiErrorResponse.code)
+            && Objects.equals(this.exceptionName, apiErrorResponse.exceptionName)
+            && Objects.equals(this.exceptionMessage, apiErrorResponse.exceptionMessage)
+            && Objects.equals(this.stacktrace, apiErrorResponse.stacktrace);
     }
 
     @Override
@@ -162,13 +162,13 @@ public class ApiErrorResponse {
 
     @Override
     public String toString() {
-        String sb = "class ApiErrorResponse {\n" +
-                "    description: " + toIndentedString(description) + "\n" +
-                "    code: " + toIndentedString(code) + "\n" +
-                "    exceptionName: " + toIndentedString(exceptionName) + "\n" +
-                "    exceptionMessage: " + toIndentedString(exceptionMessage) + "\n" +
-                "    stacktrace: " + toIndentedString(stacktrace) + "\n" +
-                "}";
+        String sb = "class ApiErrorResponse {\n"
+            + "    description: " + toIndentedString(description) + "\n"
+            + "    code: " + toIndentedString(code) + "\n"
+            + "    exceptionName: " + toIndentedString(exceptionName) + "\n"
+            + "    exceptionMessage: " + toIndentedString(exceptionMessage) + "\n"
+            + "    stacktrace: " + toIndentedString(stacktrace) + "\n"
+            + "}";
         return sb;
     }
 
