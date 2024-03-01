@@ -1,7 +1,7 @@
 package hw1.processors;
 
-import edu.java.database.SimpleDatabase;
 import edu.java.bot.processor.processors.ListHandler;
+import edu.java.database.SimpleDatabase;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;

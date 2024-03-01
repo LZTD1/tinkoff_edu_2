@@ -1,9 +1,8 @@
 package edu.java.scrapperapi.controllers;
 
-import edu.java.api.LinksApi;
-import edu.java.api.dto.AddLinkRequest;
-import edu.java.api.dto.LinkResponse;
-import edu.java.api.dto.ListLinksResponse;
+import edu.java.scrapper.dto.AddLinkRequest;
+import edu.java.scrapper.dto.LinkResponse;
+import edu.java.scrapper.dto.ListLinksResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

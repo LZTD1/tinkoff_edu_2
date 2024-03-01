@@ -1,13 +1,13 @@
 package hw1.processors;
 
-import edu.java.database.SimpleDatabase;
 import edu.java.bot.processor.processors.StartHandler;
+import edu.java.database.SimpleDatabase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import static edu.java.database.SimpleDatabase.getInstance;
 import static edu.java.bot.processor.Constants.START_MESSAGE;
+import static edu.java.database.SimpleDatabase.getInstance;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestStartHandler {

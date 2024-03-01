@@ -39,7 +39,8 @@ public class TestBot {
         configureFor("localhost", 80);
 
         stubFor(post(urlEqualTo("/updates"))
-            .withRequestBody(equalToJson("{ \"id\": 1, \"url\": \"vk.com\", \"description\": \"desc\", \"tgChatIds\": [] }"))
+            .withRequestBody(equalToJson(
+                "{ \"id\": 1, \"url\": \"vk.com\", \"description\": \"desc\", \"tgChatIds\": [] }"))
             .willReturn(
                 aResponse()
                     .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)

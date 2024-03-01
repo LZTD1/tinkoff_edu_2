@@ -1,7 +1,6 @@
 package edu.java.bot.botapi.controller;
 
-import edu.java.api.UpdatesApi;
-import edu.java.api.dto.LinkUpdate;
+import edu.java.bot.dto.LinkUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
