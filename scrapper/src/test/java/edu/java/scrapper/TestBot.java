@@ -20,13 +20,13 @@ import static wiremock.com.google.common.net.HttpHeaders.CONTENT_TYPE;
 public class TestBot {
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(80));
+    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(3000));
 
     @Test
     public void botTest() {
         configStub();
 
-        int response = new BotClient("http://localhost:80")
+        int response = new BotClient("http://localhost:3000")
             .getAnswersByQuestion(1L, URI.create("vk.com"), "desc", new ArrayList<>())
             .block()
             .getStatusCode()
@@ -36,7 +36,7 @@ public class TestBot {
     }
 
     private void configStub() {
-        configureFor("localhost", 80);
+        configureFor("localhost", 3000);
 
         stubFor(post(urlPathEqualTo("/updates"))
             .withRequestBody(equalToJson(

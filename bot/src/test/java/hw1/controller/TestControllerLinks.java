@@ -28,7 +28,7 @@ public class TestControllerLinks {
     WireMockServer wireMockServer;
 
     private static void configStub() {
-        configureFor("localhost", 80);
+        configureFor("localhost", 3000);
 
         stubFor(get(urlPathEqualTo("/links"))
             .withQueryParam("Tg-Chat-Id", equalTo("1"))
@@ -65,7 +65,7 @@ public class TestControllerLinks {
 
     @BeforeEach
     public void setup() {
-        wireMockServer = new WireMockServer(80);
+        wireMockServer = new WireMockServer(3000);
         wireMockServer.start();
         configStub();
     }
@@ -77,7 +77,7 @@ public class TestControllerLinks {
 
     @Test
     public void getAllLinks() {
-        ListLinksResponse response = new ScrapperClient("http://localhost:80")
+        ListLinksResponse response = new ScrapperClient("http://localhost:3000")
             .getAllTrackedLinks(1L)
             .block();
         assertThat(response.getLinks().get(0).getUrl()).isEqualTo(URI.create("https://vk.com"));
@@ -85,7 +85,7 @@ public class TestControllerLinks {
 
     @Test
     public void deleteLink() {
-        ResponseEntity<Void> response = new ScrapperClient("http://localhost:80")
+        ResponseEntity<Void> response = new ScrapperClient("http://localhost:3000")
             .deleteTrackLink(1L, URI.create("https://vk.com"))
             .block();
         assertThat(response.getStatusCode().value()).isEqualTo(200);
@@ -93,7 +93,7 @@ public class TestControllerLinks {
 
     @Test
     public void addLink() {
-        ResponseEntity<Void> response = new ScrapperClient("http://localhost:80")
+        ResponseEntity<Void> response = new ScrapperClient("http://localhost:3000")
             .addTrackLink(1L, URI.create("https://vk.com"))
             .block();
         assertThat(response.getStatusCode().value()).isEqualTo(200);
