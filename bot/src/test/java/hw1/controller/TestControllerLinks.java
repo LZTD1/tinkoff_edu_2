@@ -8,7 +8,6 @@ import java.net.URI;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
 import static com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.CONTENT_TYPE;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
@@ -26,6 +25,38 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class TestControllerLinks {
 
     WireMockServer wireMockServer;
+
+    @BeforeEach
+    public void setup() {
+        wireMockServer = new WireMockServer(3000);
+        wireMockServer.start();
+        configStub();
+    }
+
+    @AfterEach
+    public void teardown() {
+        wireMockServer.stop();
+    }
+
+    @Test
+    public void getAllLinks() {
+        ListLinksResponse response = new ScrapperClient("http://localhost:3000")
+            .getAllTrackedLinks(1L);
+
+        assertThat(response.getLinks().get(0).getUrl()).isEqualTo(URI.create("https://vk.com"));
+    }
+
+    @Test
+    public void deleteLink() {
+        new ScrapperClient("http://localhost:3000")
+            .deleteTrackLink(1L, URI.create("https://vk.com"));
+    }
+
+    @Test
+    public void addLink() {
+        new ScrapperClient("http://localhost:3000")
+            .addTrackLink(1L, URI.create("https://vk.com"));
+    }
 
     private static void configStub() {
         configureFor("localhost", 3000);
@@ -61,43 +92,6 @@ public class TestControllerLinks {
                     .withStatus(200)
             )
         );
-    }
-
-    @BeforeEach
-    public void setup() {
-        wireMockServer = new WireMockServer(3000);
-        wireMockServer.start();
-        configStub();
-    }
-
-    @AfterEach
-    public void teardown() {
-        wireMockServer.stop();
-    }
-
-    @Test
-    public void getAllLinks() {
-        ListLinksResponse response = new ScrapperClient("http://localhost:3000")
-            .getAllTrackedLinks(1L)
-            .block();
-        assertThat(response.getLinks().get(0).getUrl()).isEqualTo(URI.create("https://vk.com"));
-    }
-
-    @Test
-    public void deleteLink() {
-        ResponseEntity<Void> response = new ScrapperClient("http://localhost:3000")
-            .deleteTrackLink(1L, URI.create("https://vk.com"))
-            .block();
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-    }
-
-    @Test
-    public void addLink() {
-        ResponseEntity<Void> response = new ScrapperClient("http://localhost:3000")
-            .addTrackLink(1L, URI.create("https://vk.com"))
-            .block();
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        ;
     }
 
 }
