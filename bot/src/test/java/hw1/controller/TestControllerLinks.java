@@ -3,6 +3,7 @@ package hw1.controller;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.clients.ScrapperClient;
+import edu.java.bot.clients.exceptions.LinkNotFoundException;
 import edu.java.scrapper.dto.ListLinksResponse;
 import java.net.URI;
 import org.junit.jupiter.api.AfterEach;
@@ -19,6 +20,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @WireMockTest
@@ -47,9 +49,21 @@ public class TestControllerLinks {
     }
 
     @Test
-    public void deleteLink() {
+    public void deleteLink2xx() {
         new ScrapperClient("http://localhost:3000")
             .deleteTrackLink(1L, URI.create("https://vk.com"));
+    }
+
+    @Test
+    public void deleteLink404() {
+        assertThrows(LinkNotFoundException.class, () -> new ScrapperClient("http://localhost:3000")
+            .deleteTrackLink(10L, URI.create("https://vk.com")));
+    }
+
+    @Test
+    public void deleteLink400() {
+        assertThrows(LinkNotFoundException.class, () -> new ScrapperClient("http://localhost:3000")
+            .deleteTrackLink(0L, URI.create("https://vk.com")));
     }
 
     @Test
@@ -63,6 +77,15 @@ public class TestControllerLinks {
 
         stubFor(get(urlPathEqualTo("/links"))
             .withQueryParam("Tg-Chat-Id", equalTo("1"))
+            .willReturn(
+                aResponse()
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                    .withStatus(200)
+                    .withBody("{ \"links\": [ { \"id\": 0, \"url\": \"https://vk.com\" } ], \"size\": 1 }")
+            )
+        );
+        stubFor(get(urlPathEqualTo("/links"))
+            .withQueryParam("Tg-Chat-Id", equalTo("0"))
             .willReturn(
                 aResponse()
                     .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -92,6 +115,15 @@ public class TestControllerLinks {
                     .withStatus(200)
             )
         );
+        stubFor(delete(urlPathEqualTo("/links"))
+            .withQueryParam("Tg-Chat-Id", equalTo("0"))
+            .withRequestBody(equalToJson(
+                "{ \"link\": \"https://vk.com\" }"))
+            .willReturn(
+                aResponse()
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                    .withStatus(404)
+            )
+        );
     }
-
 }
