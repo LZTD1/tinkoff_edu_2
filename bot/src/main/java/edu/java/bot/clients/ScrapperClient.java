@@ -15,6 +15,7 @@ public class ScrapperClient {
     private final WebClient client;
     private final String linksPath = "/links";
     private final String queryTgChat = "Tg-Chat-Id";
+    private final String exceptionMessage = "Некорректные параметры запроса";
 
     public ScrapperClient() {
         this.client = WebClient.create(BASE_URL);
@@ -33,7 +34,7 @@ public class ScrapperClient {
                 .build())
             .retrieve()
             .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.BAD_REQUEST.value(), clientResponse ->
-                Mono.error(new BadQueryParamsException("Некорректные параметры запроса")))
+                Mono.error(new BadQueryParamsException(exceptionMessage)))
             .bodyToMono(ListLinksResponse.class)
             .block();
 
@@ -52,7 +53,7 @@ public class ScrapperClient {
             }}), AddLinkRequest.class)
             .retrieve()
             .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.BAD_REQUEST.value(), clientResponse ->
-                Mono.error(new BadQueryParamsException("Некорректные параметры запроса")))
+                Mono.error(new BadQueryParamsException(exceptionMessage)))
             .bodyToMono(Void.class)
             .block();
     }
@@ -69,7 +70,7 @@ public class ScrapperClient {
             }}), DeleteLinkRequest.class)
             .retrieve()
             .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.BAD_REQUEST.value(), clientResponse ->
-                Mono.error(new BadQueryParamsException("Некорректные параметры запроса")))
+                Mono.error(new BadQueryParamsException(exceptionMessage)))
             .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.NOT_FOUND.value(), clientResponse ->
                 Mono.error(new LinkNotFoundException()))
             .bodyToMono(Void.class)
