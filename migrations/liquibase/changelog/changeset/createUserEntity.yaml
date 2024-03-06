@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: createUserEntity
+      author: Danil
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: telegramId
+                  type: bigint
+                  constraints:
+                    nullable: false
+

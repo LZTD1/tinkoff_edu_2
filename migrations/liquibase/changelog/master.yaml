@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: /liquibase/changelog/changeset/createLinkEntity.yaml
+  - include:
+      file: /liquibase/changelog/changeset/createUserEntity.yaml
+  - include:
+      file: /liquibase/changelog/changeset/createUserLinksTable.yaml
+  - include:
+      file: /liquibase/changelog/changeset/createUserLinksRelation.yaml
