@@ -1,7 +1,7 @@
 package edu.java.scrapperapi.controllers;
 
-import edu.java.scrapper.dto.ApiErrorResponse;
 import edu.java.scrapper.dto.LinkResponse;
+import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

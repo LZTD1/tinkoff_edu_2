@@ -1,10 +1,10 @@
 package edu.java.scrapperapi.controllers;
 
 import edu.java.scrapper.dto.AddLinkRequest;
-import edu.java.scrapper.dto.ApiErrorResponse;
 import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapper.dto.ListLinksResponse;
+import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
