@@ -1,8 +1,7 @@
 package edu.java.bot.botapi.controller;
 
-import edu.java.bot.botapi.controller.exceptions.EmptyIdListException;
-import edu.java.bot.dto.ApiErrorResponse;
 import edu.java.bot.dto.LinkUpdate;
+import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,12 +9,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,18 +39,15 @@ public class UpdatesController {
             })
         }
     )
-    @RequestMapping(
-        method = RequestMethod.POST,
+    @PostMapping(
         value = "/updates",
         produces = {"application/json"},
         consumes = {"application/json"}
     )
     public ResponseEntity<Void> updatesPost(
-        @Parameter(name = "LinkUpdate", description = "", required = true) @Valid @RequestBody LinkUpdate linkUpdate
+        @NotEmpty @NotNull @Parameter(name = "LinkUpdate", description = "", required = true) @Valid @RequestBody
+        LinkUpdate linkUpdate
     ) {
-        if (linkUpdate.getTgChatIds().isEmpty()) {
-            throw new EmptyIdListException("Список идентификаторов пуст!");
-        }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }
