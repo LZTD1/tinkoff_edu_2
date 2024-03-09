@@ -1,7 +1,7 @@
 package hw1.processors;
 
+import edu.java.bot.processor.processors.ListHandler;
 import edu.java.database.SimpleDatabase;
-import edu.java.processor.processors.ListHandler;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import static edu.java.processor.Constants.EMPTY_LIST_MESSAGE;
+import static edu.java.bot.processor.Constants.EMPTY_LIST_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestListHandler {
