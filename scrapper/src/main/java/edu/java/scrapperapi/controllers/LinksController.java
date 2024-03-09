@@ -29,14 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "links", description = "управление ссылками в чатах")
 public class LinksController {
 
-    /**
-     * DELETE /links : Убрать отслеживание ссылки
-     *
-     * @param tgChatId (required)
-     * @return Ссылка успешно убрана (status code 200)
-     *     or Некорректные параметры запроса (status code 400)
-     *     or Ссылка не найдена (status code 404)
-     */
+
     @Operation(
         operationId = "linksDelete",
         summary = "Убрать отслеживание ссылки",
@@ -67,13 +60,6 @@ public class LinksController {
 
     }
 
-    /**
-     * GET /links : Получить все отслеживаемые ссылки
-     *
-     * @param tgChatId (required)
-     * @return Ссылки успешно получены (status code 200)
-     *     or Некорректные параметры запроса (status code 400)
-     */
     @Operation(
         operationId = "linksGet",
         summary = "Получить все отслеживаемые ссылки",
@@ -97,14 +83,6 @@ public class LinksController {
     ) {
     }
 
-    /**
-     * POST /links : Добавить отслеживание ссылки
-     *
-     * @param tgChatId       (required)
-     * @param addLinkRequest (required)
-     * @return Ссылка успешно добавлена (status code 200)
-     *     or Некорректные параметры запроса (status code 400)
-     */
     @Operation(
         operationId = "linksPost",
         summary = "Добавить отслеживание ссылки",

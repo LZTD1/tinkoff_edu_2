@@ -22,13 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "updates", description = "the updates API")
 public class UpdatesController {
-    /**
-     * POST /updates : Отправить обновление
-     *
-     * @param linkUpdate (required)
-     * @return Обновление обработано (status code 200)
-     *     or Некорректные параметры запроса (status code 400)
-     */
+
     @Operation(
         operationId = "updatesPost",
         summary = "Отправить обновление",

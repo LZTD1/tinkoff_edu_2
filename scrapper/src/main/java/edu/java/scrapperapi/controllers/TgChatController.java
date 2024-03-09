@@ -22,13 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Tg-Chat", description = "управление чатами телеграм")
 public class TgChatController {
 
-    /**
-     * POST /tg-chat/{id} : Зарегистрировать чат
-     *
-     * @param id (required)
-     * @return Чат зарегистрирован (status code 200)
-     *     or Некорректные параметры запроса (status code 400)
-     */
     @Operation(
         operationId = "tgChatIdPost",
         summary = "Зарегистрировать чат",
@@ -51,13 +44,6 @@ public class TgChatController {
     ) {
     }
 
-    /**
-     * DELETE /tg-chat/{id} : Удалить чат
-     *
-     * @param id (required)
-     * @return Чат удален (status code 200)
-     *     or Некорректные параметры запроса (status code 400)
-     */
     @Operation(
         operationId = "tgChatIdDelete",
         summary = "Удалить чат",
