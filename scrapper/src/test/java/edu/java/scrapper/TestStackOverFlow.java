@@ -2,9 +2,9 @@ package edu.java.scrapper;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import edu.java.clients.StackoverflowClient;
-import edu.java.dto.sofDto.ItemDto;
-import edu.java.dto.sofDto.OwnerDto;
-import edu.java.dto.sofDto.SofResponseDto;
+import edu.java.clients.dto.sofDto.ItemDto;
+import edu.java.clients.dto.sofDto.OwnerDto;
+import edu.java.clients.dto.sofDto.SofResponseDto;
 import java.util.ArrayList;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,13 +47,13 @@ public class TestStackOverFlow {
         }};
     }};
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(80));
+    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(3000));
 
     @Test
     public void sofTest() {
         configStub();
 
-        SofResponseDto response = new StackoverflowClient("localhost")
+        SofResponseDto response = new StackoverflowClient("http://localhost:3000")
             .getAnswersByQuestion(1)
             .block();
 
@@ -68,7 +68,7 @@ public class TestStackOverFlow {
         var jsonString =
             "{\"items\":[{\"owner\":{\"account_id\":7498967,\"reputation\":200,\"user_id\":5698120,\"user_type\":\"registered\",\"profile_image\":\"https://www.gravatar.com/avatar/3ba3535d92e44eb78b30ef574102b398?s=256&d=identicon&r=PG\",\"display_name\":\"Rex Raphael\",\"link\":\"https://stackoverflow.com/users/5698120/rex-raphael\"},\"is_accepted\":true,\"score\":1,\"last_activity_date\":1586185945,\"creation_date\":1586185945,\"answer_id\":61062973,\"question_id\":61033836,\"content_license\":\"CC BY-SA 4.0\"}],\"has_more\":false,\"quota_max\":300,\"quota_remaining\":277}";
 
-        configureFor("localhost", 80);
+        configureFor("localhost", 3000);
         stubFor(get(urlEqualTo("/2.3/questions/1/answers?order=desc&sort=activity&site=stackoverflow"))
             .willReturn(
                 aResponse()

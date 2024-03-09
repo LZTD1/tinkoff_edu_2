@@ -1,14 +1,14 @@
 package hw1.processors;
 
+import edu.java.bot.processor.processors.HelpHandler;
 import edu.java.database.SimpleDatabase;
-import edu.java.processor.processors.HelpHandler;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import static edu.java.bot.processor.ProcessorHolder.getAllCommands;
 import static edu.java.database.SimpleDatabase.getInstance;
-import static edu.java.processor.ProcessorHolder.getAllCommands;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestHelpHandler {

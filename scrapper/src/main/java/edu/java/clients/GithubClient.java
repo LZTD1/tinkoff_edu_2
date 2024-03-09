@@ -1,6 +1,6 @@
 package edu.java.clients;
 
-import edu.java.dto.githubDto.GitResponseDto;
+import edu.java.clients.dto.githubDto.GitResponseDto;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
