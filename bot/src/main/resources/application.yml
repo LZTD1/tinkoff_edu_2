@@ -2,6 +2,10 @@ app:
   telegramToken: ${TELEGRAM_KEY}
   telegramName: ${TELEGRAM_NAME}
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
 spring:
   application:
     name: bot

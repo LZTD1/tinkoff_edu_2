@@ -1,16 +1,15 @@
 package hw1.processors;
 
+import edu.java.bot.processor.processors.UntrackHandler;
 import edu.java.database.SimpleDatabase;
-import edu.java.processor.processors.UntrackHandler;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import static edu.java.bot.processor.Constants.FAIL_UNTRACK_MESSAGE;
+import static edu.java.bot.processor.Constants.SUCCESSFUL_UNTRACK_MESSAGE;
 import static edu.java.database.SimpleDatabase.getInstance;
-import static edu.java.processor.Constants.FAIL_UNTRACK_MESSAGE;
-import static edu.java.processor.Constants.SUCCESSFUL_UNTRACK_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestUntrackHandler {
