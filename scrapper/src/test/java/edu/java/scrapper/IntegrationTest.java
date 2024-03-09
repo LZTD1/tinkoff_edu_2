@@ -32,6 +32,7 @@ public abstract class IntegrationTest {
         Path locationMaster =
             new File(".").toPath().toAbsolutePath().getParent().getParent().resolve("migrations").resolve("liquibase")
                 .resolve("changelog");
+
         try (
             var liqBase = new Liquibase(
                 "master.yaml",

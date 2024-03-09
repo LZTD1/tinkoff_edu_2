@@ -47,7 +47,6 @@ public class BotComponent extends TelegramLongPollingBot {
             LOGGER.info("Пользователь {}, отправил - {}", chatId, messageText);
 
             MethodProcessor processor = getCommandByName(messageText.split(" ")[0]);
-
             sendMessage(chatId, processor.handle(update));
         }
     }
