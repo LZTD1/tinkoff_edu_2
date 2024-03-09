@@ -15,13 +15,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -56,7 +56,8 @@ public class LinksController {
         value = "/links",
         produces = {"application/json"}
     )
-    public ResponseEntity<LinkResponse> linksDelete(
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public void linksDelete(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
 
@@ -64,7 +65,6 @@ public class LinksController {
         @Valid @RequestBody DeleteLinkRequest deleteLinkRequest
     ) {
 
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     /**
@@ -90,11 +90,11 @@ public class LinksController {
         value = "/links",
         produces = {"application/json"}
     )
-    public ResponseEntity<ListLinksResponse> linksGet(
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public void linksGet(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     /**
@@ -122,12 +122,12 @@ public class LinksController {
         produces = {"application/json"},
         consumes = {"application/json"}
     )
-    public ResponseEntity<LinkResponse> linksPost(
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public void linksPost(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
         @Parameter(name = "AddLinkRequest", description = "", required = true)
         @Valid @RequestBody AddLinkRequest addLinkRequest
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }

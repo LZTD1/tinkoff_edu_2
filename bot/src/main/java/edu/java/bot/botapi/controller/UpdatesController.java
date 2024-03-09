@@ -12,10 +12,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,10 +44,10 @@ public class UpdatesController {
         produces = {"application/json"},
         consumes = {"application/json"}
     )
-    public ResponseEntity<Void> updatesPost(
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public void updatesPost(
         @NotEmpty @NotNull @Parameter(name = "LinkUpdate", description = "", required = true) @Valid @RequestBody
         LinkUpdate linkUpdate
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }

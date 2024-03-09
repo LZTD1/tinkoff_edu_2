@@ -1,6 +1,5 @@
 package edu.java.scrapperapi.controllers;
 
-import edu.java.scrapper.dto.LinkResponse;
 import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,11 +10,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -45,11 +44,11 @@ public class TgChatController {
         produces = {"application/json"},
         consumes = {"application/json"}
     )
-    public ResponseEntity<LinkResponse> tgChatPost(
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public void tgChatPost(
         @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id", required = true) Long id
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     /**
@@ -74,11 +73,11 @@ public class TgChatController {
         produces = {"application/json"},
         consumes = {"application/json"}
     )
-    public ResponseEntity<LinkResponse> tgChatDelete(
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public void tgChatDelete(
         @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id", required = true) Long id
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }
