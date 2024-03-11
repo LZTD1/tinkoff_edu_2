@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: /changeset/createLinkEntity.sql
+  - include:
+      file: /changeset/createUserEntity.sql
+  - include:
+      file: /changeset/createUserLinksTable.sql

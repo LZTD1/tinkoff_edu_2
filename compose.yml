@@ -1,6 +1,7 @@
 services:
   postgresql:
     image: postgres:16
+    restart: always
     ports:
       - "5432:5432"
     environment:
@@ -9,11 +10,24 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgresql:/var/lib/postgresql/data
-    networks:
-      - backend
+  liquibase-migrations:
+    image: liquibase/liquibase:4.25
+    command:
+      - --changelog-file=/liquibase/changelog/master.yaml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://postgresql:5432/scrapper
+      - --username=postgres
+      - --password=postgres
+      - update
+    volumes:
+      - ./migrations:/liquibase/changelog
+    depends_on:
+      - postgresql
 
 volumes:
   postgresql: { }
+  pgadmin: { }
+  liquibase-migrations: { }
 
 networks:
   backend: { }
