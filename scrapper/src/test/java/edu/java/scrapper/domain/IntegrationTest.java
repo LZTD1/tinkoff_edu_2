@@ -1,4 +1,4 @@
-package edu.java.scrapper;
+package edu.java.scrapper.domain;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -30,12 +30,11 @@ public abstract class IntegrationTest {
     @SneakyThrows
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
         Path locationMaster =
-            new File(".").toPath().toAbsolutePath().getParent().getParent().resolve("migrations").resolve("liquibase")
-                .resolve("changelog");
+            new File(".").toPath().toAbsolutePath().getParent().getParent().resolve("migrations");
 
         try (
             var liqBase = new Liquibase(
-                "master.yaml",
+                "liquibase/changelog/master.yaml",
                 new DirectoryResourceAccessor(locationMaster),
                 new JdbcConnection(
                     DriverManager.getConnection(

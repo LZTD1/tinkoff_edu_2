@@ -9,8 +9,14 @@ springdoc:
     path: /swagger-ui
 
 spring:
+  liquibase:
+    enabled: false
   application:
     name: scrapper
+  datasource:
+    password: ${POSTGRES_PASSWORD}
+    username: ${POSTGRES_NAME}
+    url: ${JDBC_URL}
 
 server:
   port: 8080

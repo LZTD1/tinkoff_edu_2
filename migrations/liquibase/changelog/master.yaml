@@ -1,7 +1,7 @@
 databaseChangeLog:
   - include:
-      file: /changeset/createLinkEntity.sql
+      file: /liquibase/changelog/changeset/createLinkEntity.sql
   - include:
-      file: /changeset/createUserEntity.sql
+      file: /liquibase/changelog/changeset/createUserEntity.sql
   - include:
-      file: /changeset/createUserLinksTable.sql
+      file: /liquibase/changelog/changeset/createUserLinksTable.sql
