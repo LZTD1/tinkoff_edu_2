@@ -1,9 +1,11 @@
 package edu.java.scrapperapi.controllers;
 
+import edu.java.database.dto.Link;
 import edu.java.scrapper.dto.AddLinkRequest;
 import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapper.dto.ListLinksResponse;
+import edu.java.scrapperapi.services.LinkService;
 import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "links", description = "управление ссылками в чатах")
 public class LinksController {
 
+    private LinkService linkService;
+
+    @Autowired
+    public LinksController(LinkService linkService) {
+        this.linkService = linkService;
+    }
 
     @Operation(
         operationId = "linksDelete",
@@ -49,7 +59,7 @@ public class LinksController {
         value = "/links",
         produces = {"application/json"}
     )
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    @ResponseStatus(HttpStatus.OK)
     public void linksDelete(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
@@ -57,7 +67,7 @@ public class LinksController {
         @Parameter(name = "DeleteLinkRequest", description = "", required = true)
         @Valid @RequestBody DeleteLinkRequest deleteLinkRequest
     ) {
-
+        linkService.remove(tgChatId, deleteLinkRequest.getLink());
     }
 
     @Operation(
@@ -76,11 +86,19 @@ public class LinksController {
         value = "/links",
         produces = {"application/json"}
     )
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public void linksGet(
+    @ResponseStatus(HttpStatus.OK)
+    public List<Link> linksGet(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
-        @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId
+        @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
+
+        @NotNull @Parameter(name = "limit", description = "", required = true, in = ParameterIn.HEADER)
+        @RequestHeader(value = "limit", required = true) int limit,
+
+        @NotNull @Parameter(name = "offset", description = "", required = true, in = ParameterIn.HEADER)
+        @RequestHeader(value = "offset", required = true) int offset
+
     ) {
+        return linkService.listAll(tgChatId, limit, offset);
     }
 
     @Operation(
@@ -100,12 +118,16 @@ public class LinksController {
         produces = {"application/json"},
         consumes = {"application/json"}
     )
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    @ResponseStatus(HttpStatus.OK)
     public void linksPost(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
         @Parameter(name = "AddLinkRequest", description = "", required = true)
         @Valid @RequestBody AddLinkRequest addLinkRequest
     ) {
+        linkService.createLink(
+            tgChatId,
+            addLinkRequest.getLink()
+        );
     }
 }

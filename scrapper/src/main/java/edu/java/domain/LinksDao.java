@@ -11,6 +11,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Repository
 public class LinksDao {
 
+    public static final String LINK = "link";
     private final JdbcTemplate template;
     private final TransactionTemplate transactionTemplate;
 
@@ -22,7 +23,8 @@ public class LinksDao {
 
     @Transactional
     public Long createLink(Link link) {
-        String sql = "INSERT INTO links (link) VALUES (?) RETURNING id";
+        String sql =
+            "INSERT INTO links (link) VALUES ( ? ) ON CONFLICT (link) DO UPDATE SET link = EXCLUDED.link RETURNING id;";
         return template.queryForObject(sql, Long.class, link.getLink());
     }
 
@@ -38,8 +40,30 @@ public class LinksDao {
         return template.query(sql, (rs, rowNum) -> {
             Link link = new Link();
             link.setId(rs.getLong("id"));
-            link.setLink(rs.getObject("link", String.class));
+            link.setLink(rs.getObject(LINK, String.class));
             return link;
         }, limit, offset);
+    }
+
+    @Transactional
+    public Link getLinkById(Long id) {
+        String sql = "SELECT * FROM links WHERE id = ?;";
+        return template.query(sql, (rs, rowNum) -> {
+            Link link = new Link();
+            link.setId(rs.getLong("id"));
+            link.setLink(rs.getObject(LINK, String.class));
+            return link;
+        }, id).getFirst();
+    }
+
+    @Transactional
+    public Link getLinkByLink(String url) {
+        String sql = "SELECT * FROM links WHERE link = ?;";
+        return template.query(sql, (rs, rowNum) -> {
+            Link link = new Link();
+            link.setId(rs.getLong("id"));
+            link.setLink(rs.getObject(LINK, String.class));
+            return link;
+        }, url).getFirst();
     }
 }

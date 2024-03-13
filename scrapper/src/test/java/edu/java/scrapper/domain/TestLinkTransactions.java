@@ -82,4 +82,34 @@ public class TestLinkTransactions extends IntegrationTest {
         List<Link> result2 = linksDao.getAllLinks(3, 3);
         assertThat(result2.size()).isEqualTo(2);
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testGetById() {
+        Long id = linksDao.createLink(
+            new Link() {{
+                setLink("vk.com");
+            }}
+        );
+
+        Link dbObject = linksDao.getLinkById(id);
+
+        assertThat(dbObject.getLink()).isEqualTo("vk.com");
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testGetByLink() {
+        Long id = linksDao.createLink(
+            new Link() {{
+                setLink("vk.com");
+            }}
+        );
+
+        Link dbObject = linksDao.getLinkByLink("vk.com");
+
+        assertThat(dbObject.getId()).isEqualTo(id);
+    }
 }

@@ -2,9 +2,7 @@ package edu.java.scrapper.domain;
 
 import edu.java.database.dto.User;
 import edu.java.domain.UsersDao;
-
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +71,7 @@ public class TestUserTransactions extends IntegrationTest {
         for (int i = 0; i < 5; i++) {
             usersDao.createUser(
                 new User() {{
-                    setTelegramId( ThreadLocalRandom.current().nextLong(Long.MAX_VALUE) );
+                    setTelegramId(ThreadLocalRandom.current().nextLong(Long.MAX_VALUE));
                 }}
             );
         }
@@ -83,5 +81,35 @@ public class TestUserTransactions extends IntegrationTest {
 
         List<User> result2 = usersDao.getAllUsers(3, 3);
         assertThat(result2.size()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testGetById() {
+        Long id = usersDao.createUser(
+            new User() {{
+                setTelegramId(1L);
+            }}
+        );
+
+        User dbObject = usersDao.getUserById(id);
+
+        assertThat(dbObject.getTelegramId()).isEqualTo(1L);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testGetByTgId() {
+        Long id = usersDao.createUser(
+            new User() {{
+                setTelegramId(5L);
+            }}
+        );
+
+        User dbObject = usersDao.getUserByTgId(5L);
+
+        assertThat(dbObject.getId()).isEqualTo(id);
     }
 }

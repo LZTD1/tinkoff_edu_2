@@ -1,6 +1,5 @@
 package edu.java.scrapper.domain;
 
-import edu.java.scrapper.domain.IntegrationTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.jdbc.DataSourceBuilder;
