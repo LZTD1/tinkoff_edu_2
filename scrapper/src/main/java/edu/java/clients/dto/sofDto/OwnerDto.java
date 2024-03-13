@@ -16,15 +16,4 @@ public class OwnerDto {
     public String displayName;
     public String link;
 
-    @Override public String toString() {
-        return "Owner{"
-            + "account_id=" + accountId
-            + ", reputation=" + reputation
-            + ", user_id=" + userId
-            + ", user_type='" + userType + '\''
-            + ", profile_image='" + profileImage + '\''
-            + ", display_name='" + displayName + '\''
-            + ", link='" + link + '\''
-            + '}';
-    }
 }

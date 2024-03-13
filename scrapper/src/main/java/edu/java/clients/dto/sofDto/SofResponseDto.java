@@ -12,13 +12,4 @@ public class SofResponseDto {
     public int quotaMax;
     @JsonProperty("quota_remaining")
     public int quotaRemaining;
-
-    @Override public String toString() {
-        return "SofResponse{"
-            + "items=" + items
-            + ", has_more=" + hasMore
-            + ", quota_max=" + quotaMax
-            + ", quota_remaining=" + quotaRemaining
-            + '}';
-    }
 }

@@ -27,13 +27,13 @@ public class LinksDao {
     public Long createLink(Link link) {
         String sql =
             "INSERT INTO links (link) VALUES ( ? ) ON CONFLICT (link) DO UPDATE SET link = EXCLUDED.link RETURNING id;";
-        return template.queryForObject(sql, Long.class, link.getLink());
+        return template.queryForObject(sql, Long.class, link.getLink().toString());
     }
 
     @Transactional
     public void deleteLink(Link link) {
         String sql = "DELETE FROM links WHERE link = ?";
-        template.update(sql, link.getLink());
+        template.update(sql, link.getLink().toString());
     }
 
     @Transactional
@@ -42,7 +42,7 @@ public class LinksDao {
         return template.query(sql, (rs, rowNum) -> {
             Link link = new Link();
             link.setId(rs.getLong("id"));
-            link.setLink(rs.getObject(LINK, String.class));
+            link.setLink(URI.create(rs.getObject(LINK, String.class)));
             return link;
         }, limit, offset);
     }
@@ -67,5 +67,15 @@ public class LinksDao {
             link.setUrl(URI.create(rs.getObject(LINK, String.class)));
             return link;
         }, url).getFirst();
+    }
+
+    public List<Link> getAllLinksNotUpdates(int minutes){
+        String sql = "SELECT * FROM links WHERE current_timestamp - updatetime > INTERVAL '"+minutes+" minutes';";
+        return template.query(sql, (rs, rowNum) -> {
+            Link link = new Link();
+            link.setId(rs.getLong("id"));
+            link.setLink(URI.create(rs.getObject(LINK, String.class)));
+            return link;
+        });
     }
 }

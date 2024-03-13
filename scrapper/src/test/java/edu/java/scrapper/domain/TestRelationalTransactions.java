@@ -6,6 +6,7 @@ import edu.java.database.dto.UserLinkRel;
 import edu.java.domain.LinksDao;
 import edu.java.domain.UserLinkRelationDao;
 import edu.java.domain.UsersDao;
+import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
         var linkId = linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
 
@@ -71,7 +72,7 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
         var linkId = linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
 
@@ -105,7 +106,7 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
         var linkId = linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
 
@@ -138,12 +139,12 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
         var link1 = linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
         var link2 = linksDao.createLink(
             new Link() {{
-                setLink("github.com");
+                setLink(URI.create("github.com"));
             }}
         );
 

@@ -2,6 +2,8 @@ package edu.java.scrapper;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import edu.java.clients.GithubClient;
+import edu.java.clients.dto.githubDto.CommitDto;
+import edu.java.clients.dto.githubDto.CommitterDto;
 import edu.java.clients.dto.githubDto.GitResponseDto;
 import java.util.List;
 import org.junit.Rule;
@@ -21,6 +23,13 @@ public class TestGithub {
     public static final GitResponseDto IDEAL_RESPONSE = new GitResponseDto() {{
         sha = "6b99dea062f28e723b2022e0aa0e3d17e05f6566";
         nodeId = "C_kwDOJcbWa9oAKDZiOTlkZWEwNjJmMjhlNzIzYjIwMjJlMGFhMGUzZDE3ZTA1ZjY1NjY";
+        commit = new CommitDto() {{
+            message = "commmiiiiit!";
+            committer = new CommitterDto() {{
+                name = "LZTD1";
+                email = "danil227pavlov@gmail.com";
+            }};
+        }};
     }};
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(3000));
@@ -37,6 +46,7 @@ public class TestGithub {
         assertThat(response.size()).isEqualTo(1);
         assertThat(response.get(0).nodeId).isEqualTo(IDEAL_RESPONSE.nodeId);
         assertThat(response.get(0).sha).isEqualTo(IDEAL_RESPONSE.sha);
+        assertThat(response.get(0).commit.message).isEqualTo(IDEAL_RESPONSE.commit.message);
     }
 
     private void configStub() {

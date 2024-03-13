@@ -7,10 +7,5 @@ public class GitResponseDto {
     @JsonProperty("node_id")
     public String nodeId;
 
-    @Override public String toString() {
-        return "GitResponseDto{"
-            + "sha='" + sha + '\''
-            + ", nodeId='" + nodeId + '\''
-            + '}';
-    }
+    public CommitDto commit;
 }

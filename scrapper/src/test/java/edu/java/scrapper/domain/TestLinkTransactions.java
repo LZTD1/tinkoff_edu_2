@@ -2,9 +2,13 @@ package edu.java.scrapper.domain;
 
 import edu.java.database.dto.Link;
 import edu.java.domain.LinksDao;
+import edu.java.scrapper.dto.LinkResponse;
+import java.net.URI;
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
-import edu.java.scrapper.dto.LinkResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +32,7 @@ public class TestLinkTransactions extends IntegrationTest {
     void testAdd() {
         linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
 
@@ -47,12 +51,12 @@ public class TestLinkTransactions extends IntegrationTest {
     void testDelete() {
         linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
         linksDao.deleteLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
 
@@ -72,7 +76,7 @@ public class TestLinkTransactions extends IntegrationTest {
         for (int i = 0; i < 5; i++) {
             linksDao.createLink(
                 new Link() {{
-                    setLink(UUID.randomUUID().toString());
+                    setLink(URI.create(UUID.randomUUID().toString()));
                 }}
             );
         }
@@ -90,7 +94,7 @@ public class TestLinkTransactions extends IntegrationTest {
     void testGetById() {
         Long id = linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
 
@@ -105,7 +109,7 @@ public class TestLinkTransactions extends IntegrationTest {
     void testGetByLink() {
         Long id = linksDao.createLink(
             new Link() {{
-                setLink("vk.com");
+                setLink(URI.create("vk.com"));
             }}
         );
 
@@ -113,4 +117,24 @@ public class TestLinkTransactions extends IntegrationTest {
 
         assertThat(dbObject.getId()).isEqualTo(id);
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testGetLinksByTime() {
+        jdbcTemplate.update(
+            "INSERT INTO public.links (link, updatetime) VALUES ('test.com', '2023-03-13 21:39:44.907092 +03:00');");
+
+        OffsetDateTime now = OffsetDateTime.now();
+        jdbcTemplate.update(
+            "INSERT INTO public.links (link, updatetime) VALUES (?, ?)",
+            new Object[] {"test2.com", Timestamp.from(now.toInstant())},
+            new int[] {Types.VARCHAR, Types.TIMESTAMP}
+        );
+
+        List<Link> links = linksDao.getAllLinksNotUpdates(5);
+
+        assertThat(links.size()).isEqualTo(1);
+    }
+
 }

@@ -18,16 +18,4 @@ public class ItemDto {
     @JsonProperty("content_license")
     public String contentLicense;
 
-    @Override public String toString() {
-        return "Item{"
-            + "owner=" + owner
-            + ", is_accepted=" + isAccepted
-            + ", score=" + score
-            + ", last_activity_date=" + lastActivityDate
-            + ", creation_date=" + creationDate
-            + ", answer_id=" + answerId
-            + ", question_id=" + questionId
-            + ", content_license='" + contentLicense + '\''
-            + '}';
-    }
 }

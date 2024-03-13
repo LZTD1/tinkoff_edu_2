@@ -9,7 +9,6 @@ import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;
 import edu.java.scrapperapi.services.LinkService;
 import java.net.URI;
-import java.rmi.NotBoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class JdbcLinkService implements LinkService {
     @Transactional
     public Long createLink(long tgChatId, URI url) {
         Long idLink = linksDao.createLink(new Link() {{
-            setLink(url.toString());
+            setLink(url);
         }});
 
         try {
@@ -74,6 +73,12 @@ public class JdbcLinkService implements LinkService {
         }catch (NoSuchElementException e){
             throw new UserIsNotDefindedException();
         }
-
     }
+
+    @Override
+    public List<Link> listScheduler(int minutes) {
+        List<Link> result = linksDao.getAllLinksNotUpdates(minutes);
+        return result;
+    }
+
 }
