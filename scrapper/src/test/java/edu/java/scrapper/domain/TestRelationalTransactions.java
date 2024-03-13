@@ -119,7 +119,7 @@ public class TestRelationalTransactions extends IntegrationTest {
 
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLink().getLink()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getLink().getUrl().toString()).isEqualTo("vk.com");
     }
 
     @Test
@@ -157,11 +157,11 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
 
         List<UserLinkRel> result = userLinkRelationDao.getAllLinksByTgId(
-            user1, 5, 0
+            505L, 5, 0
         );
 
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLink().getLink()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getLink().getUrl().toString()).isEqualTo("vk.com");
     }
 }

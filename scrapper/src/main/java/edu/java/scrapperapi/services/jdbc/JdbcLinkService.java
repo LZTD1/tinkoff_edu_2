@@ -4,10 +4,14 @@ import edu.java.database.dto.Link;
 import edu.java.domain.LinksDao;
 import edu.java.domain.UserLinkRelationDao;
 import edu.java.domain.UsersDao;
+import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
+import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;
 import edu.java.scrapperapi.services.LinkService;
 import java.net.URI;
+import java.rmi.NotBoundException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -48,8 +52,9 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     @Transactional
-    public Link remove(long tgChatId, URI url) {
-        var link = linksDao.getLinkByLink(url.toString());
+    public LinkResponse remove(long tgChatId, URI url) {
+
+        LinkResponse link = linksDao.getLinkByLink(url.toString());
         userLinkRelationDao.deleteRelational(
             usersDao.getUserByTgId(tgChatId),
             link
@@ -60,10 +65,15 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     @Transactional
-    public List<Link> listAll(long tgChatId, int limit, int offset) {
-        return userLinkRelationDao.getAllLinksByTgId(tgChatId, limit, offset)
-            .stream()
-            .map(entry -> linksDao.getLinkById(entry.getLink().getId()))
-            .toList();
+    public List<LinkResponse> listAll(long tgChatId, int limit, int offset) {
+        try {
+            return userLinkRelationDao.getAllRelational(limit, offset)
+                .stream()
+                .map(entry -> linksDao.getLinkById(entry.getLink().getId()))
+                .toList();
+        }catch (NoSuchElementException e){
+            throw new UserIsNotDefindedException();
+        }
+
     }
 }

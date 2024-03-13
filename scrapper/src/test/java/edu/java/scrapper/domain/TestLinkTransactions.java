@@ -4,6 +4,7 @@ import edu.java.database.dto.Link;
 import edu.java.domain.LinksDao;
 import java.util.List;
 import java.util.UUID;
+import edu.java.scrapper.dto.LinkResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -93,9 +94,9 @@ public class TestLinkTransactions extends IntegrationTest {
             }}
         );
 
-        Link dbObject = linksDao.getLinkById(id);
+        LinkResponse dbObject = linksDao.getLinkById(id);
 
-        assertThat(dbObject.getLink()).isEqualTo("vk.com");
+        assertThat(dbObject.getUrl().toString()).isEqualTo("vk.com");
     }
 
     @Test
@@ -108,7 +109,7 @@ public class TestLinkTransactions extends IntegrationTest {
             }}
         );
 
-        Link dbObject = linksDao.getLinkByLink("vk.com");
+        LinkResponse dbObject = linksDao.getLinkByLink("vk.com");
 
         assertThat(dbObject.getId()).isEqualTo(id);
     }

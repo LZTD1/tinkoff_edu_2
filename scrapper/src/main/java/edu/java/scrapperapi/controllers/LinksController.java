@@ -1,6 +1,5 @@
 package edu.java.scrapperapi.controllers;
 
-import edu.java.database.dto.Link;
 import edu.java.scrapper.dto.AddLinkRequest;
 import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.LinkResponse;
@@ -87,7 +86,7 @@ public class LinksController {
         produces = {"application/json"}
     )
     @ResponseStatus(HttpStatus.OK)
-    public List<Link> linksGet(
+    public ListLinksResponse linksGet(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
 
@@ -98,7 +97,12 @@ public class LinksController {
         @RequestHeader(value = "offset", required = true) int offset
 
     ) {
-        return linkService.listAll(tgChatId, limit, offset);
+        return new ListLinksResponse() {{
+            List<LinkResponse> links = linkService.listAll(tgChatId, limit, offset);
+
+            setLinks(links);
+            setSize(links.size());
+        }};
     }
 
     @Operation(

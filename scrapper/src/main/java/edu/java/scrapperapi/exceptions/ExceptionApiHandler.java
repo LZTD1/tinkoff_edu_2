@@ -1,6 +1,8 @@
 package edu.java.scrapperapi.exceptions;
 
 import edu.java.shared.ApiErrorResponse;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,7 +17,20 @@ public class ExceptionApiHandler {
         return new ApiErrorResponse() {{
             setCode(HttpStatus.CONFLICT.toString());
             setExceptionName("LinkNotFoundException");
+            setStacktrace(getStackTraceList(exception));
             setExceptionMessage(exception.getMessage());
+        }};
+    }
+
+    @ExceptionHandler(UserIsNotDefindedException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrorResponse userIsNotDefinded(UserIsNotDefindedException exception) {
+        return new ApiErrorResponse() {{
+            setCode(HttpStatus.NOT_FOUND.toString());
+            setExceptionName("userIsNotDefinded");
+            setExceptionMessage(exception.getMessage());
+            setStacktrace(getStackTraceList(exception));
+            setDescription("Операция, производимая над пользователем, не нашла конкретного пользователя!");
         }};
     }
 
@@ -25,7 +40,14 @@ public class ExceptionApiHandler {
         return new ApiErrorResponse() {{
             setCode(HttpStatus.CONFLICT.toString());
             setExceptionName("LinkAlreadyExistsException");
+            setStacktrace(getStackTraceList(exception));
             setExceptionMessage(exception.getMessage());
         }};
+    }
+
+    private static List<String> getStackTraceList(RuntimeException exception) {
+        return Arrays.stream(exception.getStackTrace())
+            .map(StackTraceElement::toString)
+            .toList();
     }
 }

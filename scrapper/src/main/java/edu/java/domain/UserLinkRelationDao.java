@@ -1,8 +1,8 @@
 package edu.java.domain;
 
-import edu.java.database.dto.Link;
 import edu.java.database.dto.User;
 import edu.java.database.dto.UserLinkRel;
+import edu.java.scrapper.dto.LinkResponse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,31 +16,28 @@ public class UserLinkRelationDao {
     public static final String USERID = "userid";
     public static final String LINKID = "linkid";
     private final JdbcTemplate template;
-    private final TransactionTemplate transactionTemplate;
     private final UsersDao usersDao;
     private final LinksDao linksDao;
 
     @Autowired
     public UserLinkRelationDao(
         JdbcTemplate template,
-        TransactionTemplate transactionTemplate,
         UsersDao usersDao,
         LinksDao linksDao
     ) {
         this.template = template;
-        this.transactionTemplate = transactionTemplate;
         this.usersDao = usersDao;
         this.linksDao = linksDao;
     }
 
     @Transactional
-    public void createRelational(User user, Link link) {
+    public void createRelational(User user, LinkResponse link) {
         String sql = "INSERT INTO users_links (userid, linkid) VALUES (?, ?)";
         template.update(sql, user.getId(), link.getId());
     }
 
     @Transactional
-    public void deleteRelational(User user, Link link) {
+    public void deleteRelational(User user, LinkResponse link) {
         String sql = "DELETE FROM users_links WHERE userid = ? AND linkid = ?";
         template.update(sql, user.getId(), link.getId());
     }
@@ -50,7 +47,7 @@ public class UserLinkRelationDao {
         String sql = "SELECT * FROM users_links LIMIT ? OFFSET ?;";
         return template.query(sql, (rs, rowNum) -> {
             User user = usersDao.getUserById(rs.getLong(USERID));
-            Link link = linksDao.getLinkById(rs.getLong(LINKID));
+            LinkResponse link = linksDao.getLinkById(rs.getLong(LINKID));
 
             return new UserLinkRel() {{
                 setLink(link);
@@ -65,8 +62,9 @@ public class UserLinkRelationDao {
 
         String sql = "SELECT * FROM users_links WHERE userid = ? LIMIT ? OFFSET ?;";
         return template.query(sql, (rs, rowNum) -> {
+
             User user = usersDao.getUserById(rs.getLong(USERID));
-            Link link = linksDao.getLinkById(rs.getLong(LINKID));
+            LinkResponse link = linksDao.getLinkById(rs.getLong(LINKID));
 
             return new UserLinkRel() {{
                 setLink(link);

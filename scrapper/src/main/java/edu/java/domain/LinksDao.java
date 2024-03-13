@@ -1,6 +1,8 @@
 package edu.java.domain;
 
 import edu.java.database.dto.Link;
+import edu.java.scrapper.dto.LinkResponse;
+import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -46,23 +48,23 @@ public class LinksDao {
     }
 
     @Transactional
-    public Link getLinkById(Long id) {
+    public LinkResponse getLinkById(Long id) {
         String sql = "SELECT * FROM links WHERE id = ?;";
         return template.query(sql, (rs, rowNum) -> {
-            Link link = new Link();
+            LinkResponse link = new LinkResponse();
             link.setId(rs.getLong("id"));
-            link.setLink(rs.getObject(LINK, String.class));
+            link.setUrl(URI.create(rs.getObject(LINK, String.class)));
             return link;
         }, id).getFirst();
     }
 
     @Transactional
-    public Link getLinkByLink(String url) {
+    public LinkResponse getLinkByLink(String url) {
         String sql = "SELECT * FROM links WHERE link = ?;";
         return template.query(sql, (rs, rowNum) -> {
-            Link link = new Link();
+            LinkResponse link = new LinkResponse();
             link.setId(rs.getLong("id"));
-            link.setLink(rs.getObject(LINK, String.class));
+            link.setUrl(URI.create(rs.getObject(LINK, String.class)));
             return link;
         }, url).getFirst();
     }
