@@ -70,7 +70,7 @@ public class JdbcLinkService implements LinkService {
                 .stream()
                 .map(entry -> linksDao.getLinkById(entry.getLink().getId()))
                 .toList();
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             throw new UserIsNotDefindedException();
         }
     }
@@ -79,6 +79,19 @@ public class JdbcLinkService implements LinkService {
     public List<Link> listScheduler(int minutes) {
         List<Link> result = linksDao.getAllLinksNotUpdates(minutes);
         return result;
+    }
+
+    @Override
+    public void updateTimeAndLastHash(Long idLink, String hash) {
+        linksDao.updateTimeAndLastHash(idLink, hash);
+    }
+
+    @Override
+    public List<Long> getAllUsersWithLink(Link link) {
+        return userLinkRelationDao.getAllUsersIdWithLink(link.getId())
+            .stream()
+            .map(entry -> usersDao.getUserById(entry).getTelegramId())
+            .toList();
     }
 
 }

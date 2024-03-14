@@ -7,7 +7,11 @@ import lombok.SneakyThrows;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
+@SuppressWarnings("HideUtilityClassConstructor")
 public class MainHandler {
+
+    public MainHandler() {
+    }
 
     @SneakyThrows
     public static LinkUpdate handle(URI uri) {
@@ -18,14 +22,10 @@ public class MainHandler {
             if (aClass.getInterfaces().length > 0 && aClass.getInterfaces()[0].getSimpleName().equals("WebHandler")) {
                 WebHandler instance = (WebHandler) aClass.getDeclaredConstructor().newInstance();
 
-                if (instance.getHost().equals(uri.getHost())) {
-//                    LinkUpdate linkUpdate = new LinkUpdate();
-//                    Optional<String> updates = instance.getUpdateReasonIfHas(uri);
+//                  Но как я в конструктор передам бин, допустим, GithubClient
 
-                    System.out.println("Нашелся инстанс!");
-                    System.out.println(
-                        instance.getUpdateReasonIfHas(uri)
-                    );
+                if (instance.getHost().equals(uri.getHost())) {
+//                    Optional<String> updates = instance.getUpdateReasonIfHas(uri);
                 }
             }
         }

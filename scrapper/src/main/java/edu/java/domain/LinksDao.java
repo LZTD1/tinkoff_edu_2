@@ -3,6 +3,7 @@ package edu.java.domain;
 import edu.java.database.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
+import java.sql.Types;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +15,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class LinksDao {
 
     public static final String LINK = "link";
+    public static final String LASTHASH = "lasthash";
     private final JdbcTemplate template;
     private final TransactionTemplate transactionTemplate;
 
@@ -43,6 +45,7 @@ public class LinksDao {
             Link link = new Link();
             link.setId(rs.getLong("id"));
             link.setLink(URI.create(rs.getObject(LINK, String.class)));
+            link.setLasthash(rs.getObject(LASTHASH, String.class));
             return link;
         }, limit, offset);
     }
@@ -69,13 +72,24 @@ public class LinksDao {
         }, url).getFirst();
     }
 
-    public List<Link> getAllLinksNotUpdates(int minutes){
-        String sql = "SELECT * FROM links WHERE current_timestamp - updatetime > INTERVAL '"+minutes+" minutes';";
+    @Transactional
+    public List<Link> getAllLinksNotUpdates(int minutes) {
+        String sql = "SELECT * FROM links WHERE current_timestamp - updatetime > INTERVAL '" + minutes + " minutes';";
         return template.query(sql, (rs, rowNum) -> {
             Link link = new Link();
             link.setId(rs.getLong("id"));
             link.setLink(URI.create(rs.getObject(LINK, String.class)));
+            link.setLasthash(rs.getObject(LASTHASH, String.class));
             return link;
+        });
+    }
+
+    @Transactional
+    public void updateTimeAndLastHash(Long idLink, String hash) {
+        String sql = "UPDATE links SET lasthash = ?, updatetime = current_timestamp WHERE id = ?;";
+        template.update(sql, new Object[] {hash, idLink}, new int[] {
+            Types.VARCHAR,
+            Types.BIGINT
         });
     }
 }

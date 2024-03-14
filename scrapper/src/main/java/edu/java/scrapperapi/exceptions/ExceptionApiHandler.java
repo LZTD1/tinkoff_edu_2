@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionApiHandler {
 
+    private static List<String> getStackTraceList(RuntimeException exception) {
+        return Arrays.stream(exception.getStackTrace())
+            .map(StackTraceElement::toString)
+            .toList();
+    }
+
     @ExceptionHandler(LinkNotFoundException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiErrorResponse notFoundException(LinkNotFoundException exception) {
@@ -43,11 +49,5 @@ public class ExceptionApiHandler {
             setStacktrace(getStackTraceList(exception));
             setExceptionMessage(exception.getMessage());
         }};
-    }
-
-    private static List<String> getStackTraceList(RuntimeException exception) {
-        return Arrays.stream(exception.getStackTrace())
-            .map(StackTraceElement::toString)
-            .toList();
     }
 }

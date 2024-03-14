@@ -1,23 +1,25 @@
 package edu.java.scrapper;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.clients.GithubClient;
 import edu.java.clients.dto.githubDto.CommitDto;
 import edu.java.clients.dto.githubDto.CommitterDto;
 import edu.java.clients.dto.githubDto.GitResponseDto;
 import java.util.List;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static wiremock.com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
+@WireMockTest
 public class TestGithub {
 
     public static final GitResponseDto IDEAL_RESPONSE = new GitResponseDto() {{
@@ -31,13 +33,22 @@ public class TestGithub {
             }};
         }};
     }};
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(3000));
+    WireMockServer wireMockServer;
+
+    @BeforeEach
+    public void setup() {
+        wireMockServer = new WireMockServer(3000);
+        wireMockServer.start();
+        configStub();
+    }
+
+    @AfterEach
+    public void teardown() {
+        wireMockServer.stop();
+    }
 
     @Test
     public void gitTest() {
-        configStub();
-
         List<GitResponseDto> response = new GithubClient("http://localhost:3000")
             .getAnswersByQuestion("LZTD1", "Voronezh-Hakaton")
             .collectList()

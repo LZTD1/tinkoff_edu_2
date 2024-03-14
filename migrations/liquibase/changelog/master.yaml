@@ -7,3 +7,5 @@ databaseChangeLog:
       file: /liquibase/changelog/changeset/createUserLinksTable.sql
   - include:
       file: /liquibase/changelog/changeset/createNewColumnInLinkEntity.sql
+  - include:
+      file: /liquibase/changelog/changeset/createNewColumnLastHashInLinkEntity.sql

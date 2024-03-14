@@ -6,6 +6,7 @@ import edu.java.database.dto.UserLinkRel;
 import edu.java.domain.LinksDao;
 import edu.java.domain.UserLinkRelationDao;
 import edu.java.domain.UsersDao;
+import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -164,5 +165,45 @@ public class TestRelationalTransactions extends IntegrationTest {
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
         assertThat(result.getFirst().getLink().getUrl().toString()).isEqualTo("vk.com");
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testGetAllUsersIdWithLink() {
+        var user1 = usersDao.createUser(
+            new User() {{
+                setTelegramId(505L);
+            }}
+        );
+        var user2 = usersDao.createUser(
+            new User() {{
+                setTelegramId(404L);
+            }}
+        );
+        var link = linksDao.createLink(
+            new Link() {{
+                setLink(URI.create("vk.com"));
+            }}
+        );
+        userLinkRelationDao.createRelational(
+            new User() {{
+                setId(user1);
+            }},
+            new LinkResponse() {{
+                setId(link);
+            }}
+        );
+        userLinkRelationDao.createRelational(
+            new User() {{
+                setId(user2);
+            }},
+            new LinkResponse() {{
+                setId(link);
+            }}
+        );
+        List<Long> result = userLinkRelationDao.getAllUsersIdWithLink(link);
+
+        assertThat(result.size()).isEqualTo(2);
     }
 }

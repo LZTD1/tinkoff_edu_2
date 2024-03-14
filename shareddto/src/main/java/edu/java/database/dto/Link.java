@@ -12,4 +12,6 @@ public class Link {
     private URI link;
 
     private OffsetDateTime updatetime;
+
+    private String lasthash;
 }

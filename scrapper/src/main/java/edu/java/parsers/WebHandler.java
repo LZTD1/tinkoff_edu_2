@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.Optional;
 
 public interface WebHandler {
-    public String getHost();
+    String getHost();
 
-    public Optional<String> getUpdateReasonIfHas(URI uri);
+    Optional<String> getUpdateReasonIfHas(URI uri);
 }

@@ -1,23 +1,25 @@
 package edu.java.scrapper;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.clients.StackoverflowClient;
 import edu.java.clients.dto.sofDto.ItemDto;
 import edu.java.clients.dto.sofDto.OwnerDto;
 import edu.java.clients.dto.sofDto.SofResponseDto;
 import java.util.ArrayList;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static wiremock.com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
+@WireMockTest
 public class TestStackOverFlow {
 
     public static final SofResponseDto IDEAL_RESPONSE = new SofResponseDto() {{
@@ -46,13 +48,22 @@ public class TestStackOverFlow {
             }});
         }};
     }};
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(3000));
+    WireMockServer wireMockServer;
+
+    @BeforeEach
+    public void setup() {
+        wireMockServer = new WireMockServer(3000);
+        wireMockServer.start();
+        configStub();
+    }
+
+    @AfterEach
+    public void teardown() {
+        wireMockServer.stop();
+    }
 
     @Test
     public void sofTest() {
-        configStub();
-
         SofResponseDto response = new StackoverflowClient("http://localhost:3000")
             .getAnswersByQuestion(1)
             .block();

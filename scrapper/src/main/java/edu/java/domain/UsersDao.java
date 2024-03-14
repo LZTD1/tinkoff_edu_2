@@ -66,5 +66,4 @@ public class UsersDao {
             return user;
         }, tgId).getFirst();
     }
-
 }

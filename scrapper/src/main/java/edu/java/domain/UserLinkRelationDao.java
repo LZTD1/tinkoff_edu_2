@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @Repository
 public class UserLinkRelationDao {
@@ -71,5 +70,12 @@ public class UserLinkRelationDao {
                 setUser(user);
             }};
         }, userID, limit, offset);
+    }
+
+    @Transactional
+    public List<Long> getAllUsersIdWithLink(Long id) {
+        String sql = "SELECT userid FROM users_links WHERE linkid = ?";
+
+        return template.query(sql, (rs, rowNum) -> rs.getLong(USERID), id);
     }
 }

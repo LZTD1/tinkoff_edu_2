@@ -1,14 +1,12 @@
-//package edu.java.parsers.web;
-//
-//import edu.java.parsers.WebHandler;
-//
-//public class WebStackoverflow implements WebHandler {
-//
-//    public WebStackoverflow() {
-//    }
-//
-//    @Override
-//    public String getHost() {
-//        return "api.stackexchange.com";
-//    }
-//}
+package edu.java.parsers.web;
+
+public class WebStackoverflow {
+
+    public String getHost() {
+        return "stackoverflow.com";
+    }
+
+    public String getId(String path) {
+        return path.split("/")[2];
+    }
+}
