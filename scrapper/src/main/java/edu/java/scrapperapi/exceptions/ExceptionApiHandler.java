@@ -39,6 +39,17 @@ public class ExceptionApiHandler {
         }};
     }
 
+    @ExceptionHandler(EntityDeleteException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiErrorResponse entityAlreadyDelete(EntityDeleteException exception) {
+        return new ApiErrorResponse() {{
+            setCode(HttpStatus.CONFLICT.toString());
+            setExceptionName("entityAlreadyDelete");
+            setStacktrace(getStackTraceList(exception));
+            setExceptionMessage(exception.getMessage());
+        }};
+    }
+
     @ExceptionHandler(UserIsNotDefindedException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponse userIsNotDefinded(UserIsNotDefindedException exception) {

@@ -5,6 +5,7 @@ import edu.java.domain.UsersDao;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
+import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -82,6 +83,27 @@ public class TestUserTransactions extends IntegrationTest {
         ).intValue();
 
         assertThat(result).isEqualTo(0);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testDeleteException() {
+        usersDao.createUser(
+            new User() {{
+                setTelegramId(505L);
+            }}
+        );
+        usersDao.deleteUser(
+            new User() {{
+                setTelegramId(505L);
+            }}
+        );
+        assertThrows(EntityDeleteException.class, () -> usersDao.deleteUser(
+            new User() {{
+                setTelegramId(505L);
+            }}
+        ));
     }
 
     @Test

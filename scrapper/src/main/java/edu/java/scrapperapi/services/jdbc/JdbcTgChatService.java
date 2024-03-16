@@ -2,6 +2,7 @@ package edu.java.scrapperapi.services.jdbc;
 
 import edu.java.database.dto.User;
 import edu.java.domain.UsersDao;
+import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,6 @@ public class JdbcTgChatService implements TgChatService {
         usersDao.deleteUser(new User() {{
             setTelegramId(tgChatId);
         }});
+
     }
 }

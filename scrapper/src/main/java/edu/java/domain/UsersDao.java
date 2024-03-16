@@ -3,6 +3,7 @@ package edu.java.domain;
 import edu.java.database.dto.User;
 import java.util.List;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
+import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,11 +26,11 @@ public class UsersDao {
     }
 
     @Transactional
-    public Long createUser(User user)  {
+    public Long createUser(User user) {
         String sql = "INSERT INTO users (telegramid) VALUES (?) RETURNING id";
-        try{
+        try {
             return template.queryForObject(sql, Long.class, user.getTelegramId());
-        }catch (DuplicateKeyException e){
+        } catch (DuplicateKeyException e) {
             throw new EntityAlreadyExistsError("Пользователь с таким telegramId уже существует!");
         }
     }
@@ -37,7 +38,10 @@ public class UsersDao {
     @Transactional
     public void deleteUser(User user) {
         String sql = "DELETE FROM users WHERE telegramid = ?";
-        template.update(sql, user.getTelegramId());
+        int rowAffected = template.update(sql, user.getTelegramId());
+        if (rowAffected == 0) {
+            throw new EntityDeleteException("Не возможно удалить юзера, возможн он уже был удален!");
+        }
     }
 
     @Transactional
