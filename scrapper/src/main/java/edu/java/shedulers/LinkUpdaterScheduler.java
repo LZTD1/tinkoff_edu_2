@@ -3,14 +3,12 @@ package edu.java.shedulers;
 import edu.java.clients.BotClient;
 import edu.java.clients.GithubClient;
 import edu.java.clients.StackoverflowClient;
-import edu.java.clients.dto.githubDto.GitResponseDto;
-import edu.java.clients.dto.sofDto.ItemDto;
-import edu.java.configuration.ApplicationConfig;
 import edu.java.database.dto.Link;
-import edu.java.parsers.web.WebGithub;
-import edu.java.parsers.web.WebStackoverflow;
+import edu.java.parsers.WebHandler;
 import edu.java.scrapperapi.services.LinkService;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class LinkUpdaterScheduler {
 
     private final static Logger LOGGER = LogManager.getLogger();
+    private final List<WebHandler> webHandlers;
     private LinkService linkService;
     private GithubClient githubClient;
     private StackoverflowClient stackoverflowClient;
@@ -40,12 +39,14 @@ public class LinkUpdaterScheduler {
         LinkService linkService,
         GithubClient githubClient,
         BotClient botClient,
-        StackoverflowClient stackoverflowClient
+        StackoverflowClient stackoverflowClient,
+        List<WebHandler> webHandlers
     ) {
         this.linkService = linkService;
         this.githubClient = githubClient;
         this.stackoverflowClient = stackoverflowClient;
         this.botClient = botClient;
+        this.webHandlers = webHandlers;
     }
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
@@ -53,9 +54,12 @@ public class LinkUpdaterScheduler {
     public void update() {
         LOGGER.info("Updating...");
         List<Link> list = linkService.listScheduler(linkDelay, limitPerCheck);
+        Map<String, WebHandler> handlerContainer = getHandlerContainer();
         list.forEach(
             entry -> {
-                System.out.println("need upd "+entry);
+                System.out.println("need upd " + entry);
+                WebHandler webHandler = handlerContainer.get(entry.getLink().getHost());
+                webHandler.getUpdate(entry);
 //                if (entry.getLink().getHost().equals("github.com")) {
 //                    WebGithub webGithub = new WebGithub();
 //                    GitResponseDto result = githubClient.getAnswersByQuestion(
@@ -98,6 +102,12 @@ public class LinkUpdaterScheduler {
 
 //                }
             }
+        );
+    }
+
+    private Map<String, WebHandler> getHandlerContainer() {
+        return this.webHandlers.stream().collect(
+            Collectors.toMap(WebHandler::getHost, e -> e)
         );
     }
 }
