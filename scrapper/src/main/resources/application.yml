@@ -4,6 +4,7 @@ app:
     interval: 10000
     force-check-delay: 10000
   linkDelay: 5
+  limitPerCheck: 10
 
 springdoc:
   swagger-ui:

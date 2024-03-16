@@ -76,8 +76,8 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
-    public List<Link> listScheduler(int minutes) {
-        List<Link> result = linksDao.getAllLinksNotUpdates(minutes);
+    public List<Link> listScheduler(int minutes, int limit) {
+        List<Link> result = linksDao.getLinksNotUpdates(minutes, limit);
         return result;
     }
 

@@ -132,7 +132,7 @@ public class TestLinkTransactions extends IntegrationTest {
             new int[] {Types.VARCHAR, Types.TIMESTAMP}
         );
 
-        List<Link> links = linksDao.getAllLinksNotUpdates(5);
+        List<Link> links = linksDao.getLinksNotUpdates(5, 2);
 
         assertThat(links.size()).isEqualTo(1);
     }

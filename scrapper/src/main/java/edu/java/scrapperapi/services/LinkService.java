@@ -12,7 +12,7 @@ public interface LinkService {
 
     List<LinkResponse> listAll(long tgChatId, int limit, int offset);
 
-    List<Link> listScheduler(int minutes);
+    List<Link> listScheduler(int minutes, int limit);
 
     void updateTimeAndLastHash(Long idLink, String hash);
 

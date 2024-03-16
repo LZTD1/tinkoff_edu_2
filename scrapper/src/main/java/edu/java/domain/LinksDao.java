@@ -73,7 +73,7 @@ public class LinksDao {
     }
 
     @Transactional
-    public List<Link> getAllLinksNotUpdates(int minutes) {
+    public List<Link> getLinksNotUpdates(int minutes, int limit) {
         String sql = "SELECT * FROM links WHERE current_timestamp - updatetime > INTERVAL '" + minutes + " minutes';";
         return template.query(sql, (rs, rowNum) -> {
             Link link = new Link();

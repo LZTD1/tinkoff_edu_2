@@ -19,7 +19,6 @@ public class ServiceConfiguration {
     private UsersDao usersDao;
     private UserLinkRelationDao userLinkRelationDao;
 
-    @Autowired
     public ServiceConfiguration(LinksDao linksDao, UsersDao usersDao, UserLinkRelationDao userLinkRelationDao) {
         this.linksDao = linksDao;
         this.usersDao = usersDao;

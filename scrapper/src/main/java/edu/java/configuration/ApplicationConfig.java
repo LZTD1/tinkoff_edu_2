@@ -11,7 +11,8 @@ public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
 
-    int linkDelay
+    int linkDelay,
+    int limitPerCheck
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
