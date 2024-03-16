@@ -28,6 +28,17 @@ public class ExceptionApiHandler {
         }};
     }
 
+    @ExceptionHandler(EntityAlreadyExistsError.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiErrorResponse entityAlreadyExists(EntityAlreadyExistsError exception) {
+        return new ApiErrorResponse() {{
+            setCode(HttpStatus.CONFLICT.toString());
+            setExceptionName("entityAlreadyExists");
+            setStacktrace(getStackTraceList(exception));
+            setExceptionMessage(exception.getMessage());
+        }};
+    }
+
     @ExceptionHandler(UserIsNotDefindedException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponse userIsNotDefinded(UserIsNotDefindedException exception) {

@@ -2,7 +2,9 @@ package edu.java.domain;
 
 import edu.java.database.dto.User;
 import java.util.List;
+import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +25,13 @@ public class UsersDao {
     }
 
     @Transactional
-    public Long createUser(User user) {
+    public Long createUser(User user)  {
         String sql = "INSERT INTO users (telegramid) VALUES (?) RETURNING id";
-        return template.queryForObject(sql, Long.class, user.getTelegramId());
+        try{
+            return template.queryForObject(sql, Long.class, user.getTelegramId());
+        }catch (DuplicateKeyException e){
+            throw new EntityAlreadyExistsError("Пользователь с таким telegramId уже существует!");
+        }
     }
 
     @Transactional
