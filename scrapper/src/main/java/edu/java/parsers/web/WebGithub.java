@@ -1,7 +1,7 @@
 package edu.java.parsers.web;
 
 import edu.java.clients.GithubClient;
-import edu.java.clients.dto.githubDto.GitResponseDto;
+//import edu.java.clients.dto.githubDto.commit.GitResponseDto;
 import edu.java.database.dto.Link;
 import edu.java.parsers.WebHandler;
 import java.net.URI;
@@ -24,7 +24,7 @@ public class WebGithub implements WebHandler {
 
     @Override
     public void getUpdate(Link link) {
-        GitResponseDto result = getGitResponseDto(link);
+//        GitResponseDto result = getGitResponseDto(link);
 
 //        if (!link.getLasthash().equals(result.nodeId)) {
 //            linkService.updateTimeAndLastHash(entry.getId(), result.nodeId);
@@ -42,12 +42,12 @@ public class WebGithub implements WebHandler {
 //        }
     }
 
-    private GitResponseDto getGitResponseDto(Link link) {
-        return githubClient.getAnswersByQuestion(
-            getOwner(link.getLink().getPath()),
-            getRepos(link.getLink().getPath())
-        ).collectList().block().getFirst();
-    }
+//    private GitResponseDto getGitResponseDto(Link link) {
+//        return githubClient.getCommitsByRepos(
+//            getOwner(link.getLink().getPath()),
+//            getRepos(link.getLink().getPath())
+//        ).collectList().block().getFirst();
+//    }
 
     @Override
     public Optional<String> getUpdateReasonIfHas(URI uri) {
