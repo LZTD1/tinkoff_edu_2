@@ -20,22 +20,10 @@ public class WebStackoverflow implements WebHandler {
 
     private static final String EYES_EMOJI = "\uD83D\uDC40";
     private static final String CUP_EMOJI = "\uD83C\uDFC6";
+    private static final int MAX_MESSAGE_LENGTH = 20;
     private final LinkService linkService;
     private final StackoverflowClient stackoverflowClient;
-    private static final int MAX_MESSAGE_LENGTH = 20;
     private OffsetDateTime newSendTime;
-
-    @Getter
-    enum Types {
-        ANSWER("ответ"),
-        COMMENT("комментарий");
-
-        private final String name;
-
-        Types(String text) {
-            this.name = text;
-        }
-    }
 
     public WebStackoverflow(LinkService linkService, StackoverflowClient stackoverflowClient) {
         this.linkService = linkService;
@@ -139,5 +127,17 @@ public class WebStackoverflow implements WebHandler {
 
     private String getId(String path) {
         return path.split("/")[2];
+    }
+
+    @Getter
+    enum Types {
+        ANSWER("ответ"),
+        COMMENT("комментарий");
+
+        private final String name;
+
+        Types(String text) {
+            this.name = text;
+        }
     }
 }

@@ -1,7 +1,7 @@
 package edu.java.scrapper.dto;
 
-import lombok.Data;
 import java.net.URI;
+import lombok.Data;
 
 @Data
 public class DeleteLinkRequest {

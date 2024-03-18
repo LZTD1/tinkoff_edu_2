@@ -82,6 +82,7 @@ public class WebGithub implements WebHandler {
         });
     }
 
+    @SuppressWarnings("MultipleStringLiterals")
     private String getDescriptionMessage(CommitsDto entry) {
         return new StringBuilder()
             .append(SPEAKING_HEAD_EMOJI + " Нашел новый коммит!\n")

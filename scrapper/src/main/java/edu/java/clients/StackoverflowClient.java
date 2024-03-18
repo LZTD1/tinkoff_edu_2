@@ -20,7 +20,10 @@ public class StackoverflowClient {
     public Mono<StackOverFlowDto> getAnswersByQuestion(int id) {
         return client
             .get()
-            .uri(String.format("/2.3/questions/%d/answers?order=desc&sort=creation&site=stackoverflow&filter=withbody", id))
+            .uri(String.format(
+                "/2.3/questions/%d/answers?order=desc&sort=creation&site=stackoverflow&filter=withbody",
+                id
+            ))
             .retrieve()
             .bodyToMono(StackOverFlowDto.class);
     }
@@ -28,7 +31,10 @@ public class StackoverflowClient {
     public Mono<StackOverFlowDto> getCommentsByQuestion(int id) {
         return client
             .get()
-            .uri(String.format("/2.3/questions/%d/comments?order=desc&sort=creation&site=stackoverflow&filter=withbody", id))
+            .uri(String.format(
+                "/2.3/questions/%d/comments?order=desc&sort=creation&site=stackoverflow&filter=withbody",
+                id
+            ))
             .retrieve()
             .bodyToMono(StackOverFlowDto.class);
     }

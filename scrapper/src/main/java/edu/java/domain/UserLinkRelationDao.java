@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@SuppressWarnings("LineLength")
 public class UserLinkRelationDao {
 
     private final JdbcTemplate template;
