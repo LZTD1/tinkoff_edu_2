@@ -15,7 +15,7 @@ public interface LinkService {
 
     List<Link> listScheduler(int minutes, int limit);
 
-    void updateTimeAndLastHash(Long idLink, OffsetDateTime offsetDateTime);
+    void updateLastSendTime(Long idLink, OffsetDateTime newSendTime);
 
     List<Long> getAllUsersWithLink(Link link);
 }

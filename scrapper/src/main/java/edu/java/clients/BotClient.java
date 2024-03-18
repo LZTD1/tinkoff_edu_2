@@ -43,4 +43,13 @@ public class BotClient {
             LOGGER.warn("Не возможно установить соединение с bot сервером!");
         }
     }
+
+    public void sendUpdates(List<LinkUpdate> linkUpdateList) {
+        linkUpdateList.forEach(entry -> sendUpdate(
+            entry.getId(),
+            entry.getUrl(),
+            entry.getDescription(),
+            entry.getTgChatIds()
+        ));
+    }
 }

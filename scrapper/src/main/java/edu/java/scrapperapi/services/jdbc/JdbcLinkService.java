@@ -83,8 +83,8 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
-    public void updateTimeAndLastHash(Long idLink, OffsetDateTime offsetDateTime) {
-        linksDao.updateLastSendTime(idLink, offsetDateTime);
+    public void updateLastSendTime(Long idLink, OffsetDateTime newSendTime) {
+        linksDao.updateLastSendTime(idLink, newSendTime);
     }
 
     @Override

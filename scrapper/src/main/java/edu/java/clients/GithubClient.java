@@ -26,7 +26,7 @@ public class GithubClient {
             .bodyToFlux(CommitsDto.class);
     }
 
-    public Flux<PullDto> getPullsByRepos(String owner, String repos){
+    public Flux<PullDto> getPullsByRepos(String owner, String repos) {
         return client
             .get()
             .uri(String.format("/repos/%s/%s/pulls", owner, repos))

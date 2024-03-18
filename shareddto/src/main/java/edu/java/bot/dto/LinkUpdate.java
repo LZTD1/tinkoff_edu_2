@@ -1,9 +1,9 @@
 package edu.java.bot.dto;
 
 import jakarta.validation.Valid;
+import lombok.Data;
 import java.net.URI;
 import java.util.List;
-import lombok.Data;
 
 @Data
 public class LinkUpdate {

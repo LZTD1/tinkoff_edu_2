@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.clients.dto.githubDto.UserDto;
 import edu.java.clients.dto.githubDto.commit.commit.CommitDto;
 import java.net.URI;
-import java.time.OffsetDateTime;
 import lombok.Data;
 
 @Data

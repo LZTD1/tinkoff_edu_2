@@ -97,7 +97,8 @@ public class TestGithub {
         assertThat(response.getFirst().getNodeId()).isEqualTo(IDEAL_RESPONSE_COMMIT.getNodeId());
         assertThat(response.getFirst().getHtmlUrl()).isEqualTo(IDEAL_RESPONSE_COMMIT.getHtmlUrl());
         assertThat(response.getFirst().getAuthor().getId()).isEqualTo(IDEAL_RESPONSE_COMMIT.getAuthor().getId());
-        assertThat(response.getFirst().getCommit().getCommitter().getEmail()).isEqualTo(IDEAL_RESPONSE_COMMIT.getCommit().getCommitter().getEmail());
+        assertThat(response.getFirst().getCommit().getCommitter()
+            .getEmail()).isEqualTo(IDEAL_RESPONSE_COMMIT.getCommit().getCommitter().getEmail());
     }
 
     private void configStub() {
