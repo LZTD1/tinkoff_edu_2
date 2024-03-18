@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class stackOverFlowDto {
+public class StackOverFlowDto {
 
     private List<ItemsDto> items;
 }

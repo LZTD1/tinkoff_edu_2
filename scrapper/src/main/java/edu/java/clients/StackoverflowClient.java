@@ -1,6 +1,6 @@
 package edu.java.clients;
 
-import edu.java.clients.dto.sofDto.stackOverFlowDto;
+import edu.java.clients.dto.sofDto.StackOverFlowDto;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -17,19 +17,19 @@ public class StackoverflowClient {
         this.client = WebClient.create(baseUrl);
     }
 
-    public Mono<stackOverFlowDto> getAnswersByQuestion(int id) {
+    public Mono<StackOverFlowDto> getAnswersByQuestion(int id) {
         return client
             .get()
             .uri(String.format("/2.3/questions/%d/answers?order=desc&sort=creation&site=stackoverflow&filter=withbody", id))
             .retrieve()
-            .bodyToMono(stackOverFlowDto.class);
+            .bodyToMono(StackOverFlowDto.class);
     }
 
-    public Mono<stackOverFlowDto> getCommentsByQuestion(int id) {
+    public Mono<StackOverFlowDto> getCommentsByQuestion(int id) {
         return client
             .get()
             .uri(String.format("/2.3/questions/%d/comments?order=desc&sort=creation&site=stackoverflow&filter=withbody", id))
             .retrieve()
-            .bodyToMono(stackOverFlowDto.class);
+            .bodyToMono(StackOverFlowDto.class);
     }
 }

@@ -3,7 +3,7 @@ package edu.java.scrapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.clients.StackoverflowClient;
-import edu.java.clients.dto.sofDto.stackOverFlowDto;
+import edu.java.clients.dto.sofDto.StackOverFlowDto;
 import edu.java.clients.dto.sofDto.ItemsDto;
 import edu.java.clients.dto.sofDto.OwnerSofDto;
 import org.junit.jupiter.api.AfterEach;
@@ -25,7 +25,7 @@ import static wiremock.com.google.common.net.HttpHeaders.CONTENT_TYPE;
 @WireMockTest
 public class TestStackOverFlow {
 
-    public static final stackOverFlowDto IDEAL_ANSWERS_DTO = new stackOverFlowDto() {{
+    public static final StackOverFlowDto IDEAL_ANSWERS_DTO = new StackOverFlowDto() {{
         setItems(new ArrayList<>(){{
             add(new ItemsDto() {{
                 setOwner(new OwnerSofDto(){{
@@ -38,7 +38,7 @@ public class TestStackOverFlow {
             }});
         }});
     }};
-    public static final stackOverFlowDto IDEAL_COMMENTS_DTO = new stackOverFlowDto() {{
+    public static final StackOverFlowDto IDEAL_COMMENTS_DTO = new StackOverFlowDto() {{
         setItems(new ArrayList<>(){{
             add(new ItemsDto() {{
                 setOwner(new OwnerSofDto(){{
@@ -68,7 +68,7 @@ public class TestStackOverFlow {
 
     @Test
     public void sofAnswersTest() {
-        stackOverFlowDto response = new StackoverflowClient("http://localhost:3000")
+        StackOverFlowDto response = new StackoverflowClient("http://localhost:3000")
             .getAnswersByQuestion(1)
             .block();
 
@@ -79,7 +79,7 @@ public class TestStackOverFlow {
     }
     @Test
     public void sofCommentsTest() {
-        stackOverFlowDto response = new StackoverflowClient("http://localhost:3000")
+        StackOverFlowDto response = new StackoverflowClient("http://localhost:3000")
             .getCommentsByQuestion(1)
             .block();
 
