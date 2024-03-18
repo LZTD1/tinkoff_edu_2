@@ -2,6 +2,7 @@ package edu.java.domain;
 
 import edu.java.database.dto.User;
 import edu.java.database.dto.UserLinkRel;
+import edu.java.domain.mappers.UserLinkRelMapper;
 import edu.java.scrapper.dto.LinkResponse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class UserLinkRelationDao {
 
-    public static final String USERID = "userid";
-    public static final String LINKID = "linkid";
     private final JdbcTemplate template;
-    private final UsersDao usersDao;
-    private final LinksDao linksDao;
 
     @Autowired
     public UserLinkRelationDao(
-        JdbcTemplate template,
-        UsersDao usersDao,
-        LinksDao linksDao
+        JdbcTemplate template
     ) {
         this.template = template;
-        this.usersDao = usersDao;
-        this.linksDao = linksDao;
     }
 
     @Transactional
@@ -43,39 +36,21 @@ public class UserLinkRelationDao {
 
     @Transactional
     public List<UserLinkRel> getAllRelational(int limit, int offset) {
-        String sql = "SELECT * FROM users_links LIMIT ? OFFSET ?;";
-        return template.query(sql, (rs, rowNum) -> {
-            User user = usersDao.getUserById(rs.getLong(USERID));
-            LinkResponse link = linksDao.getLinkById(rs.getLong(LINKID));
-
-            return new UserLinkRel() {{
-                setLink(link);
-                setUser(user);
-            }};
-        }, limit, offset);
+        String sql =
+            "SELECT ul.*, u.*, l.* FROM users_links ul JOIN users u ON ul.userid = u.id JOIN links l ON ul.linkid = l.id LIMIT ? OFFSET ?;";
+        return template.query(sql, UserLinkRelMapper::map, limit, offset);
     }
 
     @Transactional
     public List<UserLinkRel> getAllLinksByTgId(Long tgId, int limit, int offset) {
-        Long userID = usersDao.getUserByTgId(tgId).getId();
-
-        String sql = "SELECT * FROM users_links WHERE userid = ? LIMIT ? OFFSET ?;";
-        return template.query(sql, (rs, rowNum) -> {
-
-            User user = usersDao.getUserById(rs.getLong(USERID));
-            LinkResponse link = linksDao.getLinkById(rs.getLong(LINKID));
-
-            return new UserLinkRel() {{
-                setLink(link);
-                setUser(user);
-            }};
-        }, userID, limit, offset);
+        String sql =
+            "SELECT ul.*, u.*, l.* FROM users_links ul JOIN users u ON ul.userid = u.id JOIN links l ON ul.linkid = l.id WHERE u.telegramid = ? LIMIT ? OFFSET ?;";
+        return template.query(sql, UserLinkRelMapper::map, tgId, limit, offset);
     }
 
     @Transactional
     public List<Long> getAllUsersIdWithLink(Long id) {
         String sql = "SELECT userid FROM users_links WHERE linkid = ?";
-
-        return template.query(sql, (rs, rowNum) -> rs.getLong(USERID), id);
+        return template.query(sql, (rs, rowNum) -> rs.getLong("userid"), id);
     }
 }

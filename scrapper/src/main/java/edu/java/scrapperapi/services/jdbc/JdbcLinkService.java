@@ -9,6 +9,7 @@ import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;
 import edu.java.scrapperapi.services.LinkService;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,8 +83,8 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
-    public void updateTimeAndLastHash(Long idLink, String hash) {
-        linksDao.updateTimeAndLastHash(idLink, hash);
+    public void updateTimeAndLastHash(Long idLink, OffsetDateTime offsetDateTime) {
+        linksDao.updateLastSendTime(idLink, offsetDateTime);
     }
 
     @Override

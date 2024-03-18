@@ -3,6 +3,7 @@ package edu.java.scrapperapi.services;
 import edu.java.database.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface LinkService {
@@ -14,7 +15,7 @@ public interface LinkService {
 
     List<Link> listScheduler(int minutes, int limit);
 
-    void updateTimeAndLastHash(Long idLink, String hash);
+    void updateTimeAndLastHash(Long idLink, OffsetDateTime offsetDateTime);
 
     List<Long> getAllUsersWithLink(Link link);
 }

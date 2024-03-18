@@ -2,10 +2,10 @@ package edu.java.scrapper.domain;
 
 import edu.java.database.dto.User;
 import edu.java.domain.UsersDao;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

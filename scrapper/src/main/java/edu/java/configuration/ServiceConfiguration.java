@@ -7,7 +7,6 @@ import edu.java.scrapperapi.services.LinkService;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.scrapperapi.services.jdbc.JdbcLinkService;
 import edu.java.scrapperapi.services.jdbc.JdbcTgChatService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

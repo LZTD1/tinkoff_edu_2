@@ -58,8 +58,9 @@ public class LinkUpdaterScheduler {
         list.forEach(
             entry -> {
                 System.out.println("need upd " + entry);
-                WebHandler webHandler = handlerContainer.get(entry.getLink().getHost());
-                webHandler.getUpdate(entry);
+//                linkService.updateTimeAndLastHash(entry.getId(), result.nodeId);
+//                WebHandler webHandler = handlerContainer.get(entry.getLink().getHost());
+//                webHandler.getUpdate(entry);
 //                if (entry.getLink().getHost().equals("github.com")) {
 //                    WebGithub webGithub = new WebGithub();
 //                    GitResponseDto result = githubClient.getAnswersByQuestion(

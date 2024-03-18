@@ -8,5 +8,6 @@ public interface WebHandler {
     String getHost();
 
     void getUpdate(Link link);
+
     Optional<String> getUpdateReasonIfHas(URI uri);
 }

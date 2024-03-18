@@ -146,27 +146,10 @@ public class TestLinkTransactions extends IntegrationTest {
         }});
         Link before = linksDao.getAllLinks(1, 0).getFirst();
 
-        linksDao.updateTimeAndLastHash(before.getId(), "abc");
+        linksDao.updateLastSendTime(before.getId(), OffsetDateTime.now());
 
         Link after = linksDao.getAllLinks(1, 0).getFirst();
 
-        assertThat(before.getLasthash()).isNotEqualTo(after.getLasthash());
-    }
-
-    @Test
-    @Rollback
-    @Transactional
-    void testGetAllUsersIdWithLink() {
-        Long id = linksDao.createLink(new Link() {{
-            setLink(URI.create("vk.com"));
-        }});
-
-        Link before = linksDao.getAllLinks(1, 0).getFirst();
-
-        linksDao.updateTimeAndLastHash(before.getId(), "abc");
-
-        Link after = linksDao.getAllLinks(1, 0).getFirst();
-
-        assertThat(before.getLasthash()).isNotEqualTo(after.getLasthash());
+        assertThat(before.getLastsendtime().toString()).isNotEqualTo(after.getLastsendtime().toString());
     }
 }

@@ -1,3 +1,3 @@
 ALTER TABLE links
-    ADD COLUMN lasthash varchar(200) DEFAULT '';
+    ADD COLUMN lastSendTime timestamptz DEFAULT current_timestamp;
 

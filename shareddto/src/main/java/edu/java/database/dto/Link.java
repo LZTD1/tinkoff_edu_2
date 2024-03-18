@@ -13,5 +13,5 @@ public class Link {
 
     private OffsetDateTime updatetime;
 
-    private String lasthash;
+    private OffsetDateTime lastsendtime;
 }

@@ -4,9 +4,9 @@ import edu.java.clients.GithubClient;
 import edu.java.clients.dto.githubDto.GitResponseDto;
 import edu.java.database.dto.Link;
 import edu.java.parsers.WebHandler;
-import org.springframework.stereotype.Component;
 import java.net.URI;
 import java.util.Optional;
+import org.springframework.stereotype.Component;
 
 @Component
 public class WebGithub implements WebHandler {
