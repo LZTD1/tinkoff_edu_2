@@ -3,6 +3,7 @@ package edu.java.bot;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.processor.MethodProcessor;
 import java.util.List;
+import edu.java.bot.processor.ProcessorHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -13,17 +14,18 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import static edu.java.bot.processor.ProcessorHolder.getAllCommands;
-import static edu.java.bot.processor.ProcessorHolder.getCommandByName;
+
 
 @Component
 public class BotComponent extends TelegramLongPollingBot {
 
     private final static Logger LOGGER = LogManager.getLogger();
     private final ApplicationConfig config;
+    private ProcessorHolder processorHolder;
 
-    public BotComponent(ApplicationConfig applicationConfig) {
+    public BotComponent(ApplicationConfig applicationConfig, ProcessorHolder processorHolder) {
         this.config = applicationConfig;
+        this.processorHolder = processorHolder;
     }
 
     @Override
@@ -46,13 +48,13 @@ public class BotComponent extends TelegramLongPollingBot {
 
             LOGGER.info("Пользователь {}, отправил - {}", chatId, messageText);
 
-            MethodProcessor processor = getCommandByName(messageText.split(" ")[0]);
+            MethodProcessor processor = processorHolder.getCommandByName(messageText.split(" ")[0]);
             sendMessage(chatId, processor.handle(update));
         }
     }
 
     private void setCommands() {
-        List<BotCommand> list = getAllCommands()
+        List<BotCommand> list = processorHolder.getAllCommands()
             .stream()
             .map(entry -> new BotCommand(entry.getName(), entry.getDescription()))
             .toList();
@@ -67,9 +69,11 @@ public class BotComponent extends TelegramLongPollingBot {
         }
     }
 
-    private void sendMessage(long chatId, String text) {
+    public void sendMessage(long chatId, String text) {
 
         SendMessage message = new SendMessage(String.valueOf(chatId), text);
+        message.setParseMode("markdown");
+        message.disableWebPagePreview();
 
         try {
             execute(message);

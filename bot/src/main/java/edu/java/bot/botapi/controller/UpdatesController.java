@@ -1,5 +1,7 @@
 package edu.java.bot.botapi.controller;
 
+import edu.java.bot.botapi.services.BotCommunicatorService;
+import edu.java.bot.botapi.services.CommunicatorService;
 import edu.java.bot.dto.LinkUpdate;
 import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "updates", description = "the updates API")
 public class UpdatesController {
 
+    private CommunicatorService communicatorService;
+
+    public UpdatesController(CommunicatorService communicatorService) {
+        this.communicatorService = communicatorService;
+    }
+
     @Operation(
         operationId = "updatesPost",
         summary = "Отправить обновление",
@@ -38,10 +46,11 @@ public class UpdatesController {
         produces = {"application/json"},
         consumes = {"application/json"}
     )
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    @ResponseStatus(HttpStatus.OK)
     public void updatesPost(
-        @NotEmpty @NotNull @Parameter(name = "LinkUpdate", description = "", required = true) @Valid @RequestBody
+        @NotNull @Parameter(name = "LinkUpdate", description = "", required = true) @Valid @RequestBody
         LinkUpdate linkUpdate
     ) {
+        communicatorService.sendMessage(linkUpdate);
     }
 }
