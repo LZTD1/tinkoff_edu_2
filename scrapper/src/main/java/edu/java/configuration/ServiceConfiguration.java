@@ -9,7 +9,6 @@ import edu.java.scrapperapi.services.jdbc.JdbcLinkService;
 import edu.java.scrapperapi.services.jdbc.JdbcTgChatService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class ServiceConfiguration {
@@ -25,7 +24,6 @@ public class ServiceConfiguration {
     }
 
     @Bean
-    @Primary
     public LinkService getLinkService() {
         return new JdbcLinkService(
             linksDao, usersDao, userLinkRelationDao
@@ -33,7 +31,6 @@ public class ServiceConfiguration {
     }
 
     @Bean
-    @Primary
     public TgChatService getTgChatService() {
         return new JdbcTgChatService(
             usersDao

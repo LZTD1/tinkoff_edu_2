@@ -12,19 +12,15 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 public class JdbcLinkService implements LinkService {
 
     private LinksDao linksDao;
     private UsersDao usersDao;
     private UserLinkRelationDao userLinkRelationDao;
 
-    @Autowired
     public JdbcLinkService(LinksDao linksDao, UsersDao usersDao, UserLinkRelationDao userLinkRelationDao) {
         this.linksDao = linksDao;
         this.usersDao = usersDao;

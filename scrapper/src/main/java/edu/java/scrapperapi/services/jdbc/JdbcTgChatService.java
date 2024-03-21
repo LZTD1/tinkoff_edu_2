@@ -5,16 +5,12 @@ import edu.java.domain.UsersDao;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
 
-@Service
 public class JdbcTgChatService implements TgChatService {
 
     private UsersDao usersDao;
 
-    @Autowired
     public JdbcTgChatService(UsersDao usersDao) {
         this.usersDao = usersDao;
     }

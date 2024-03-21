@@ -31,12 +31,6 @@ public class LinksDao {
     }
 
     @Transactional
-    public void deleteLinkByUrl(Link link) {
-        String sql = "DELETE FROM links WHERE link = ?";
-        template.update(sql, link.getLink().toString());
-    }
-
-    @Transactional
     public List<Link> getAllLinks(int limit, int offset) {
         String sql = "SELECT * FROM links LIMIT ? OFFSET ?;";
         return template.query(sql, LinkMapper::map, limit, offset);

@@ -2,8 +2,6 @@ package edu.java.scrapper.domain;
 
 import edu.java.database.dto.Link;
 import edu.java.domain.LinksDao;
-import edu.java.domain.UserLinkRelationDao;
-import edu.java.domain.UsersDao;
 import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
 import java.sql.Timestamp;
@@ -45,30 +43,6 @@ public class TestLinkTransactions extends IntegrationTest {
         ).intValue();
 
         assertThat(result).isEqualTo(1);
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    void testDelete() {
-        linksDao.createLink(
-            new Link() {{
-                setLink(URI.create("vk.com"));
-            }}
-        );
-        linksDao.deleteLinkByUrl(
-            new Link() {{
-                setLink(URI.create("vk.com"));
-            }}
-        );
-
-        int result = jdbcTemplate.queryForObject(
-            "SELECT COUNT(*) FROM links WHERE link = ?",
-            Long.class,
-            "vk.com"
-        ).intValue();
-
-        assertThat(result).isEqualTo(0);
     }
 
     @Test
