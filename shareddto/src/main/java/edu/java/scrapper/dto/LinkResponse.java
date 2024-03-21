@@ -1,15 +1,9 @@
 package edu.java.scrapper.dto;
 
 import java.net.URI;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
 public class LinkResponse {
 
     private Long id;

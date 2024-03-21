@@ -1,4 +1,4 @@
-package edu.java.scrapper;
+package edu.java.scrapper.domain;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

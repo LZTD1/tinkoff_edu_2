@@ -1,6 +1,7 @@
 package edu.java.clients;
 
-import edu.java.clients.dto.githubDto.GitResponseDto;
+import edu.java.clients.dto.githubDto.commit.CommitsDto;
+import edu.java.clients.dto.githubDto.pull.PullDto;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
@@ -17,11 +18,19 @@ public class GithubClient {
         this.client = WebClient.create(baseUrl);
     }
 
-    public Flux<GitResponseDto> getAnswersByQuestion(String owner, String repos) {
+    public Flux<CommitsDto> getCommitsByRepos(String owner, String repos) {
         return client
             .get()
             .uri(String.format("/repos/%s/%s/commits", owner, repos))
             .retrieve()
-            .bodyToFlux(GitResponseDto.class);
+            .bodyToFlux(CommitsDto.class);
+    }
+
+    public Flux<PullDto> getPullsByRepos(String owner, String repos) {
+        return client
+            .get()
+            .uri(String.format("/repos/%s/%s/pulls", owner, repos))
+            .retrieve()
+            .bodyToFlux(PullDto.class);
     }
 }

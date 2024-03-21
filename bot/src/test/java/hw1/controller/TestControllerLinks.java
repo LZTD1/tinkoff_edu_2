@@ -28,50 +28,6 @@ public class TestControllerLinks {
 
     WireMockServer wireMockServer;
 
-    @BeforeEach
-    public void setup() {
-        wireMockServer = new WireMockServer(3000);
-        wireMockServer.start();
-        configStub();
-    }
-
-    @AfterEach
-    public void teardown() {
-        wireMockServer.stop();
-    }
-
-    @Test
-    public void getAllLinks() {
-        ListLinksResponse response = new ScrapperClient("http://localhost:3000")
-            .getAllTrackedLinks(1L);
-
-        assertThat(response.getLinks().get(0).getUrl()).isEqualTo(URI.create("https://vk.com"));
-    }
-
-    @Test
-    public void deleteLink2xx() {
-        new ScrapperClient("http://localhost:3000")
-            .deleteTrackLink(1L, URI.create("https://vk.com"));
-    }
-
-    @Test
-    public void deleteLink404() {
-        assertThrows(LinkNotFoundException.class, () -> new ScrapperClient("http://localhost:3000")
-            .deleteTrackLink(10L, URI.create("https://vk.com")));
-    }
-
-    @Test
-    public void deleteLink400() {
-        assertThrows(LinkNotFoundException.class, () -> new ScrapperClient("http://localhost:3000")
-            .deleteTrackLink(0L, URI.create("https://vk.com")));
-    }
-
-    @Test
-    public void addLink() {
-        new ScrapperClient("http://localhost:3000")
-            .addTrackLink(1L, URI.create("https://vk.com"));
-    }
-
     private static void configStub() {
         configureFor("localhost", 3000);
 
@@ -125,5 +81,49 @@ public class TestControllerLinks {
                     .withStatus(404)
             )
         );
+    }
+
+    @BeforeEach
+    public void setup() {
+        wireMockServer = new WireMockServer(3000);
+        wireMockServer.start();
+        configStub();
+    }
+
+    @AfterEach
+    public void teardown() {
+        wireMockServer.stop();
+    }
+
+    @Test
+    public void getAllLinks() {
+        ListLinksResponse response = new ScrapperClient("http://localhost:3000")
+            .getAllTrackedLinks(1L);
+
+        assertThat(response.getLinks().get(0).getUrl()).isEqualTo(URI.create("https://vk.com"));
+    }
+
+    @Test
+    public void deleteLink2xx() {
+        new ScrapperClient("http://localhost:3000")
+            .deleteTrackLink(1L, URI.create("https://vk.com"));
+    }
+
+    @Test
+    public void deleteLink404() {
+        assertThrows(LinkNotFoundException.class, () -> new ScrapperClient("http://localhost:3000")
+            .deleteTrackLink(10L, URI.create("https://vk.com")));
+    }
+
+    @Test
+    public void deleteLink400() {
+        assertThrows(LinkNotFoundException.class, () -> new ScrapperClient("http://localhost:3000")
+            .deleteTrackLink(0L, URI.create("https://vk.com")));
+    }
+
+    @Test
+    public void addLink() {
+        new ScrapperClient("http://localhost:3000")
+            .addTrackLink(1L, URI.create("https://vk.com"));
     }
 }

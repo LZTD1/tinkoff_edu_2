@@ -3,6 +3,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+## Start configuration ###
+.run/BotApplication.run.xml
+.run/ScrapperApplication.run.xml
+
 ### Telegram ###
 bot/.env
 

@@ -8,9 +8,9 @@ CREATE TABLE users_links
 ALTER TABLE users_links
     ADD CONSTRAINT fk_relUser_userId
         FOREIGN KEY (userId)
-            REFERENCES users(id);
+            REFERENCES users (id);
 
 ALTER TABLE users_links
     ADD CONSTRAINT fk_relLink_linkId
         FOREIGN KEY (linkId)
-            REFERENCES links(id);
+            REFERENCES links (id);
