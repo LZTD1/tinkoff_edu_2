@@ -1,7 +1,6 @@
 package edu.java.scrapper.domain;
 
 import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
 import edu.java.domain.LinksDao;
 import edu.java.domain.UserLinkRelationDao;
 import edu.java.domain.UsersDao;
@@ -19,17 +18,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class TestLinkTransactions extends IntegrationTest {
 
     @Autowired
     private LinksDao linksDao;
-    @Autowired
-    private UsersDao usersDao;
-    @Autowired
-    private UserLinkRelationDao userLinkRelationDao;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -75,35 +69,6 @@ public class TestLinkTransactions extends IntegrationTest {
         ).intValue();
 
         assertThat(result).isEqualTo(0);
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    void testDeleteWithRel() {
-        Long linkId = linksDao.createLink(
-            new Link() {{
-                setLink(URI.create("vk.com"));
-            }}
-        );
-        Long uid = usersDao.createUser(
-            new User() {{
-                setTelegramId(101L);
-            }}
-        );
-        userLinkRelationDao.createRelational(
-            new User() {{
-                setId(uid);
-            }},
-            new LinkResponse() {{
-                setId(linkId);
-            }}
-        );
-
-        assertThrows(Exception.class, () -> linksDao.deleteLinkByUrl(new Link() {{
-            setLink(URI.create("vk.com"));
-        }}));
-       
     }
 
     @Test

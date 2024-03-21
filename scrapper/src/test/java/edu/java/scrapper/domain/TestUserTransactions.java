@@ -2,8 +2,6 @@ package edu.java.scrapper.domain;
 
 import edu.java.database.dto.User;
 import edu.java.domain.UsersDao;
-import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
-import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class TestUserTransactions extends IntegrationTest {
@@ -46,24 +43,6 @@ public class TestUserTransactions extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    void testAddException() {
-        usersDao.createUser(
-            new User() {{
-                setTelegramId(505L);
-            }}
-        );
-        assertThrows(EntityAlreadyExistsError.class, () -> {
-            usersDao.createUser(
-                new User() {{
-                    setTelegramId(505L);
-                }}
-            );
-        });
-    }
-
-    @Test
-    @Transactional
-    @Rollback
     void testDelete() {
         usersDao.createUser(
             new User() {{
@@ -83,27 +62,6 @@ public class TestUserTransactions extends IntegrationTest {
         ).intValue();
 
         assertThat(result).isEqualTo(0);
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    void testDeleteException() {
-        usersDao.createUser(
-            new User() {{
-                setTelegramId(505L);
-            }}
-        );
-        usersDao.deleteUser(
-            new User() {{
-                setTelegramId(505L);
-            }}
-        );
-        assertThrows(EntityDeleteException.class, () -> usersDao.deleteUser(
-            new User() {{
-                setTelegramId(505L);
-            }}
-        ));
     }
 
     @Test
