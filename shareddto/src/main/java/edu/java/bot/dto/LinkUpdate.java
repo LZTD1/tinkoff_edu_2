@@ -1,17 +1,11 @@
 package edu.java.bot.dto;
 
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
 public class LinkUpdate {
 
     private Long id;
@@ -20,7 +14,7 @@ public class LinkUpdate {
 
     private String description;
 
-    @Valid
+    @NotNull
     private List<Long> tgChatIds;
 }
 

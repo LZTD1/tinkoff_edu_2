@@ -1,26 +1,31 @@
 package edu.java.bot.processor.processors;
 
+import edu.java.bot.clients.ScrapperClient;
 import edu.java.bot.processor.MethodProcessor;
-import edu.java.database.Database;
+import edu.java.scrapper.dto.ListLinksResponse;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.bot.processor.Constants.EMPTY_LIST_MESSAGE;
-import static edu.java.database.SimpleDatabase.getInstance;
 
+@Component
 public class ListHandler implements MethodProcessor {
 
-    private final Database database;
+    private ScrapperClient scrapperClient;
 
-    public ListHandler() {
-        this.database = getInstance();
+    public ListHandler(ScrapperClient scrapperClient) {
+        this.scrapperClient = scrapperClient;
     }
 
     @Override
     public String handle(Update update) {
-        var links = this.database.getUserLinksById(update.getMessage().getChatId());
-        if (links.isEmpty()) {
+        ListLinksResponse links = scrapperClient.getAllTrackedLinks(update.getMessage().getChatId());
+        if (links.getLinks().isEmpty()) {
             return EMPTY_LIST_MESSAGE;
         }
-        return String.join("\n", links);
+        return String.join(
+            "\n",
+            links.getLinks().stream().map(e -> e.getUrl().toString()).toList()
+        );
     }
 
     @Override

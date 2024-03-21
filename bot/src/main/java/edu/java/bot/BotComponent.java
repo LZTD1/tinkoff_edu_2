@@ -2,8 +2,9 @@ package edu.java.bot;
 
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.processor.MethodProcessor;
-import java.util.List;
 import edu.java.bot.processor.ProcessorHolder;
+import edu.java.bot.processor.processors.DefaultHandler;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 
 @Component
 public class BotComponent extends TelegramLongPollingBot {
@@ -56,6 +56,7 @@ public class BotComponent extends TelegramLongPollingBot {
     private void setCommands() {
         List<BotCommand> list = processorHolder.getAllCommands()
             .stream()
+            .filter(entry -> !entry.getClass().equals(DefaultHandler.class))
             .map(entry -> new BotCommand(entry.getName(), entry.getDescription()))
             .toList();
 

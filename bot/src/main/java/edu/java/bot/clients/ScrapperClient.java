@@ -7,9 +7,11 @@ import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.ListLinksResponse;
 import java.net.URI;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+@Component
 public class ScrapperClient {
     private final static String BASE_URL = "http://localhost:8080";
     private final WebClient client;
@@ -68,6 +70,21 @@ public class ScrapperClient {
             .body(Mono.just(new DeleteLinkRequest() {{
                 setLink(link);
             }}), DeleteLinkRequest.class)
+            .retrieve()
+            .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.BAD_REQUEST.value(), clientResponse ->
+                Mono.error(new BadQueryParamsException(exceptionMessage)))
+            .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.NOT_FOUND.value(), clientResponse ->
+                Mono.error(new LinkNotFoundException()))
+            .bodyToMono(Void.class)
+            .block();
+    }
+
+    public void registerUser(Long tgChatId){
+        client
+            .post()
+            .uri(uriBuilder -> uriBuilder
+                .path("/tg-chat/{id}")
+                .build(tgChatId))
             .retrieve()
             .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.BAD_REQUEST.value(), clientResponse ->
                 Mono.error(new BadQueryParamsException(exceptionMessage)))
