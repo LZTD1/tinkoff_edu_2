@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@SuppressWarnings("LineLength")
+@SuppressWarnings("MultipleStringLiterals")
 public class UserLinkRelationDao {
 
     private final JdbcTemplate template;
@@ -38,14 +38,23 @@ public class UserLinkRelationDao {
     @Transactional
     public List<UserLinkRel> getAllRelational(int limit, int offset) {
         String sql =
-            "SELECT ul.*, u.*, l.* FROM users_links ul JOIN users u ON ul.userid = u.id JOIN links l ON ul.linkid = l.id LIMIT ? OFFSET ?;";
+            "SELECT ul.*, u.*, l.* "
+                + "FROM users_links ul "
+                + "JOIN users u ON ul.userid = u.id "
+                + "JOIN links l ON ul.linkid = l.id"
+                + " LIMIT ? OFFSET ?;";
         return template.query(sql, UserLinkRelMapper::map, limit, offset);
     }
 
     @Transactional
     public List<UserLinkRel> getAllLinksByTgId(Long tgId, int limit, int offset) {
         String sql =
-            "SELECT ul.*, u.*, l.* FROM users_links ul JOIN users u ON ul.userid = u.id JOIN links l ON ul.linkid = l.id WHERE u.telegramid = ? LIMIT ? OFFSET ?;";
+            "SELECT ul.*, u.*, l.* "
+                + "FROM users_links ul "
+                + "JOIN users u ON ul.userid = u.id "
+                + "JOIN links l ON ul.linkid = l.id "
+                + "WHERE u.telegramid = ? "
+                + "LIMIT ? OFFSET ?;";
         return template.query(sql, UserLinkRelMapper::map, tgId, limit, offset);
     }
 

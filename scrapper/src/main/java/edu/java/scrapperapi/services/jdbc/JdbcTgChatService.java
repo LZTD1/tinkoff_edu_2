@@ -2,8 +2,11 @@ package edu.java.scrapperapi.services.jdbc;
 
 import edu.java.database.dto.User;
 import edu.java.domain.UsersDao;
+import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
+import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,16 +21,22 @@ public class JdbcTgChatService implements TgChatService {
 
     @Override
     public void register(long tgChatId) {
-        usersDao.createUser(new User() {{
-            setTelegramId(tgChatId);
-        }});
+        try {
+            usersDao.createUser(new User() {{
+                setTelegramId(tgChatId);
+            }});
+        } catch (DuplicateKeyException e) {
+            throw new EntityAlreadyExistsError("Пользователь с таким telegramId уже существует!");
+        }
     }
 
     @Override
     public void unregister(long tgChatId) {
-        usersDao.deleteUser(new User() {{
+        var rowsAffected = usersDao.deleteUser(new User() {{
             setTelegramId(tgChatId);
         }});
-
+        if (rowsAffected == 0) {
+            throw new EntityDeleteException("Не возможно удалить юзера, возможн он уже был удален!");
+        }
     }
 }

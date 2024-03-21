@@ -31,7 +31,7 @@ public class LinksDao {
     }
 
     @Transactional
-    public void deleteLink(Link link) {
+    public void deleteLinkByUrl(Link link) {
         String sql = "DELETE FROM links WHERE link = ?";
         template.update(sql, link.getLink().toString());
     }

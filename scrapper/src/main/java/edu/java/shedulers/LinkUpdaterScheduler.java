@@ -9,6 +9,7 @@ import edu.java.parsers.WebHandler;
 import edu.java.scrapperapi.services.LinkService;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,7 +68,7 @@ public class LinkUpdaterScheduler {
 
     private Map<String, WebHandler> getHandlerContainer() {
         return this.webHandlers.stream().collect(
-            Collectors.toMap(WebHandler::getHost, e -> e)
+            Collectors.toMap(WebHandler::getHost, Function.identity())
         );
     }
 }
