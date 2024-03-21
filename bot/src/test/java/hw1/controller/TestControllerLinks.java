@@ -98,7 +98,7 @@ public class TestControllerLinks {
     @Test
     public void getAllLinks() {
         ListLinksResponse response = new ScrapperClient("http://localhost:3000")
-            .getAllTrackedLinks(1L);
+            .getAllTrackedLinks(1L, 10, 0);
 
         assertThat(response.getLinks().get(0).getUrl()).isEqualTo(URI.create("https://vk.com"));
     }

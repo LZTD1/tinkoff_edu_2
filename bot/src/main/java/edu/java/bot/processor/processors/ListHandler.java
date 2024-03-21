@@ -18,10 +18,21 @@ public class ListHandler implements MethodProcessor {
 
     @Override
     public String handle(Update update) {
-        ListLinksResponse links = scrapperClient.getAllTrackedLinks(update.getMessage().getChatId());
+        ListLinksResponse links = scrapperClient.getAllTrackedLinks(
+            update.getMessage().getChatId(),
+            25,
+            0
+        );
+        // todo реализовать пагинацию
+
         if (links.getLinks().isEmpty()) {
             return EMPTY_LIST_MESSAGE;
         }
+
+        return convertToString(links);
+    }
+
+    private static String convertToString(ListLinksResponse links) {
         return String.join(
             "\n",
             links.getLinks().stream().map(e -> e.getUrl().toString()).toList()
