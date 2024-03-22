@@ -1,4 +1,4 @@
-package edu.java.domain.mappers;
+package edu.java.domain.jdbc.mappers;
 
 import edu.java.database.dto.User;
 import java.sql.ResultSet;

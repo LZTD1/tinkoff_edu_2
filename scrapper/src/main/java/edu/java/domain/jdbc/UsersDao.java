@@ -1,7 +1,7 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
 import edu.java.database.dto.User;
-import edu.java.domain.mappers.UserMapper;
+import edu.java.domain.jdbc.mappers.UserMapper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

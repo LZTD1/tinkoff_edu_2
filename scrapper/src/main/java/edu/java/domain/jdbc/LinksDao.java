@@ -1,8 +1,8 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
 import edu.java.database.dto.Link;
-import edu.java.domain.mappers.LinkMapper;
-import edu.java.domain.mappers.LinkResponseMapper;
+import edu.java.domain.jdbc.mappers.LinkMapper;
+import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.scrapper.dto.LinkResponse;
 import java.sql.Timestamp;
 import java.sql.Types;

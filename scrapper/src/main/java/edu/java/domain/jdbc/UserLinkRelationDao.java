@@ -1,8 +1,8 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
 import edu.java.database.dto.User;
 import edu.java.database.dto.UserLinkRel;
-import edu.java.domain.mappers.UserLinkRelMapper;
+import edu.java.domain.jdbc.mappers.UserLinkRelMapper;
 import edu.java.scrapper.dto.LinkResponse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package edu.java.scrapperapi.services.jdbc;
 
 import edu.java.database.dto.Link;
-import edu.java.domain.LinksDao;
-import edu.java.domain.UserLinkRelationDao;
-import edu.java.domain.UsersDao;
+import edu.java.domain.jdbc.LinksDao;
+import edu.java.domain.jdbc.UserLinkRelationDao;
+import edu.java.domain.jdbc.UsersDao;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;

@@ -3,9 +3,9 @@ package edu.java.scrapper.domain;
 import edu.java.database.dto.Link;
 import edu.java.database.dto.User;
 import edu.java.database.dto.UserLinkRel;
-import edu.java.domain.LinksDao;
-import edu.java.domain.UserLinkRelationDao;
-import edu.java.domain.UsersDao;
+import edu.java.domain.jdbc.LinksDao;
+import edu.java.domain.jdbc.UserLinkRelationDao;
+import edu.java.domain.jdbc.UsersDao;
 import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
 import java.util.List;
@@ -121,7 +121,7 @@ public class TestRelationalTransactions extends IntegrationTest {
 
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLink().getUrl().toString()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getLink().getLink().toString()).isEqualTo("vk.com");
     }
 
     @Test
@@ -164,7 +164,7 @@ public class TestRelationalTransactions extends IntegrationTest {
 
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLink().getUrl().toString()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getLink().getLink().toString()).isEqualTo("vk.com");
     }
 
     @Test

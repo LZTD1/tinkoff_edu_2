@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain;
 
 import edu.java.database.dto.User;
-import edu.java.domain.UsersDao;
+import edu.java.domain.jdbc.UsersDao;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;

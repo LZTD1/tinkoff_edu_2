@@ -1,5 +1,6 @@
-package edu.java.domain.mappers;
+package edu.java.domain.jdbc.mappers;
 
+import edu.java.database.dto.Link;
 import edu.java.database.dto.User;
 import edu.java.database.dto.UserLinkRel;
 import edu.java.scrapper.dto.LinkResponse;
@@ -13,8 +14,8 @@ public class UserLinkRelMapper {
     @SneakyThrows
     public static UserLinkRel map(ResultSet rs, int rowNum) {
         return new UserLinkRel() {{
-            setLink(new LinkResponse() {{
-                setUrl(URI.create(rs.getObject("link", String.class)));
+            setLink(new Link() {{
+                setLink(URI.create(rs.getObject("link", String.class)));
                 setId(rs.getLong("linkid"));
             }});
             setUser(new User() {{
