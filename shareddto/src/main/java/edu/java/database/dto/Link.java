@@ -1,17 +1,38 @@
 package edu.java.database.dto;
 
+import edu.java.database.dto.converters.UriConverter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.net.URI;
 import java.time.OffsetDateTime;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Entity
+@Getter
+@Setter
+@Table(
+    name = "links",
+    uniqueConstraints = @UniqueConstraint(columnNames = "link")
+)
 public class Link {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 200, nullable = false)
+    @Convert(converter = UriConverter.class)
     private URI link;
 
-    private OffsetDateTime updatetime;
+    @Column(nullable = false)
+    private OffsetDateTime updatetime = OffsetDateTime.now();
 
-    private OffsetDateTime lastsendtime;
+    @Column(nullable = false)
+    private OffsetDateTime lastsendtime = OffsetDateTime.now();
 }
