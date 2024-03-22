@@ -1,9 +1,10 @@
 package edu.java.scrapperapi.services.jdbc;
 
 import edu.java.database.dto.Link;
-import edu.java.domain.jdbc.LinksDao;
-import edu.java.domain.jdbc.UserLinkRelationDao;
-import edu.java.domain.jdbc.UsersDao;
+import edu.java.domain.LinksDao;
+import edu.java.domain.UserLinkRelationDao;
+import edu.java.domain.UsersDao;
+import edu.java.domain.mappers.LinkResponseMapper;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;
@@ -50,23 +51,27 @@ public class JdbcLinkService implements LinkService {
     @Transactional
     public LinkResponse remove(long tgChatId, URI url) {
 
-        LinkResponse link = linksDao.getLinkByLink(url.toString());
+        Link link = linksDao.getLinkByLink(url.toString());
         userLinkRelationDao.deleteRelational(
             usersDao.getUserByTgId(tgChatId),
             link
         );
 
-        return link;
+        return LinkResponseMapper.map(link);
     }
 
     @Override
     @Transactional
     public List<LinkResponse> listAll(long tgChatId, int limit, int offset) {
         try {
+
             return userLinkRelationDao.getAllRelational(limit, offset)
                 .stream()
-                .map(entry -> linksDao.getLinkById(entry.getLinkid().getId()))
+                .map(entry -> LinkResponseMapper.map(
+                    linksDao.getLinkById(entry.getLink().getId()))
+                )
                 .toList();
+
         } catch (NoSuchElementException e) {
             throw new UserIsNotDefindedException();
         }

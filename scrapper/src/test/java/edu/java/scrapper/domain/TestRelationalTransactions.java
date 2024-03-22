@@ -190,7 +190,7 @@ public class TestRelationalTransactions extends IntegrationTest {
             new User() {{
                 setId(user1);
             }},
-            new LinkResponse() {{
+            new Link() {{
                 setId(link);
             }}
         );
@@ -198,7 +198,7 @@ public class TestRelationalTransactions extends IntegrationTest {
             new User() {{
                 setId(user2);
             }},
-            new LinkResponse() {{
+            new Link() {{
                 setId(link);
             }}
         );

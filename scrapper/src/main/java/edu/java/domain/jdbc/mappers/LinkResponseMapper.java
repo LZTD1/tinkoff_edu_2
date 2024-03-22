@@ -1,5 +1,6 @@
 package edu.java.domain.jdbc.mappers;
 
+import edu.java.database.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
 import java.sql.ResultSet;
@@ -16,5 +17,15 @@ public class LinkResponseMapper {
         link.setUrl(URI.create(rs.getObject("link", String.class)));
 
         return link;
+    }
+
+    @SneakyThrows
+    public static LinkResponse map(Link link) {
+        LinkResponse newLink = new LinkResponse();
+
+        newLink.setId(link.getId());
+        newLink.setUrl(link.getLink());
+
+        return newLink;
     }
 }

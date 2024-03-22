@@ -11,6 +11,7 @@ import java.text.MessageFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +21,6 @@ public class WebGithub implements WebHandler {
     private static final int MAX_MESSAGE_LENGTH = 20;
     private final GithubClient githubClient;
     private final LinkService linkService;
-    private OffsetDateTime newSendTime;
 
     public WebGithub(GithubClient githubClient, LinkService linkService) {
         this.githubClient = githubClient;
@@ -38,17 +38,18 @@ public class WebGithub implements WebHandler {
         List<PullDto> pullDtoList = getGitPulls(link);
         List<LinkUpdate> linkUpdateList = new ArrayList<>();
 
-        newSendTime = link.getLastsendtime();
+        OffsetDateTime lastCommitTime = gitCommitsProcessing(link, commitsDtoList, linkUpdateList);
+        OffsetDateTime lastPullsTime = gitPullsProcessing(link, pullDtoList, linkUpdateList);
 
-        gitCommitsProcessing(link, commitsDtoList, linkUpdateList);
-        gitPullsProcessing(link, pullDtoList, linkUpdateList);
+        OffsetDateTime newSendTime = lastCommitTime.isAfter(lastPullsTime) ? lastCommitTime : lastPullsTime;
 
         linkService.updateLastSendTime(link.getId(), newSendTime);
 
         return linkUpdateList;
     }
 
-    private void gitPullsProcessing(Link link, List<PullDto> pullDtoList, List<LinkUpdate> linkUpdateList) {
+    private OffsetDateTime gitPullsProcessing(Link link, List<PullDto> pullDtoList, List<LinkUpdate> linkUpdateList) {
+        AtomicReference<OffsetDateTime> newSendTime = new AtomicReference<>(link.getLastsendtime());
         pullDtoList.forEach(entry -> {
             if (link.getLastsendtime().isBefore(entry.getCreatedAt())) {
                 linkUpdateList.add(new LinkUpdate() {{
@@ -58,14 +59,20 @@ public class WebGithub implements WebHandler {
                     setTgChatIds(linkService.getAllUsersWithLink(link));
                 }});
 
-                if (newSendTime.isBefore(entry.getCreatedAt())) {
-                    newSendTime = entry.getCreatedAt();
+                if (newSendTime.get().isBefore(entry.getCreatedAt())) {
+                    newSendTime.set(entry.getCreatedAt());
                 }
             }
         });
+        return newSendTime.get();
     }
 
-    private void gitCommitsProcessing(Link link, List<CommitsDto> commitsDtoList, List<LinkUpdate> linkUpdateList) {
+    private OffsetDateTime gitCommitsProcessing(
+        Link link,
+        List<CommitsDto> commitsDtoList,
+        List<LinkUpdate> linkUpdateList
+    ) {
+        AtomicReference<OffsetDateTime> newSendTime = new AtomicReference<>(link.getLastsendtime());
         commitsDtoList.forEach(entry -> {
             if (link.getLastsendtime().isBefore(entry.getCommit().getCommitter().getDate())) {
                 linkUpdateList.add(new LinkUpdate() {{
@@ -74,12 +81,12 @@ public class WebGithub implements WebHandler {
                     setUrl(link.getLink());
                     setTgChatIds(linkService.getAllUsersWithLink(link));
                 }});
-
-                if (newSendTime.isBefore(entry.getCommit().getCommitter().getDate())) {
-                    newSendTime = entry.getCommit().getCommitter().getDate();
+                if (newSendTime.get().isBefore(entry.getCommit().getCommitter().getDate())) {
+                    newSendTime.set(entry.getCommit().getCommitter().getDate());
                 }
             }
         });
+        return newSendTime.get();
     }
 
     @SuppressWarnings("MultipleStringLiterals")
