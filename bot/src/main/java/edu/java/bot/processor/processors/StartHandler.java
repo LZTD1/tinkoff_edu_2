@@ -18,10 +18,10 @@ public class StartHandler implements MethodProcessor {
 
     @Override
     public String handle(Update update) {
-        try{
+        try {
             scrapperClient.registerUser(update.getMessage().getChatId());
             return START_MESSAGE;
-        }catch (ConflictError e){
+        } catch (ConflictError e) {
             return e.getMessage();
         }
     }

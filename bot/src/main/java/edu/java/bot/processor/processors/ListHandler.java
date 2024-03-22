@@ -16,6 +16,13 @@ public class ListHandler implements MethodProcessor {
         this.scrapperClient = scrapperClient;
     }
 
+    private static String convertToString(ListLinksResponse links) {
+        return String.join(
+            "\n",
+            links.getLinks().stream().map(e -> e.getUrl().toString()).toList()
+        );
+    }
+
     @Override
     public String handle(Update update) {
         ListLinksResponse links = scrapperClient.getAllTrackedLinks(
@@ -30,13 +37,6 @@ public class ListHandler implements MethodProcessor {
         }
 
         return convertToString(links);
-    }
-
-    private static String convertToString(ListLinksResponse links) {
-        return String.join(
-            "\n",
-            links.getLinks().stream().map(e -> e.getUrl().toString()).toList()
-        );
     }
 
     @Override

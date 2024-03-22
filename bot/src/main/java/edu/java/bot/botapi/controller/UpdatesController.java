@@ -1,6 +1,5 @@
 package edu.java.bot.botapi.controller;
 
-import edu.java.bot.botapi.services.BotCommunicatorService;
 import edu.java.bot.botapi.services.CommunicatorService;
 import edu.java.bot.dto.LinkUpdate;
 import edu.java.shared.ApiErrorResponse;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;

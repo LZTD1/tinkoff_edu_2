@@ -51,7 +51,7 @@ public class TrackHandler implements MethodProcessor {
         }
 
         LinkValidator validator = validatorsMap.get(uriParam.getHost());
-        if (! uriParam.getPath().matches(validator.getPathValidator())) {
+        if (!uriParam.getPath().matches(validator.getPathValidator())) {
             return INCORRECT_LINK_TYPE + validator.getExample();
         }
 

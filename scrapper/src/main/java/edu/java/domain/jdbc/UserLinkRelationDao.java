@@ -51,13 +51,13 @@ public class UserLinkRelationDao {
     public List<UserLinkRel> getAllLinksByTgId(Long tgId, int limit, int offset) {
         String sql =
             """
-                    SELECT ul.*, u.*, l.*
-                    FROM users_links ul
-                    JOIN users u ON ul.userid = u.id
-                    JOIN links l ON ul.linkid = l.id
-                    WHERE u.telegramid = ?
-                    LIMIT ? OFFSET ?;
-                     """;
+                SELECT ul.*, u.*, l.*
+                FROM users_links ul
+                JOIN users u ON ul.userid = u.id
+                JOIN links l ON ul.linkid = l.id
+                WHERE u.telegramid = ?
+                LIMIT ? OFFSET ?;
+                 """;
         return template.query(sql, UserLinkRelMapper::map, tgId, limit, offset);
     }
 
