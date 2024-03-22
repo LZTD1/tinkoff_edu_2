@@ -74,9 +74,9 @@ public class TestLinkTransactions extends IntegrationTest {
             }}
         );
 
-        LinkResponse dbObject = linksDao.getLinkById(id);
+        Link dbObject = linksDao.getLinkById(id);
 
-        assertThat(dbObject.getUrl().toString()).isEqualTo("vk.com");
+        assertThat(dbObject.getLink().toString()).isEqualTo("vk.com");
     }
 
     @Test
@@ -89,7 +89,7 @@ public class TestLinkTransactions extends IntegrationTest {
             }}
         );
 
-        LinkResponse dbObject = linksDao.getLinkByLink("vk.com");
+        Link dbObject = linksDao.getLinkByLink("vk.com");
 
         assertThat(dbObject.getId()).isEqualTo(id);
     }

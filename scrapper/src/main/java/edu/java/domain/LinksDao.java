@@ -2,8 +2,6 @@ package edu.java.domain;
 
 import edu.java.database.dto.Link;
 import edu.java.domain.mappers.LinkMapper;
-import edu.java.domain.mappers.LinkResponseMapper;
-import edu.java.scrapper.dto.LinkResponse;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.OffsetDateTime;
@@ -37,15 +35,15 @@ public class LinksDao {
     }
 
     @Transactional
-    public LinkResponse getLinkById(Long id) {
+    public Link getLinkById(Long id) {
         String sql = "SELECT * FROM links WHERE id = ?;";
-        return template.query(sql, LinkResponseMapper::map, id).getFirst();
+        return template.query(sql, LinkMapper::map, id).getFirst();
     }
 
     @Transactional
-    public LinkResponse getLinkByLink(String url) {
+    public Link getLinkByLink(String url) {
         String sql = "SELECT * FROM links WHERE link = ?;";
-        return template.query(sql, LinkResponseMapper::map, url).getFirst();
+        return template.query(sql, LinkMapper::map, url).getFirst();
     }
 
     @Transactional

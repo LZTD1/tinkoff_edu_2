@@ -11,6 +11,7 @@ import java.text.MessageFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,6 @@ public class WebStackoverflow implements WebHandler {
     private static final int MAX_MESSAGE_LENGTH = 20;
     private final LinkService linkService;
     private final StackoverflowClient stackoverflowClient;
-    private OffsetDateTime newSendTime;
 
     public WebStackoverflow(LinkService linkService, StackoverflowClient stackoverflowClient) {
         this.linkService = linkService;
@@ -40,17 +40,22 @@ public class WebStackoverflow implements WebHandler {
         StackOverFlowDto sofAnswers = getSofAnswers(link);
         List<LinkUpdate> linkUpdateList = new ArrayList<>();
 
-        newSendTime = link.getLastsendtime();
+        OffsetDateTime lastCommentsTime = sofCommentsProcessing(link, sofComments, linkUpdateList);
+        OffsetDateTime lastAnswersTime = sofAnswersProcessing(link, sofAnswers, linkUpdateList);
 
-        sofCommentsProcessing(link, sofComments, linkUpdateList);
-        sofAnswersProcessing(link, sofAnswers, linkUpdateList);
+        OffsetDateTime newSendTime = lastCommentsTime.isAfter(lastAnswersTime) ? lastCommentsTime : lastAnswersTime;
 
         linkService.updateLastSendTime(link.getId(), newSendTime);
 
         return linkUpdateList;
     }
 
-    private void sofAnswersProcessing(Link link, StackOverFlowDto sofAnswers, List<LinkUpdate> linkUpdateList) {
+    private OffsetDateTime sofAnswersProcessing(
+        Link link,
+        StackOverFlowDto sofAnswers,
+        List<LinkUpdate> linkUpdateList
+    ) {
+        AtomicReference<OffsetDateTime> newSendTime = new AtomicReference<>(link.getLastsendtime());
         sofAnswers.getItems().forEach(entry -> {
             if (link.getLastsendtime().isBefore(entry.getCreationDate())) {
                 linkUpdateList.add(
@@ -61,15 +66,20 @@ public class WebStackoverflow implements WebHandler {
                         setTgChatIds(linkService.getAllUsersWithLink(link));
                     }}
                 );
-
-                if (newSendTime.isBefore(entry.getCreationDate())) {
-                    newSendTime = entry.getCreationDate();
+                if (newSendTime.get().isBefore(entry.getCreationDate())) {
+                    newSendTime.set(entry.getCreationDate());
                 }
             }
         });
+        return newSendTime.get();
     }
 
-    private void sofCommentsProcessing(Link link, StackOverFlowDto sofComments, List<LinkUpdate> linkUpdateList) {
+    private OffsetDateTime sofCommentsProcessing(
+        Link link,
+        StackOverFlowDto sofComments,
+        List<LinkUpdate> linkUpdateList
+    ) {
+        AtomicReference<OffsetDateTime> newSendTime = new AtomicReference<>(link.getLastsendtime());
         sofComments.getItems().forEach(entry -> {
             if (link.getLastsendtime().isBefore(entry.getCreationDate())) {
                 linkUpdateList.add(
@@ -80,12 +90,13 @@ public class WebStackoverflow implements WebHandler {
                         setTgChatIds(linkService.getAllUsersWithLink(link));
                     }}
                 );
-
-                if (newSendTime.isBefore(entry.getCreationDate())) {
-                    newSendTime = entry.getCreationDate();
+                if (newSendTime.get().isBefore(entry.getCreationDate())) {
+                    newSendTime.set(entry.getCreationDate());
                 }
             }
         });
+        return newSendTime.get();
+
     }
 
     private String getDescriptionMessage(ItemsDto entry, Types comment, Link link) {
