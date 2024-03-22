@@ -10,23 +10,22 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "users_links")
 @Getter
 @Setter
+@Entity
+@Table(name = "users_links")
 public class UserLinkRel {
-
     @EmbeddedId
-    private UserLinkPK id;
+    private UsersLinkId id = new UsersLinkId();
 
     @MapsId("userid")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "userid")
-    private User user;
+    @JoinColumn(name = "userid", nullable = false)
+    private User userid;
 
     @MapsId("linkid")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "linkid")
-    private Link link;
+    @JoinColumn(name = "linkid", nullable = false)
+    private Link linkid;
 
 }

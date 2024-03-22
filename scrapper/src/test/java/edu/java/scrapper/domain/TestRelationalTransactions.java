@@ -120,8 +120,8 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
 
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLink().getLink().toString()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getUserid().getTelegramId()).isEqualTo(505L);
+        assertThat(result.getFirst().getLinkid().getLink().toString()).isEqualTo("vk.com");
     }
 
     @Test
@@ -163,8 +163,8 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
 
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLink().getLink().toString()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getUserid().getTelegramId()).isEqualTo(505L);
+        assertThat(result.getFirst().getLinkid().getLink().toString()).isEqualTo("vk.com");
     }
 
     @Test

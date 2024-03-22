@@ -6,10 +6,13 @@ import edu.java.domain.jpa.LinkRepository;
 import edu.java.domain.jpa.UserLinkRelRepository;
 import edu.java.domain.jpa.UserRepository;
 import edu.java.scrapper.dto.LinkResponse;
+import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.services.LinkService;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
 
 public class JpaLinkService implements LinkService {
 
@@ -17,25 +20,39 @@ public class JpaLinkService implements LinkService {
     private UserRepository userRepository;
     private UserLinkRelRepository userLinkRelRepository;
 
-
-    public JpaLinkService(LinkRepository linkRepository, UserRepository userRepository, UserLinkRelRepository userLinkRelRepository) {
+    public JpaLinkService(
+        LinkRepository linkRepository,
+        UserRepository userRepository,
+        UserLinkRelRepository userLinkRelRepository
+    ) {
         this.linkRepository = linkRepository;
         this.userRepository = userRepository;
         this.userLinkRelRepository = userLinkRelRepository;
     }
 
     @Override
+    @Transactional
     public Long createLink(long tgChatId, URI url) {
-        Long idLink = linkRepository.saveAndFlush(new Link() {{
-            setLink(url);
-        }}).getId();
+        Link existingLink = linkRepository.findLinkByLink(url);
 
-        userLinkRelRepository.save(new UserLinkRel(){{
-            setUser(userRepository.getUserByTelegramId(tgChatId));
-            setLink(linkRepository.getReferenceById(idLink));
-        }});
+        if (existingLink == null) {
+            var newLink = new Link();
+            newLink.setLink(url);
 
-        return idLink;
+            existingLink = linkRepository.saveAndFlush(newLink);
+        }
+
+        UserLinkRel userLinkRel = new UserLinkRel();
+        userLinkRel.setLinkid(existingLink);
+        userLinkRel.setUserid(userRepository.getUserByTelegramId(tgChatId));
+
+        try {
+            userLinkRelRepository.saveAndFlush(userLinkRel);
+        }catch (DataIntegrityViolationException e){
+            throw new LinkAlreadyExistsException("Current link already tracked!");
+        }
+
+        return existingLink.getId();
     }
 
     @Override

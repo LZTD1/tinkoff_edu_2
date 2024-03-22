@@ -32,7 +32,7 @@ public class JpaTgChatService implements TgChatService {
     public void unregister(long tgChatId) {
         var rowsAffected = userRepository.deleteByTelegramId(tgChatId);
         if (rowsAffected == 0) {
-            throw new EntityDeleteException("Не возможно удалить юзера, возможн он уже был удален!");
+            throw new EntityDeleteException("Не возможно удалить юзера, возможно он уже был удален!");
         }
     }
 }

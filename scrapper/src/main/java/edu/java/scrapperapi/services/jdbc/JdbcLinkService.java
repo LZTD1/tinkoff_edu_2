@@ -65,7 +65,7 @@ public class JdbcLinkService implements LinkService {
         try {
             return userLinkRelationDao.getAllRelational(limit, offset)
                 .stream()
-                .map(entry -> linksDao.getLinkById(entry.getLink().getId()))
+                .map(entry -> linksDao.getLinkById(entry.getLinkid().getId()))
                 .toList();
         } catch (NoSuchElementException e) {
             throw new UserIsNotDefindedException();
