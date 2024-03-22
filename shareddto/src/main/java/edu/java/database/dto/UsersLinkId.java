@@ -5,12 +5,16 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @Embeddable
 public class UsersLinkId implements Serializable {
 
@@ -21,5 +25,4 @@ public class UsersLinkId implements Serializable {
     @NotNull
     @Column(name = "linkid", nullable = false)
     private Long linkid;
-
 }

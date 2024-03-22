@@ -1,9 +1,9 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
 import edu.java.database.dto.Link;
 import edu.java.database.dto.User;
 import edu.java.database.dto.UserLinkRel;
-import edu.java.domain.mappers.UserLinkRelMapper;
+import edu.java.domain.jdbc.mappers.UserLinkRelMapper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,13 +51,13 @@ public class UserLinkRelationDao {
     public List<UserLinkRel> getAllLinksByTgId(Long tgId, int limit, int offset) {
         String sql =
             """
-                SELECT ul.*, u.*, l.*
-                FROM users_links ul
-                JOIN users u ON ul.userid = u.id
-                JOIN links l ON ul.linkid = l.id
-                WHERE u.telegramid = ?
-                LIMIT ? OFFSET ?;
-                """;
+                    SELECT ul.*, u.*, l.*
+                    FROM users_links ul
+                    JOIN users u ON ul.userid = u.id
+                    JOIN links l ON ul.linkid = l.id
+                    WHERE u.telegramid = ?
+                    LIMIT ? OFFSET ?;
+                     """;
         return template.query(sql, UserLinkRelMapper::map, tgId, limit, offset);
     }
 

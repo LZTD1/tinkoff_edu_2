@@ -2,7 +2,6 @@ package edu.java.scrapper.domain;
 
 import edu.java.database.dto.Link;
 import edu.java.domain.jdbc.LinksDao;
-import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.sql.Types;

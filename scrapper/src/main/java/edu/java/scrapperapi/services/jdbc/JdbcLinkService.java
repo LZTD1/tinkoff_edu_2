@@ -1,10 +1,10 @@
 package edu.java.scrapperapi.services.jdbc;
 
 import edu.java.database.dto.Link;
-import edu.java.domain.LinksDao;
-import edu.java.domain.UserLinkRelationDao;
-import edu.java.domain.UsersDao;
-import edu.java.domain.mappers.LinkResponseMapper;
+import edu.java.domain.jdbc.LinksDao;
+import edu.java.domain.jdbc.UserLinkRelationDao;
+import edu.java.domain.jdbc.UsersDao;
+import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;
@@ -65,11 +65,11 @@ public class JdbcLinkService implements LinkService {
     public List<LinkResponse> listAll(long tgChatId, int limit, int offset) {
         try {
 
-            return userLinkRelationDao.getAllRelational(limit, offset)
+            return userLinkRelationDao.getAllLinksByTgId(tgChatId, limit, offset)
                 .stream()
                 .map(entry -> LinkResponseMapper.map(
-                    linksDao.getLinkById(entry.getLink().getId()))
-                )
+                    entry.getLinkid()
+                ))
                 .toList();
 
         } catch (NoSuchElementException e) {
@@ -79,8 +79,7 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public List<Link> listScheduler(int minutes, int limit) {
-        List<Link> result = linksDao.getLinksNotUpdates(minutes, limit);
-        return result;
+        return linksDao.getLinksNotUpdates(minutes, limit);
     }
 
     @Override

@@ -2,9 +2,9 @@ package edu.java.domain.jdbc.mappers;
 
 import edu.java.database.dto.Link;
 import edu.java.database.dto.User;
+import edu.java.database.dto.UserLinkRel;
 import java.net.URI;
 import java.sql.ResultSet;
-import edu.java.database.dto.UserLinkRel;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
