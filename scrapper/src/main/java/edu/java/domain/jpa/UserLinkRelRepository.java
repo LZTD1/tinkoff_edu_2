@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@SuppressWarnings({"MethodName", "ParameterName"})
 public interface UserLinkRelRepository extends JpaRepository<UserLinkRel, UsersLinkId> {
     List<UserLinkRel> findAllByUserid_TelegramId(Long userid_telegramId);
 

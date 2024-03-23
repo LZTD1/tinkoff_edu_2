@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProcessorHolder {
 
-    final List<MethodProcessor> ROADS;
+    final List<MethodProcessor> roads;
 
     @Qualifier("MapHandlerContainer")
     private final Map<String, MethodProcessor> handlerContainer;
 
-    private ProcessorHolder(List<MethodProcessor> roads) {
-        ROADS = roads;
+    private ProcessorHolder(List<MethodProcessor> processors) {
+        roads = processors;
         handlerContainer = getHandlerContainer();
     }
 
@@ -31,7 +31,7 @@ public class ProcessorHolder {
     }
 
     private Map<String, MethodProcessor> getHandlerContainer() {
-        return this.ROADS.stream().collect(
+        return this.roads.stream().collect(
             Collectors.toMap(MethodProcessor::getName, Function.identity())
         );
     }

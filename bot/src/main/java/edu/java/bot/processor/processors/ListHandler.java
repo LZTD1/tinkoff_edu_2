@@ -10,6 +10,7 @@ import static edu.java.bot.processor.Constants.EMPTY_LIST_MESSAGE;
 @Component
 public class ListHandler implements MethodProcessor {
 
+    private static final int CONST_LIMIT = 25;
     private ScrapperClient scrapperClient;
 
     public ListHandler(ScrapperClient scrapperClient) {
@@ -27,7 +28,7 @@ public class ListHandler implements MethodProcessor {
     public String handle(Update update) {
         ListLinksResponse links = scrapperClient.getAllTrackedLinks(
             update.getMessage().getChatId(),
-            25,
+            CONST_LIMIT,
             0
         );
         // todo реализовать пагинацию
