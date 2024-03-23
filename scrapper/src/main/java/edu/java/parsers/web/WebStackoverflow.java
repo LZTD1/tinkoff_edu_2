@@ -11,7 +11,6 @@ import java.text.MessageFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
@@ -55,8 +54,8 @@ public class WebStackoverflow implements WebHandler {
         StackOverFlowDto sofAnswers,
         List<LinkUpdate> linkUpdateList
     ) {
-        AtomicReference<OffsetDateTime> newSendTime = new AtomicReference<>(link.getLastsendtime());
-        sofAnswers.getItems().forEach(entry -> {
+        OffsetDateTime newSendTime = link.getLastsendtime();
+        for (ItemsDto entry : sofAnswers.getItems()) {
             if (link.getLastsendtime().isBefore(entry.getCreationDate())) {
                 linkUpdateList.add(
                     new LinkUpdate() {{
@@ -66,12 +65,12 @@ public class WebStackoverflow implements WebHandler {
                         setTgChatIds(linkService.getAllUsersWithLink(link));
                     }}
                 );
-                if (newSendTime.get().isBefore(entry.getCreationDate())) {
-                    newSendTime.set(entry.getCreationDate());
+                if (newSendTime.isBefore(entry.getCreationDate())) {
+                    newSendTime = entry.getCreationDate();
                 }
             }
-        });
-        return newSendTime.get();
+        }
+        return newSendTime;
     }
 
     private OffsetDateTime sofCommentsProcessing(
@@ -79,8 +78,8 @@ public class WebStackoverflow implements WebHandler {
         StackOverFlowDto sofComments,
         List<LinkUpdate> linkUpdateList
     ) {
-        AtomicReference<OffsetDateTime> newSendTime = new AtomicReference<>(link.getLastsendtime());
-        sofComments.getItems().forEach(entry -> {
+        OffsetDateTime newSendTime = link.getLastsendtime();
+        for (ItemsDto entry : sofComments.getItems()) {
             if (link.getLastsendtime().isBefore(entry.getCreationDate())) {
                 linkUpdateList.add(
                     new LinkUpdate() {{
@@ -90,12 +89,12 @@ public class WebStackoverflow implements WebHandler {
                         setTgChatIds(linkService.getAllUsersWithLink(link));
                     }}
                 );
-                if (newSendTime.get().isBefore(entry.getCreationDate())) {
-                    newSendTime.set(entry.getCreationDate());
+                if (newSendTime.isBefore(entry.getCreationDate())) {
+                    newSendTime = entry.getCreationDate();
                 }
             }
-        });
-        return newSendTime.get();
+        }
+        return newSendTime;
 
     }
 
