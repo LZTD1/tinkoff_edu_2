@@ -32,7 +32,7 @@ public class TestControllerLinks {
         configureFor("localhost", 3000);
 
         stubFor(get(urlPathEqualTo("/links"))
-            .withQueryParam("Tg-Chat-Id", equalTo("1"))
+            .withHeader("Tg-Chat-Id", equalTo("1"))
             .willReturn(
                 aResponse()
                     .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -41,7 +41,7 @@ public class TestControllerLinks {
             )
         );
         stubFor(get(urlPathEqualTo("/links"))
-            .withQueryParam("Tg-Chat-Id", equalTo("0"))
+            .withHeader("Tg-Chat-Id", equalTo("0"))
             .willReturn(
                 aResponse()
                     .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -49,9 +49,9 @@ public class TestControllerLinks {
                     .withBody("{ \"links\": [ { \"id\": 0, \"url\": \"https://vk.com\" } ], \"size\": 1 }")
             )
         );
-
+        // addLink
         stubFor(post(urlPathEqualTo("/links"))
-            .withQueryParam("Tg-Chat-Id", equalTo("1"))
+            .withHeader("Tg-Chat-Id", equalTo("1"))
             .withRequestBody(equalToJson(
                 "{ \"link\": \"https://vk.com\" }"))
             .willReturn(
@@ -62,7 +62,7 @@ public class TestControllerLinks {
         );
 
         stubFor(delete(urlPathEqualTo("/links"))
-            .withQueryParam("Tg-Chat-Id", equalTo("1"))
+            .withHeader("Tg-Chat-Id", equalTo("1"))
             .withRequestBody(equalToJson(
                 "{ \"link\": \"https://vk.com\" }"))
             .willReturn(
@@ -72,7 +72,7 @@ public class TestControllerLinks {
             )
         );
         stubFor(delete(urlPathEqualTo("/links"))
-            .withQueryParam("Tg-Chat-Id", equalTo("0"))
+            .withHeader("Tg-Chat-Id", equalTo("0"))
             .withRequestBody(equalToJson(
                 "{ \"link\": \"https://vk.com\" }"))
             .willReturn(
