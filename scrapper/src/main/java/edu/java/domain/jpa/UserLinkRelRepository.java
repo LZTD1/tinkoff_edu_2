@@ -11,5 +11,4 @@ public interface UserLinkRelRepository extends JpaRepository<UserLinkRel, UsersL
     List<UserLinkRel> findAllByUserid_TelegramId(Long userid_telegramId);
 
     List<UserLinkRel> findByLinkid_Id(Long id);
-
 }

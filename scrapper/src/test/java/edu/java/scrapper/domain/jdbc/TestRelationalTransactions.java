@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jdbc;
 
 import edu.java.database.dto.Link;
 import edu.java.database.dto.User;
@@ -6,6 +6,7 @@ import edu.java.database.dto.UserLinkRel;
 import edu.java.domain.jdbc.LinksDao;
 import edu.java.domain.jdbc.UserLinkRelationDao;
 import edu.java.domain.jdbc.UsersDao;
+import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
