@@ -2,15 +2,9 @@ package edu.java.shared;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
 public class ApiErrorResponse {
 
     private String description;

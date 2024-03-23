@@ -3,14 +3,22 @@ app:
     enable: true
     interval: 10000
     force-check-delay: 10000
+  linkDelay: 5
+  limitPerCheck: 10
 
 springdoc:
   swagger-ui:
     path: /swagger-ui
 
 spring:
+  liquibase:
+    enabled: false
   application:
     name: scrapper
+  datasource:
+    password: ${POSTGRES_PASSWORD}
+    username: ${POSTGRES_NAME}
+    url: ${JDBC_URL}
 
 server:
   port: 8080
