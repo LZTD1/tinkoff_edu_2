@@ -74,8 +74,8 @@
                                         <inputSchema>public</inputSchema>
                                     </database>
                                     <target>
-                                        <packageName>ru.tinkoff.edu.java.scrapper.domain.jooq</packageName>
-                                        <directory>scrapper/src/main/java</directory>
+                                        <packageName>edu.java.domain.jooq.tables</packageName>
+                                        <directory>../scrapper/src/main/java</directory>
                                     </target>
                                 </generator>
                             </jooq>

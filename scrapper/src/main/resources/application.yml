@@ -1,11 +1,11 @@
 app:
   scheduler:
-    enable: true
+    enable: false
     interval: 10000
     force-check-delay: 10000
   linkDelay: 5
   limitPerCheck: 10
-  database-access-type: jpa
+  database-access-type: jooq
 
 springdoc:
   swagger-ui:
