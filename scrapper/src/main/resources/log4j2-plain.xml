@@ -6,6 +6,7 @@
     https://raw.githubusercontent.com/apache/logging-log4j2/master/log4j-core/src/main/resources/Log4j-config.xsd"
     strict="true"
 >
+
     <Appenders>
         <Console name="STDOUT_PLAIN" target="SYSTEM_OUT">
             <PatternLayout
@@ -36,7 +37,9 @@
         <!--        <Logger name="org.hibernate.cache" level="debug"/>-->
 
         <Logger name="edu.java" level="TRACE"/>
-
+        <Logger name="org.jooq.Constants" level="warn">
+            <appender-ref ref="STDOUT" />
+        </Logger>
         <Root level="INFO">
             <AppenderRef ref="STDOUT_PLAIN"/>
         </Root>

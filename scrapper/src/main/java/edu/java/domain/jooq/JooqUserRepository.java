@@ -3,7 +3,7 @@ package edu.java.domain.jooq;
 import edu.java.database.dto.User;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
 import static edu.java.domain.jooq.tables.Tables.USERS;
 
 @Repository
@@ -17,16 +17,25 @@ public class JooqUserRepository {
 
     public void createUser(User user) {
         dslContext.insertInto(USERS)
-            .set(USERS.TELEGRAMID, user.getTelegramId())
-            .returning(USERS.ID)
-            .fetchOne()
-            .getId();
+                .set(USERS.TELEGRAMID, user.getTelegramId())
+                .returning(USERS.ID)
+                .fetchOne()
+                .getId();
     }
 
     public int deleteUser(User user) {
         return dslContext
-            .delete(USERS)
-            .where(USERS.TELEGRAMID.eq(user.getTelegramId()))
-            .execute();
+                .delete(USERS)
+                .where(USERS.TELEGRAMID.eq(user.getTelegramId()))
+                .execute();
+    }
+
+    public User getUserByTgId(Long tgId) {
+        return dslContext
+                .select(USERS.fields())
+                .from(USERS)
+                .where(USERS.TELEGRAMID.eq(tgId))
+                .fetchInto(User.class)
+                .getFirst();
     }
 }

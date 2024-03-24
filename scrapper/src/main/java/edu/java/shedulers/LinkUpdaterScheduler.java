@@ -56,6 +56,7 @@ public class LinkUpdaterScheduler {
     public void update() {
         LOGGER.info("Updating...");
         List<Link> list = linkService.listScheduler(linkDelay, limitPerCheck);
+        System.out.println(list.size());
         Map<String, WebHandler> handlerContainer = getHandlerContainer();
         list.forEach(
             entry -> {

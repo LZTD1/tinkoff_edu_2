@@ -72,6 +72,13 @@
                                         <includes>.*</includes>
                                         <excludes>DATABASECHANGELOG</excludes>
                                         <inputSchema>public</inputSchema>
+                                        <forcedTypes>
+                                            <forcedType>
+                                                <userType>java.net.URI</userType>
+                                                <converter>converters.UriConverter</converter>
+                                                <include>links.link</include>
+                                            </forcedType>
+                                        </forcedTypes>
                                     </database>
                                     <target>
                                         <packageName>edu.java.domain.jooq.tables</packageName>

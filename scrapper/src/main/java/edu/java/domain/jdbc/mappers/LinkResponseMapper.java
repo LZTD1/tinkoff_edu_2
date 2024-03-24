@@ -6,6 +6,7 @@ import java.net.URI;
 import java.sql.ResultSet;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import org.jooq.Record;
 
 @UtilityClass
 public class LinkResponseMapper {
@@ -25,6 +26,16 @@ public class LinkResponseMapper {
 
         newLink.setId(link.getId());
         newLink.setUrl(link.getLink());
+
+        return newLink;
+    }
+
+    @SneakyThrows
+    public static LinkResponse map(Record record) {
+        LinkResponse newLink = new LinkResponse();
+
+        newLink.setUrl(URI.create((String) record.get("link")));
+        newLink.setId((Long) record.get("linkid"));
 
         return newLink;
     }
