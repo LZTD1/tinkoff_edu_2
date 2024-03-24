@@ -1,7 +1,7 @@
 package edu.java.scrapperapi.services.jpa;
 
 import edu.java.database.dto.User;
-import edu.java.domain.jpa.UserRepository;
+import edu.java.domain.jpa.JpaUserRepository;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
@@ -10,10 +10,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 public class JpaTgChatService implements TgChatService {
 
-    private UserRepository userRepository;
+    private JpaUserRepository jpaUserRepository;
 
-    public JpaTgChatService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public JpaTgChatService(JpaUserRepository jpaUserRepository) {
+        this.jpaUserRepository = jpaUserRepository;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class JpaTgChatService implements TgChatService {
         User user = new User();
         user.setTelegramId(tgChatId);
         try {
-            userRepository.saveAndFlush(user);
+            jpaUserRepository.saveAndFlush(user);
         } catch (DataIntegrityViolationException e) {
             throw new EntityAlreadyExistsError("Пользователь с таким telegramId уже существует!");
         }
@@ -30,7 +30,7 @@ public class JpaTgChatService implements TgChatService {
     @Override
     @Transactional
     public void unregister(long tgChatId) {
-        var rowsAffected = userRepository.deleteByTelegramId(tgChatId);
+        var rowsAffected = jpaUserRepository.deleteByTelegramId(tgChatId);
         if (rowsAffected == 0) {
             throw new EntityDeleteException("Не возможно удалить юзера, возможно он уже был удален!");
         }

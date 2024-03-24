@@ -1,8 +1,8 @@
 package edu.java.configuration.AccessTypes;
 
-import edu.java.domain.jpa.LinkRepository;
-import edu.java.domain.jpa.UserLinkRelRepository;
-import edu.java.domain.jpa.UserRepository;
+import edu.java.domain.jpa.JpaLinkRepository;
+import edu.java.domain.jpa.JpaUserLinkRelRepository;
+import edu.java.domain.jpa.JpaUserRepository;
 import edu.java.scrapperapi.services.LinkService;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.scrapperapi.services.jpa.JpaLinkService;
@@ -17,18 +17,18 @@ public class JpaAccessConfiguration {
 
     @Bean
     public LinkService linkService(
-        LinkRepository linkRepository,
-        UserRepository userRepository,
-        UserLinkRelRepository userLinkRelRepository
+        JpaLinkRepository jpaLinkRepository,
+        JpaUserRepository jpaUserRepository,
+        JpaUserLinkRelRepository jpaUserLinkRelRepository
     ) {
-        return new JpaLinkService(linkRepository, userRepository, userLinkRelRepository);
+        return new JpaLinkService(jpaLinkRepository, jpaUserRepository, jpaUserLinkRelRepository);
     }
 
     @Bean
     public TgChatService tgChatService(
-        UserRepository userRepository
+        JpaUserRepository jpaUserRepository
     ) {
-        return new JpaTgChatService(userRepository);
+        return new JpaTgChatService(jpaUserRepository);
     }
 
 }

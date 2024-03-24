@@ -1,9 +1,9 @@
 package edu.java.scrapperapi.services.jdbc;
 
 import edu.java.database.dto.Link;
-import edu.java.domain.jdbc.LinksDao;
-import edu.java.domain.jdbc.UserLinkRelationDao;
-import edu.java.domain.jdbc.UsersDao;
+import edu.java.domain.jdbc.JdbcLinkRepository;
+import edu.java.domain.jdbc.JdbcUserLinkRelRepository;
+import edu.java.domain.jdbc.JdbcUserRepository;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
@@ -18,27 +18,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class JdbcLinkService implements LinkService {
 
-    private LinksDao linksDao;
-    private UsersDao usersDao;
-    private UserLinkRelationDao userLinkRelationDao;
+    private JdbcLinkRepository jdbcLinkRepository;
+    private JdbcUserRepository jdbcUserRepository;
+    private JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
 
-    public JdbcLinkService(LinksDao linksDao, UsersDao usersDao, UserLinkRelationDao userLinkRelationDao) {
-        this.linksDao = linksDao;
-        this.usersDao = usersDao;
-        this.userLinkRelationDao = userLinkRelationDao;
+    public JdbcLinkService(JdbcLinkRepository jdbcLinkRepository, JdbcUserRepository jdbcUserRepository, JdbcUserLinkRelRepository jdbcUserLinkRelRepository) {
+        this.jdbcLinkRepository = jdbcLinkRepository;
+        this.jdbcUserRepository = jdbcUserRepository;
+        this.jdbcUserLinkRelRepository = jdbcUserLinkRelRepository;
     }
 
     @Override
     @Transactional
     public Long createLink(long tgChatId, URI url) {
-        Long idLink = linksDao.createLink(new Link() {{
+        Long idLink = jdbcLinkRepository.createLink(new Link() {{
             setLink(url);
         }});
 
         try {
-            userLinkRelationDao.createRelational(
-                usersDao.getUserByTgId(tgChatId),
-                linksDao.getLinkById(idLink)
+            jdbcUserLinkRelRepository.createRelational(
+                jdbcUserRepository.getUserByTgId(tgChatId),
+                jdbcLinkRepository.getLinkById(idLink)
             );
         } catch (DuplicateKeyException e) {
             throw new LinkAlreadyExistsException("Current link already tracked!");
@@ -51,9 +51,9 @@ public class JdbcLinkService implements LinkService {
     @Transactional
     public LinkResponse remove(long tgChatId, URI url) {
 
-        Link link = linksDao.getLinkByLink(url.toString());
-        userLinkRelationDao.deleteRelational(
-            usersDao.getUserByTgId(tgChatId),
+        Link link = jdbcLinkRepository.getLinkByLink(url.toString());
+        jdbcUserLinkRelRepository.deleteRelational(
+            jdbcUserRepository.getUserByTgId(tgChatId),
             link
         );
 
@@ -65,7 +65,7 @@ public class JdbcLinkService implements LinkService {
     public List<LinkResponse> listAll(long tgChatId, int limit, int offset) {
         try {
 
-            return userLinkRelationDao.getAllLinksByTgId(tgChatId, limit, offset)
+            return jdbcUserLinkRelRepository.getAllLinksByTgId(tgChatId, limit, offset)
                 .stream()
                 .map(entry -> LinkResponseMapper.map(
                     entry.getLinkid()
@@ -79,19 +79,19 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public List<Link> listScheduler(int minutes, int limit) {
-        return linksDao.getLinksNotUpdates(minutes, limit);
+        return jdbcLinkRepository.getLinksNotUpdates(minutes, limit);
     }
 
     @Override
     public void updateLastSendTime(Long idLink, OffsetDateTime newSendTime) {
-        linksDao.updateLastSendTime(idLink, newSendTime);
+        jdbcLinkRepository.updateLastSendTime(idLink, newSendTime);
     }
 
     @Override
     public List<Long> getAllUsersWithLink(Link link) {
-        return userLinkRelationDao.getAllUsersIdWithLink(link.getId())
+        return jdbcUserLinkRelRepository.getAllUsersIdWithLink(link.getId())
             .stream()
-            .map(entry -> usersDao.getUserById(entry).getTelegramId())
+            .map(entry -> jdbcUserRepository.getUserById(entry).getTelegramId())
             .toList();
     }
 

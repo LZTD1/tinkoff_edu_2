@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class LinksDao {
+public class JdbcLinkRepository {
 
     private final JdbcTemplate template;
 
     @Autowired
-    public LinksDao(JdbcTemplate template) {
+    public JdbcLinkRepository(JdbcTemplate template) {
         this.template = template;
     }
 

@@ -1,8 +1,8 @@
 package edu.java.configuration;
 
-import edu.java.domain.jdbc.LinksDao;
-import edu.java.domain.jdbc.UserLinkRelationDao;
-import edu.java.domain.jdbc.UsersDao;
+import edu.java.domain.jdbc.JdbcLinkRepository;
+import edu.java.domain.jdbc.JdbcUserLinkRelRepository;
+import edu.java.domain.jdbc.JdbcUserRepository;
 import edu.java.scrapperapi.services.LinkService;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.scrapperapi.services.jdbc.JdbcLinkService;
@@ -13,27 +13,27 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ServiceConfiguration {
 
-    private LinksDao linksDao;
-    private UsersDao usersDao;
-    private UserLinkRelationDao userLinkRelationDao;
+    private JdbcLinkRepository jdbcLinkRepository;
+    private JdbcUserRepository jdbcUserRepository;
+    private JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
 
-    public ServiceConfiguration(LinksDao linksDao, UsersDao usersDao, UserLinkRelationDao userLinkRelationDao) {
-        this.linksDao = linksDao;
-        this.usersDao = usersDao;
-        this.userLinkRelationDao = userLinkRelationDao;
+    public ServiceConfiguration(JdbcLinkRepository jdbcLinkRepository, JdbcUserRepository jdbcUserRepository, JdbcUserLinkRelRepository jdbcUserLinkRelRepository) {
+        this.jdbcLinkRepository = jdbcLinkRepository;
+        this.jdbcUserRepository = jdbcUserRepository;
+        this.jdbcUserLinkRelRepository = jdbcUserLinkRelRepository;
     }
 
     @Bean
     public LinkService getLinkService() {
         return new JdbcLinkService(
-            linksDao, usersDao, userLinkRelationDao
+                jdbcLinkRepository, jdbcUserRepository, jdbcUserLinkRelRepository
         );
     }
 
     @Bean
     public TgChatService getTgChatService() {
         return new JdbcTgChatService(
-            usersDao
+            jdbcUserRepository
         );
     }
 }
