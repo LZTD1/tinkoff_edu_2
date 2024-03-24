@@ -1,13 +1,13 @@
 databaseChangeLog:
   - include:
-      file: /liquibase/changelog/changeset/createLinkEntity.sql
+      file: changeset/createLinkEntity.sql
   - include:
-      file: /liquibase/changelog/changeset/createUserEntity.sql
+      file: changeset/createUserEntity.sql
   - include:
-      file: /liquibase/changelog/changeset/createUserLinksTable.sql
+      file: changeset/createUserLinksTable.sql
   - include:
-      file: /liquibase/changelog/changeset/createNewColumnInLinkEntity.sql
+      file: changeset/createNewColumnInLinkEntity.sql
   - include:
-      file: /liquibase/changelog/changeset/createNewColumnLastHashInLinkEntity.sql
+      file: changeset/createNewColumnLastHashInLinkEntity.sql
   - include:
-      file: /liquibase/changelog/changeset/createUsersTableUniqueRelation.sql
+      file: changeset/createUsersTableUniqueRelation.sql
