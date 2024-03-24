@@ -7,26 +7,22 @@ import edu.java.scrapperapi.services.LinkService;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.scrapperapi.services.jdbc.JdbcLinkService;
 import edu.java.scrapperapi.services.jdbc.JdbcTgChatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class ServiceConfiguration {
 
-    private JdbcLinkRepository jdbcLinkRepository;
-    private JdbcUserRepository jdbcUserRepository;
-    private JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
-
-    public ServiceConfiguration(JdbcLinkRepository jdbcLinkRepository, JdbcUserRepository jdbcUserRepository, JdbcUserLinkRelRepository jdbcUserLinkRelRepository) {
-        this.jdbcLinkRepository = jdbcLinkRepository;
-        this.jdbcUserRepository = jdbcUserRepository;
-        this.jdbcUserLinkRelRepository = jdbcUserLinkRelRepository;
-    }
+    private final JdbcLinkRepository jdbcLinkRepository;
+    private final JdbcUserRepository jdbcUserRepository;
+    private final JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
 
     @Bean
     public LinkService getLinkService() {
         return new JdbcLinkService(
-                jdbcLinkRepository, jdbcUserRepository, jdbcUserLinkRelRepository
+            jdbcLinkRepository, jdbcUserRepository, jdbcUserLinkRelRepository
         );
     }
 

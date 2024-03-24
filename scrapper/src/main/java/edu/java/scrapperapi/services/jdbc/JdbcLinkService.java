@@ -22,7 +22,11 @@ public class JdbcLinkService implements LinkService {
     private JdbcUserRepository jdbcUserRepository;
     private JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
 
-    public JdbcLinkService(JdbcLinkRepository jdbcLinkRepository, JdbcUserRepository jdbcUserRepository, JdbcUserLinkRelRepository jdbcUserLinkRelRepository) {
+    public JdbcLinkService(
+        JdbcLinkRepository jdbcLinkRepository,
+        JdbcUserRepository jdbcUserRepository,
+        JdbcUserLinkRelRepository jdbcUserLinkRelRepository
+    ) {
         this.jdbcLinkRepository = jdbcLinkRepository;
         this.jdbcUserRepository = jdbcUserRepository;
         this.jdbcUserLinkRelRepository = jdbcUserLinkRelRepository;

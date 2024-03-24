@@ -1,6 +1,7 @@
 package edu.java.scrapperapi.services.jooq;
 
 import edu.java.database.dto.Link;
+import edu.java.domain.jdbc.mappers.LinkMapper;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.domain.jooq.JooqLinkRepository;
 import edu.java.domain.jooq.JooqUserLinkRelRepository;
@@ -9,6 +10,7 @@ import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.services.LinkService;
 import java.net.URI;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.Record;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
+import static edu.java.domain.jooq.tables.Tables.LINKS;
 
 @RequiredArgsConstructor
 public class JooqLinkService implements LinkService {
@@ -75,16 +78,43 @@ public class JooqLinkService implements LinkService {
 
     @Override
     public List<Link> listScheduler(int minutes, int limit) {
-        return jooqLinkRepository.getLinksNotUpdates(minutes, limit);
+        Iterator<Record> iterator = jooqLinkRepository.getLinksNotUpdates(limit);
+
+        ArrayList<Link> responses = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Record currentRecord = iterator.next();
+            if (Math.abs(
+                Duration
+                    .between(
+                        currentRecord.get(LINKS.UPDATETIME), OffsetDateTime.now()
+                    )
+                    .toMinutes()) > minutes) {
+                responses.add(
+                    LinkMapper.mapFromRecord(currentRecord)
+                );
+            }
+        }
+
+        return responses;
     }
 
     @Override
     public void updateLastSendTime(Long idLink, OffsetDateTime newSendTime) {
-
+        jooqLinkRepository.updateLastSendTime(idLink, newSendTime);
     }
 
     @Override
     public List<Long> getAllUsersWithLink(Link link) {
-        return null;
+        Iterator<Record> iterator = jooqUserLinkRelRepository.getAllUsersIdWithLink(link.getId());
+
+        ArrayList<Long> responses = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Record currentRecord = iterator.next();
+            responses.add(
+                (Long) currentRecord.get("telegramid")
+            );
+        }
+
+        return responses;
     }
 }

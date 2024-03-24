@@ -2,17 +2,14 @@ package edu.java.domain.jooq;
 
 import edu.java.database.dto.Link;
 import edu.java.database.dto.User;
-
 import java.util.Iterator;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.SelectForUpdateStep;
 import org.springframework.stereotype.Repository;
 import static edu.java.domain.jooq.tables.Tables.LINKS;
 import static edu.java.domain.jooq.tables.Tables.USERS;
 import static edu.java.domain.jooq.tables.Tables.USERS_LINKS;
-import static org.jooq.impl.DSL.field;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,15 +33,26 @@ public class JooqUserLinkRelRepository {
     }
 
     public Iterator<Record> getAllLinksByTgId(long tgChatId, int limit, int offset) {
-        SelectForUpdateStep<Record> a =  dslContext
+        return dslContext
             .select()
             .from(USERS_LINKS)
             .join(USERS).on(USERS_LINKS.USERID.eq(USERS.ID))
             .join(LINKS).on(USERS_LINKS.LINKID.eq(LINKS.ID))
             .where(USERS.TELEGRAMID.eq(tgChatId))
             .limit(limit)
-            .offset(offset);
+            .offset(offset)
+            .fetch()
+            .iterator();
+    }
 
-        return a.fetch().iterator();
+    public Iterator<Record> getAllUsersIdWithLink(Long id) {
+        return dslContext
+            .select()
+            .from(USERS_LINKS)
+            .join(USERS).on(USERS_LINKS.USERID.eq(USERS.ID))
+            .join(LINKS).on(USERS_LINKS.LINKID.eq(LINKS.ID))
+            .where(LINKS.ID.eq(id))
+            .fetch()
+            .iterator();
     }
 }

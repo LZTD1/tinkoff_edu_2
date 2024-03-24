@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -62,8 +62,8 @@
                                 <databaseName>scrapper</databaseName> <!-- optional -->
                             </database>
                             <liquibase>
-                               <changeLogPath>master.yaml</changeLogPath>
-                               <changeLogDirectory>../migrations/liquibase/changelog/</changeLogDirectory>
+                                <changeLogPath>master.yaml</changeLogPath>
+                                <changeLogDirectory>../migrations/liquibase/changelog/</changeLogDirectory>
                             </liquibase>
 
                             <jooq>
@@ -72,13 +72,6 @@
                                         <includes>.*</includes>
                                         <excludes>DATABASECHANGELOG</excludes>
                                         <inputSchema>public</inputSchema>
-                                        <forcedTypes>
-                                            <forcedType>
-                                                <userType>java.net.URI</userType>
-                                                <converter>converters.UriConverter</converter>
-                                                <include>links.link</include>
-                                            </forcedType>
-                                        </forcedTypes>
                                     </database>
                                     <target>
                                         <packageName>edu.java.domain.jooq.tables</packageName>
