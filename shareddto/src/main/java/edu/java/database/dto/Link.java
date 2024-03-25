@@ -1,19 +1,12 @@
 package edu.java.database.dto;
 
 import edu.java.database.dto.converters.UriConverter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import java.net.URI;
-import java.time.OffsetDateTime;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import java.net.URI;
+import java.time.OffsetDateTime;
 
 @Entity
 @Getter

@@ -56,4 +56,13 @@ public class JooqLinkRepository {
             .where(LINKS.ID.eq(idLink))
             .execute();
     }
+
+    public Link getLinkById(Long linkId) {
+        return dslContext
+            .select(LINKS.fields())
+            .from(LINKS)
+            .where(LINKS.ID.eq(linkId))
+            .fetchInto(Link.class)
+            .getFirst();
+    }
 }

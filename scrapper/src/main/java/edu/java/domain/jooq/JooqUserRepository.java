@@ -14,8 +14,8 @@ public class JooqUserRepository {
         this.dslContext = dslContext;
     }
 
-    public void createUser(User user) {
-        dslContext.insertInto(USERS)
+    public Long createUser(User user) {
+        return dslContext.insertInto(USERS)
             .set(USERS.TELEGRAMID, user.getTelegramId())
             .returning(USERS.ID)
             .fetchOne()
@@ -34,6 +34,15 @@ public class JooqUserRepository {
             .select(USERS.fields())
             .from(USERS)
             .where(USERS.TELEGRAMID.eq(tgId))
+            .fetchInto(User.class)
+            .getFirst();
+    }
+
+    public User getUserById(Long userId) {
+        return dslContext
+            .select(USERS.fields())
+            .from(USERS)
+            .where(USERS.ID.eq(userId))
             .fetchInto(User.class)
             .getFirst();
     }
