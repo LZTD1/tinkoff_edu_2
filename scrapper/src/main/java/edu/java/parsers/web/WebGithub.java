@@ -6,20 +6,30 @@ import edu.java.clients.dto.githubDto.commit.CommitsDto;
 import edu.java.clients.dto.githubDto.pull.PullDto;
 import edu.java.database.dto.Link;
 import edu.java.parsers.WebHandler;
+import edu.java.parsers.githubPullsHandler.CreateEventHandler;
+import edu.java.parsers.githubPullsHandler.MessageHandler;
+import edu.java.parsers.githubPullsHandler.PullRequestEvent;
 import edu.java.scrapperapi.services.LinkService;
 import java.text.MessageFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WebGithub implements WebHandler {
 
-    private static final String SPEAKING_HEAD_EMOJI = "\uD83D\uDDE3";
+    public static final String SPEAKING_HEAD_EMOJI = "\uD83D\uDDE3";
     private static final int MAX_MESSAGE_LENGTH = 20;
+    private static final String CREATE_EVENT = "CreateEvent";
+    private static final String PULL_REQUEST_EVENT = "PullRequestEvent";
     private final GithubClient githubClient;
     private final LinkService linkService;
+    private HashMap<String, MessageHandler> messageHandlers = new HashMap<>() {{
+        put("CreateEvent", new CreateEventHandler());
+        put("PullRequestEvent", new PullRequestEvent());
+    }};
 
     public WebGithub(GithubClient githubClient, LinkService linkService) {
         this.githubClient = githubClient;
@@ -51,13 +61,15 @@ public class WebGithub implements WebHandler {
         OffsetDateTime newSendTime = link.getLastsendtime();
         for (PullDto entry : pullDtoList) {
             if (link.getLastsendtime().isBefore(entry.getCreatedAt())) {
-                linkUpdateList.add(new LinkUpdate() {{
-                    setDescription(getDescriptionMessage(entry));
-                    setId(link.getId());
-                    setUrl(link.getLink());
-                    setTgChatIds(linkService.getAllUsersWithLink(link));
-                }});
-
+                String message = getDescriptionMessage(entry);
+                if (message != null) {
+                    linkUpdateList.add(new LinkUpdate() {{
+                        setDescription(message);
+                        setId(link.getId());
+                        setUrl(link.getLink());
+                        setTgChatIds(linkService.getAllUsersWithLink(link));
+                    }});
+                }
                 if (newSendTime.isBefore(entry.getCreatedAt())) {
                     newSendTime = entry.getCreatedAt();
                 }
@@ -112,24 +124,11 @@ public class WebGithub implements WebHandler {
     }
 
     private String getDescriptionMessage(PullDto entry) {
-        return new StringBuilder()
-            .append(SPEAKING_HEAD_EMOJI + " Нашел новый пулл!\n")
-            .append(MessageFormat.format(
-                "[{0}]({1})",
-                getRepos(entry.getHtmlUrl().getPath()),
-                entry.getHtmlUrl().toString()
-            ))
-            .append(MessageFormat.format(
-                "Автор: [{0}]({1})",
-                entry.getUser().getLogin(),
-                entry.getUser().getHtmlUrl().toString()
-            ))
-            .append(MessageFormat.format(
-                    "Сообщение: {0}",
-                    trimMessage(entry.getBody())
-                )
-            )
-            .toString();
+        var handler = messageHandlers.get(entry.getType());
+        if (handler != null) {
+            return handler.getMessage(entry);
+        }
+        return null;
     }
 
     private String trimMessage(String message) {

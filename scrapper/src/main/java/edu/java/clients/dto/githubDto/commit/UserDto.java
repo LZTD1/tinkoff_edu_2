@@ -1,4 +1,4 @@
-package edu.java.clients.dto.githubDto;
+package edu.java.clients.dto.githubDto.commit;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.URI;

@@ -6,12 +6,12 @@ import edu.java.bot.clients.exceptions.LinkNotFoundException;
 import edu.java.scrapper.dto.AddLinkRequest;
 import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.ListLinksResponse;
+import java.net.URI;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import java.net.URI;
 
 @Component
 public class ScrapperClient {
