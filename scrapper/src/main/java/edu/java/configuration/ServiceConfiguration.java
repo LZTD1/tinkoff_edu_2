@@ -1,8 +1,8 @@
 package edu.java.configuration;
 
-import edu.java.domain.LinksDao;
-import edu.java.domain.UserLinkRelationDao;
-import edu.java.domain.UsersDao;
+import edu.java.domain.jdbc.LinksDao;
+import edu.java.domain.jdbc.UserLinkRelationDao;
+import edu.java.domain.jdbc.UsersDao;
 import edu.java.scrapperapi.services.LinkService;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.scrapperapi.services.jdbc.JdbcLinkService;

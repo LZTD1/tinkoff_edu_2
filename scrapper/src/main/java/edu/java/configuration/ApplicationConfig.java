@@ -1,5 +1,6 @@
 package edu.java.configuration;
 
+import edu.java.configuration.AccessTypes.AccessType;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +13,8 @@ public record ApplicationConfig(
     Scheduler scheduler,
 
     int linkDelay,
-    int limitPerCheck
+    int limitPerCheck,
+    AccessType databaseAccessType
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

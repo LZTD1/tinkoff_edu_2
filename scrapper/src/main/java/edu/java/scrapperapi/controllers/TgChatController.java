@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,15 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
+@RequiredArgsConstructor
 @Tag(name = "Tg-Chat", description = "управление чатами телеграм")
 public class TgChatController {
 
-    private TgChatService tgChatService;
-
-    @Autowired
-    public TgChatController(TgChatService tgChatService) {
-        this.tgChatService = tgChatService;
-    }
+    private final TgChatService tgChatService;
 
     @Operation(
         operationId = "tgChatIdPost",

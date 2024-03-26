@@ -4,27 +4,24 @@ import edu.java.bot.dto.LinkUpdate;
 import edu.java.clients.GithubClient;
 import edu.java.clients.dto.githubDto.commit.CommitsDto;
 import edu.java.clients.dto.githubDto.pull.PullDto;
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.parsers.WebHandler;
 import edu.java.scrapperapi.services.LinkService;
 import java.text.MessageFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class WebGithub implements WebHandler {
 
     private static final String SPEAKING_HEAD_EMOJI = "\uD83D\uDDE3";
     private static final int MAX_MESSAGE_LENGTH = 20;
     private final GithubClient githubClient;
     private final LinkService linkService;
-
-    public WebGithub(GithubClient githubClient, LinkService linkService) {
-        this.githubClient = githubClient;
-        this.linkService = linkService;
-    }
 
     @Override
     public String getHost() {

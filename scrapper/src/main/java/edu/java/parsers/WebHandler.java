@@ -1,7 +1,7 @@
 package edu.java.parsers;
 
 import edu.java.bot.dto.LinkUpdate;
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import java.util.List;
 
 public interface WebHandler {

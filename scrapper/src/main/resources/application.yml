@@ -5,6 +5,7 @@ app:
     force-check-delay: 10000
   linkDelay: 5
   limitPerCheck: 10
+  database-access-type: jpa
 
 springdoc:
   swagger-ui:
@@ -19,6 +20,11 @@ spring:
     password: ${POSTGRES_PASSWORD}
     username: ${POSTGRES_NAME}
     url: ${JDBC_URL}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
 
 server:
   port: 8080

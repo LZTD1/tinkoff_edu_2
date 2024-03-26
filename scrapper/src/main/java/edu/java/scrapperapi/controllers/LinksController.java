@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,15 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
+@RequiredArgsConstructor
 @Tag(name = "links", description = "управление ссылками в чатах")
 public class LinksController {
 
-    private LinkService linkService;
-
-    @Autowired
-    public LinksController(LinkService linkService) {
-        this.linkService = linkService;
-    }
+    private final LinkService linkService;
 
     @Operation(
         operationId = "linksDelete",
@@ -126,6 +122,7 @@ public class LinksController {
     public void linksPost(
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
+
         @Parameter(name = "AddLinkRequest", description = "", required = true)
         @Valid @RequestBody AddLinkRequest addLinkRequest
     ) {

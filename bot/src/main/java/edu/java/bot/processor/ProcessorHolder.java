@@ -1,33 +1,35 @@
 package edu.java.bot.processor;
 
 import edu.java.bot.processor.processors.DefaultHandler;
-import edu.java.bot.processor.processors.HelpHandler;
-import edu.java.bot.processor.processors.ListHandler;
-import edu.java.bot.processor.processors.StartHandler;
-import edu.java.bot.processor.processors.TrackHandler;
-import edu.java.bot.processor.processors.UntrackHandler;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProcessorHolder {
 
-    static final Map<String, MethodProcessor> ROADS = new HashMap<>() {{
-        put("/start", new StartHandler());
-        put("/help", new HelpHandler());
-        put("/track", new TrackHandler());
-        put("/untrack", new UntrackHandler());
-        put("/list", new ListHandler());
-    }};
+    @Qualifier("MapHandlerContainer")
+    private final Map<String, MethodProcessor> handlerContainer;
 
-    private ProcessorHolder() {
+    private ProcessorHolder(List<MethodProcessor> processors) {
+        handlerContainer = getHandlerContainer(processors);
     }
 
-    public static MethodProcessor getCommandByName(String name) {
-        return ROADS.getOrDefault(name, new DefaultHandler());
+    public MethodProcessor getCommandByName(String name) {
+        return handlerContainer.getOrDefault(name, new DefaultHandler());
     }
 
-    public static Collection<MethodProcessor> getAllCommands() {
-        return ROADS.values();
+    public Collection<MethodProcessor> getAllCommands() {
+        return handlerContainer.values();
+    }
+
+    private Map<String, MethodProcessor> getHandlerContainer(List<MethodProcessor> processors) {
+        return processors.stream().collect(
+            Collectors.toMap(MethodProcessor::getName, Function.identity())
+        );
     }
 }
