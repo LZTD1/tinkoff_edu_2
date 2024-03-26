@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.jpa;
 
-import edu.java.database.dto.User;
+import edu.java.dto.User;
 import edu.java.domain.jpa.UserRepository;
 import edu.java.scrapper.domain.IntegrationTest;
 import org.junit.jupiter.api.Test;

@@ -1,15 +1,14 @@
 package edu.java.domain.jpa;
 
-import edu.java.database.dto.UserLinkRel;
-import edu.java.database.dto.UsersLinkId;
+import edu.java.dto.UserLinkRel;
+import edu.java.dto.UsersLinkId;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@SuppressWarnings({"MethodName", "ParameterName"})
 public interface UserLinkRelRepository extends JpaRepository<UserLinkRel, UsersLinkId> {
-    List<UserLinkRel> findAllByUserid_TelegramId(Long userid_telegramId);
+    List<UserLinkRel> findByUserTelegramId(Long telegramId);
 
-    List<UserLinkRel> findByLinkid_Id(Long id);
+    List<UserLinkRel> findByLinkId(Long id);
 }

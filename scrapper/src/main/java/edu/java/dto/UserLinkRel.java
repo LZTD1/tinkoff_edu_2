@@ -1,4 +1,4 @@
-package edu.java.database.dto;
+package edu.java.dto;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -21,11 +21,11 @@ public class UserLinkRel {
     @MapsId("userid")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "userid", nullable = false)
-    private User userid;
+    private User user;
 
     @MapsId("linkid")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "linkid", nullable = false)
-    private Link linkid;
+    private Link link;
 
 }

@@ -1,6 +1,6 @@
 package edu.java.domain.jdbc;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.domain.jdbc.mappers.LinkMapper;
 import java.sql.Timestamp;
 import java.sql.Types;

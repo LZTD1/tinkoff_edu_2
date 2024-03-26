@@ -1,8 +1,8 @@
 package edu.java.scrapper.domain.jpa;
 
-import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
-import edu.java.database.dto.UserLinkRel;
+import edu.java.dto.Link;
+import edu.java.dto.User;
+import edu.java.dto.UserLinkRel;
 import edu.java.domain.jpa.LinkRepository;
 import edu.java.domain.jpa.UserLinkRelRepository;
 import edu.java.domain.jpa.UserRepository;
@@ -43,13 +43,13 @@ public class TestRelationalTransactions extends IntegrationTest {
         linkRepository.saveAndFlush(link);
 
         var userLinkRel = new UserLinkRel();
-        userLinkRel.setUserid(user);
-        userLinkRel.setLinkid(link);
+        userLinkRel.setUser(user);
+        userLinkRel.setLink(link);
         userLinkRelRepository.saveAndFlush(userLinkRel);
 
-        List<UserLinkRel> res = userLinkRelRepository.findAllByUserid_TelegramId(123L);
+        List<UserLinkRel> res = userLinkRelRepository.findByUserTelegramId(123L);
 
-        assertThat(res.getFirst().getLinkid().getLink()).isEqualTo(URI.create("vk.com"));
+        assertThat(res.getFirst().getLink().getLink()).isEqualTo(URI.create("vk.com"));
     }
 
     @Test
@@ -65,12 +65,12 @@ public class TestRelationalTransactions extends IntegrationTest {
         linkRepository.saveAndFlush(link);
 
         var userLinkRel = new UserLinkRel();
-        userLinkRel.setUserid(user);
-        userLinkRel.setLinkid(link);
+        userLinkRel.setUser(user);
+        userLinkRel.setLink(link);
         userLinkRelRepository.saveAndFlush(userLinkRel);
 
-        List<UserLinkRel> res = userLinkRelRepository.findByLinkid_Id(link.getId());
+        List<UserLinkRel> res = userLinkRelRepository.findByLinkId(link.getId());
 
-        assertThat(res.getFirst().getUserid().getTelegramId()).isEqualTo(123L);
+        assertThat(res.getFirst().getUser().getTelegramId()).isEqualTo(123L);
     }
 }

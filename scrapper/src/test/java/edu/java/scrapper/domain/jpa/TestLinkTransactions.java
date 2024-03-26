@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.jpa;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.domain.jpa.LinkRepository;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;

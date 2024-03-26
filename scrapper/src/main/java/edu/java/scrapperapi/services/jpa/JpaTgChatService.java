@@ -1,6 +1,6 @@
 package edu.java.scrapperapi.services.jpa;
 
-import edu.java.database.dto.User;
+import edu.java.dto.User;
 import edu.java.domain.jpa.UserRepository;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;

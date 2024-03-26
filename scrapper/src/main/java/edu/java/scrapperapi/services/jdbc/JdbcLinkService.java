@@ -1,6 +1,6 @@
 package edu.java.scrapperapi.services.jdbc;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.domain.jdbc.LinksDao;
 import edu.java.domain.jdbc.UserLinkRelationDao;
 import edu.java.domain.jdbc.UsersDao;
@@ -68,7 +68,7 @@ public class JdbcLinkService implements LinkService {
             return userLinkRelationDao.getAllLinksByTgId(tgChatId, limit, offset)
                 .stream()
                 .map(entry -> LinkResponseMapper.map(
-                    entry.getLinkid()
+                    entry.getLink()
                 ))
                 .toList();
 

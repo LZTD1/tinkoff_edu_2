@@ -4,7 +4,7 @@ import edu.java.bot.dto.LinkUpdate;
 import edu.java.clients.StackoverflowClient;
 import edu.java.clients.dto.sofDto.ItemsDto;
 import edu.java.clients.dto.sofDto.StackOverFlowDto;
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.parsers.WebHandler;
 import edu.java.scrapperapi.services.LinkService;
 import java.text.MessageFormat;

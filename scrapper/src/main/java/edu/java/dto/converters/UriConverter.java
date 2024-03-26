@@ -1,4 +1,4 @@
-package edu.java.database.dto.converters;
+package edu.java.dto.converters;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

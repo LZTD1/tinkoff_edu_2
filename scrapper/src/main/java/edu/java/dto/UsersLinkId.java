@@ -1,4 +1,4 @@
-package edu.java.database.dto;
+package edu.java.dto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

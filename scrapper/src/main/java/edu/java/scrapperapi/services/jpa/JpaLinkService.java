@@ -1,9 +1,9 @@
 package edu.java.scrapperapi.services.jpa;
 
-import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
-import edu.java.database.dto.UserLinkRel;
-import edu.java.database.dto.UsersLinkId;
+import edu.java.dto.Link;
+import edu.java.dto.User;
+import edu.java.dto.UserLinkRel;
+import edu.java.dto.UsersLinkId;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.domain.jpa.LinkRepository;
 import edu.java.domain.jpa.UserLinkRelRepository;
@@ -47,8 +47,8 @@ public class JpaLinkService implements LinkService {
         }
 
         UserLinkRel userLinkRel = new UserLinkRel();
-        userLinkRel.setLinkid(existingLink);
-        userLinkRel.setUserid(userRepository.getUserByTelegramId(tgChatId));
+        userLinkRel.setLink(existingLink);
+        userLinkRel.setUser(userRepository.getUserByTelegramId(tgChatId));
 
         try {
             userLinkRelRepository.saveAndFlush(userLinkRel);
@@ -78,10 +78,10 @@ public class JpaLinkService implements LinkService {
     @Override
     public List<LinkResponse> listAll(long tgChatId, int limit, int offset) {
 
-        List<UserLinkRel> response = userLinkRelRepository.findAllByUserid_TelegramId(tgChatId);
+        List<UserLinkRel> response = userLinkRelRepository.findByUserTelegramId(tgChatId);
 
         return response.stream()
-            .map(e -> LinkResponseMapper.map(e.getLinkid()))
+            .map(e -> LinkResponseMapper.map(e.getLink()))
             .toList();
     }
 
@@ -100,8 +100,8 @@ public class JpaLinkService implements LinkService {
     public List<Long> getAllUsersWithLink(Link link) {
 
         return userLinkRelRepository
-            .findByLinkid_Id(link.getId())
-            .stream().map(e -> e.getUserid().getTelegramId())
+            .findByLinkId(link.getId())
+            .stream().map(e -> e.getUser().getTelegramId())
             .toList();
     }
 }
