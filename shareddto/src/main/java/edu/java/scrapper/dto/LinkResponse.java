@@ -9,5 +9,6 @@ public class LinkResponse {
     private Long id;
 
     private URI url;
+
 }
 

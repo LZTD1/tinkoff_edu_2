@@ -29,7 +29,7 @@ public class GithubClient {
     public Flux<PullDto> getPullsByRepos(String owner, String repos) {
         return client
             .get()
-            .uri(String.format("/repos/%s/%s/pulls", owner, repos))
+            .uri(String.format("/repos/%s/%s/events", owner, repos))
             .retrieve()
             .bodyToFlux(PullDto.class);
     }

@@ -30,11 +30,18 @@ public abstract class IntegrationTest {
     @SneakyThrows
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
         Path locationMaster =
-            new File(".").toPath().toAbsolutePath().getParent().getParent().resolve("migrations");
+            new File(".")
+                .toPath()
+                .toAbsolutePath()
+                .getParent()
+                .getParent()
+                .resolve("migrations")
+                .resolve("liquibase")
+                .resolve("changelog");
 
         try (
             var liqBase = new Liquibase(
-                "liquibase/changelog/master.yaml",
+                "master.yaml",
                 new DirectoryResourceAccessor(locationMaster),
                 new JdbcConnection(
                     DriverManager.getConnection(
