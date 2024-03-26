@@ -1,10 +1,10 @@
 package edu.java.scrapperapi.services.jdbc;
 
-import edu.java.dto.Link;
 import edu.java.domain.jdbc.LinksDao;
 import edu.java.domain.jdbc.UserLinkRelationDao;
 import edu.java.domain.jdbc.UsersDao;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
+import edu.java.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;
@@ -13,20 +13,16 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
 
-    private LinksDao linksDao;
-    private UsersDao usersDao;
-    private UserLinkRelationDao userLinkRelationDao;
-
-    public JdbcLinkService(LinksDao linksDao, UsersDao usersDao, UserLinkRelationDao userLinkRelationDao) {
-        this.linksDao = linksDao;
-        this.usersDao = usersDao;
-        this.userLinkRelationDao = userLinkRelationDao;
-    }
+    private final LinksDao linksDao;
+    private final UsersDao usersDao;
+    private final UserLinkRelationDao userLinkRelationDao;
 
     @Override
     @Transactional

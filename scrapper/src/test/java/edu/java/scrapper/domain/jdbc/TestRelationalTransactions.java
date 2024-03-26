@@ -1,11 +1,11 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.dto.Link;
-import edu.java.dto.User;
-import edu.java.dto.UserLinkRel;
 import edu.java.domain.jdbc.LinksDao;
 import edu.java.domain.jdbc.UserLinkRelationDao;
 import edu.java.domain.jdbc.UsersDao;
+import edu.java.dto.Link;
+import edu.java.dto.User;
+import edu.java.dto.UserLinkRel;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
 import java.util.List;

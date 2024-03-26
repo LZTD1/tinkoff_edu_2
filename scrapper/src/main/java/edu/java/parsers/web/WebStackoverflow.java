@@ -12,10 +12,12 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class WebStackoverflow implements WebHandler {
 
     private static final String EYES_EMOJI = "\uD83D\uDC40";
@@ -23,11 +25,6 @@ public class WebStackoverflow implements WebHandler {
     private static final int MAX_MESSAGE_LENGTH = 20;
     private final LinkService linkService;
     private final StackoverflowClient stackoverflowClient;
-
-    public WebStackoverflow(LinkService linkService, StackoverflowClient stackoverflowClient) {
-        this.linkService = linkService;
-        this.stackoverflowClient = stackoverflowClient;
-    }
 
     public String getHost() {
         return "stackoverflow.com";

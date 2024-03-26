@@ -1,7 +1,7 @@
 package edu.java.domain.jdbc;
 
-import edu.java.dto.Link;
 import edu.java.domain.jdbc.mappers.LinkMapper;
+import edu.java.dto.Link;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.OffsetDateTime;

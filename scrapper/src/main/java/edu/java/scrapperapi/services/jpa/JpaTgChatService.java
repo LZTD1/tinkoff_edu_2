@@ -1,20 +1,18 @@
 package edu.java.scrapperapi.services.jpa;
 
-import edu.java.dto.User;
 import edu.java.domain.jpa.UserRepository;
+import edu.java.dto.User;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 
+@RequiredArgsConstructor
 public class JpaTgChatService implements TgChatService {
 
-    private UserRepository userRepository;
-
-    public JpaTgChatService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public void register(long tgChatId) {

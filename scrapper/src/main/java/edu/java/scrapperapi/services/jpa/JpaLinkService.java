@@ -1,13 +1,13 @@
 package edu.java.scrapperapi.services.jpa;
 
-import edu.java.dto.Link;
-import edu.java.dto.User;
-import edu.java.dto.UserLinkRel;
-import edu.java.dto.UsersLinkId;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.domain.jpa.LinkRepository;
 import edu.java.domain.jpa.UserLinkRelRepository;
 import edu.java.domain.jpa.UserRepository;
+import edu.java.dto.Link;
+import edu.java.dto.User;
+import edu.java.dto.UserLinkRel;
+import edu.java.dto.UsersLinkId;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.services.LinkService;
@@ -15,24 +15,16 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 public class JpaLinkService implements LinkService {
 
-    private LinkRepository linkRepository;
-    private UserRepository userRepository;
-    private UserLinkRelRepository userLinkRelRepository;
-
-    public JpaLinkService(
-        LinkRepository linkRepository,
-        UserRepository userRepository,
-        UserLinkRelRepository userLinkRelRepository
-    ) {
-        this.linkRepository = linkRepository;
-        this.userRepository = userRepository;
-        this.userLinkRelRepository = userLinkRelRepository;
-    }
+    private final LinkRepository linkRepository;
+    private final UserRepository userRepository;
+    private final UserLinkRelRepository userLinkRelRepository;
 
     @Override
     @Transactional
