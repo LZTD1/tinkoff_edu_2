@@ -79,7 +79,10 @@ public class JpaLinkService implements LinkService {
 
     @Override
     public List<Link> listScheduler(int minutes, int limit) {
-        return linkRepository.getLinksNotUpdates(Duration.ofMinutes(minutes));
+        return linkRepository.getLinksNotUpdates(Duration.ofMinutes(minutes))
+            .stream()
+            .limit(5)
+            .toList();
     }
 
     @Override
