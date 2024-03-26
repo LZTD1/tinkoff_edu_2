@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,14 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
+@RequiredArgsConstructor
 @Tag(name = "updates", description = "the updates API")
 public class UpdatesController {
 
-    private CommunicatorService communicatorService;
-
-    public UpdatesController(CommunicatorService communicatorService) {
-        this.communicatorService = communicatorService;
-    }
+    private final CommunicatorService communicatorService;
 
     @Operation(
         operationId = "updatesPost",

@@ -3,19 +3,17 @@ package edu.java.bot.processor.processors;
 import edu.java.bot.clients.ScrapperClient;
 import edu.java.bot.processor.MethodProcessor;
 import java.net.URI;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.bot.processor.Constants.FAIL_UNTRACK_MESSAGE;
 import static edu.java.bot.processor.Constants.SUCCESSFUL_UNTRACK_MESSAGE;
 
 @Component
+@RequiredArgsConstructor
 public class UntrackHandler implements MethodProcessor {
 
-    private ScrapperClient scrapperClient;
-
-    public UntrackHandler(ScrapperClient scrapperClient) {
-        this.scrapperClient = scrapperClient;
-    }
+    private final ScrapperClient scrapperClient;
 
     @Override
     public String handle(Update update) {
