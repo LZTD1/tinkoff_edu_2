@@ -21,9 +21,7 @@ import org.springframework.stereotype.Component;
 public class WebGithub implements WebHandler {
 
     public static final String SPEAKING_HEAD_EMOJI = "\uD83D\uDDE3";
-    private static final int MAX_MESSAGE_LENGTH = 20;
-    private static final String CREATE_EVENT = "CreateEvent";
-    private static final String PULL_REQUEST_EVENT = "PullRequestEvent";
+    private static final int MAX_MESSAGE_LENGTH = 200;
     private final GithubClient githubClient;
     private final LinkService linkService;
     private HashMap<String, MessageHandler> messageHandlers = new HashMap<>() {{
@@ -47,12 +45,13 @@ public class WebGithub implements WebHandler {
         List<PullDto> pullDtoList = getGitPulls(link);
         List<LinkUpdate> linkUpdateList = new ArrayList<>();
 
-        OffsetDateTime lastCommitTime = gitCommitsProcessing(link, commitsDtoList, linkUpdateList);
+//        OffsetDateTime lastCommitTime = gitCommitsProcessing(link, commitsDtoList, linkUpdateList);
         OffsetDateTime lastPullsTime = gitPullsProcessing(link, pullDtoList, linkUpdateList);
 
-        OffsetDateTime newSendTime = lastCommitTime.isAfter(lastPullsTime) ? lastCommitTime : lastPullsTime;
+//        OffsetDateTime newSendTime = lastCommitTime.isAfter(lastPullsTime) ? lastCommitTime : lastPullsTime;
 
-        linkService.updateLastSendTime(link.getId(), newSendTime);
+//        linkService.updateLastSendTime(link.getId(), newSendTime);
+        linkService.updateLastSendTime(link.getId(), lastPullsTime);
 
         return linkUpdateList;
     }
@@ -103,20 +102,22 @@ public class WebGithub implements WebHandler {
     @SuppressWarnings("MultipleStringLiterals")
     private String getDescriptionMessage(CommitsDto entry) {
         return new StringBuilder()
-            .append(SPEAKING_HEAD_EMOJI)
-            .append("Нашел новый коммит!\n")
+            .append(SPEAKING_HEAD_EMOJI).append("Нашел новый коммит!")
+            .append("\n\n")
             .append(MessageFormat.format(
-                "[{0}]({1})",
-                getRepos(entry.getHtmlUrl().getPath()),
-                entry.getHtmlUrl().toString()
+                "<b>Репозиторий:</b> <a href=''{0}''>{1}</a>",
+                entry.getHtmlUrl().toString(),
+                getRepos(entry.getHtmlUrl().getPath())
             ))
+            .append("\n")
             .append(MessageFormat.format(
-                "Автор: [{0}]({1})",
-                entry.getAuthor().getLogin(),
-                entry.getAuthor().getHtmlUrl().toString()
+                "<b>Автор коммита:</b> <a href=''{0}''>{1}</a>",
+                entry.getAuthor().getHtmlUrl().toString(),
+                entry.getAuthor().getLogin()
             ))
+            .append("\n")
             .append(MessageFormat.format(
-                    "Сообщение: {0}",
+                    "<b>Сообщение:</b> {0}",
                     trimMessage(entry.getCommit().getMessage())
                 )
             )

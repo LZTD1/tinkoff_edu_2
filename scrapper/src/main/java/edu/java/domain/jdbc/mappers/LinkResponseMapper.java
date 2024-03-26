@@ -2,11 +2,11 @@ package edu.java.domain.jdbc.mappers;
 
 import edu.java.database.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
+import java.net.URI;
+import java.sql.ResultSet;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.jooq.Record;
-import java.net.URI;
-import java.sql.ResultSet;
 
 @UtilityClass
 public class LinkResponseMapper {

@@ -49,7 +49,7 @@ public class BotComponent extends TelegramLongPollingBot {
             LOGGER.info("Пользователь {}, отправил - {}", chatId, messageText);
 
             MethodProcessor processor = processorHolder.getCommandByName(messageText.split(" ")[0]);
-            sendMessage(chatId, processor.handle(update));
+            sendMessage(chatId, processor.handle(update), Parsemode.HTML);
         }
     }
 
@@ -74,6 +74,19 @@ public class BotComponent extends TelegramLongPollingBot {
 
         SendMessage message = new SendMessage(String.valueOf(chatId), text);
         message.setParseMode("markdown");
+        message.disableWebPagePreview();
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void sendMessage(long chatId, String text, Parsemode parseMode) {
+
+        SendMessage message = new SendMessage(String.valueOf(chatId), text);
+        message.setParseMode(parseMode.getString());
         message.disableWebPagePreview();
 
         try {

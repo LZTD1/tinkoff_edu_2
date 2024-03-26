@@ -11,6 +11,7 @@ import static edu.java.bot.processor.Constants.EMPTY_LIST_MESSAGE;
 public class ListHandler implements MethodProcessor {
 
     private static final int CONST_LIMIT = 25;
+    private static final String LENS_EMOJI = "\uD83D\uDD0E";
     private ScrapperClient scrapperClient;
 
     public ListHandler(ScrapperClient scrapperClient) {
@@ -18,10 +19,15 @@ public class ListHandler implements MethodProcessor {
     }
 
     private static String convertToString(ListLinksResponse links) {
-        return String.join(
-            "\n",
-            links.getLinks().stream().map(e -> e.getUrl().toString()).toList()
-        );
+        return new StringBuilder()
+            .append(LENS_EMOJI).append("Список трекаемых ссылок: \n\n")
+            .append(
+                String.join(
+                    "\n",
+                    links.getLinks().stream().map(e -> e.getUrl().toString()).toList()
+                )
+            )
+            .toString();
     }
 
     @Override

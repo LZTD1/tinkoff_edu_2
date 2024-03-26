@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 public class HelpHandler implements MethodProcessor {
 
+    private static final String PAPER_EMOJI = "\uD83D\uDCC4";
     private List<MethodProcessor> methodProcessors;
 
     public HelpHandler(List<MethodProcessor> methodProcessors) {
@@ -17,10 +18,16 @@ public class HelpHandler implements MethodProcessor {
 
     @Override
     public String handle(Update update) {
-        return methodProcessors
-            .stream()
-            .map(entry -> entry.getName() + " - " + entry.getDescription() + " \n")
-            .collect(Collectors.joining());
+        return new StringBuilder()
+            .append(PAPER_EMOJI).append("Список команд: \n\n")
+            .append(
+                methodProcessors
+                    .stream()
+                    .filter(e -> !e.getClass().equals(DefaultHandler.class))
+                    .map(entry -> entry.getName() + " - " + entry.getDescription() + " \n")
+                    .collect(Collectors.joining())
+            )
+            .toString();
     }
 
     @Override

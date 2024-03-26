@@ -12,22 +12,24 @@ public class CreateEventHandler implements MessageHandler {
     @Override
     public String getMessage(PullDto entry) {
         return new StringBuilder()
-            .append(SPEAKING_HEAD_EMOJI)
-            .append(" Создана новая ветка!\n")
+            .append(SPEAKING_HEAD_EMOJI).append("Создана новая ветка!")
+            .append("\n\n")
             .append(MessageFormat.format(
-                "[{0}]({1})",
-                getReposName(entry),
-                entry.getRepo().getUrl().toString()
+                "<b>Репозиторий:</b> <a href=''{0}''>{1}</a>",
+                entry.getRepo().getUrl().toString(),
+                getReposName(entry)
             ))
+            .append("\n")
             .append(MessageFormat.format(
-                "Автор: [{0}]({1})",
-                entry.getActor().getLogin(),
-                entry.getActor().getUrl().toString()
+                "<b>Автор:</b> <a href=''{0}''>{1}</a>",
+                entry.getActor().getUrl().toString(),
+                entry.getActor().getLogin()
             ))
+            .append("\n")
             .append(MessageFormat.format(
-                    "Ветка {1} из {0}",
-                    entry.getPayload().getMasterBranch(),
-                    entry.getPayload().getRef()
+                    "<b>Новая ветка:</b> {0}, из {1}",
+                    entry.getPayload().getRef(),
+                    entry.getPayload().getMasterBranch()
                 )
             )
             .toString();

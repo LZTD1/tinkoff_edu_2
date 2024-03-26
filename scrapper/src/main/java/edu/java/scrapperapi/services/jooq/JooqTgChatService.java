@@ -5,6 +5,7 @@ import edu.java.domain.jooq.JooqUserRepository;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
+import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.dao.DuplicateKeyException;
 
 public class JooqTgChatService implements TgChatService {
@@ -21,8 +22,7 @@ public class JooqTgChatService implements TgChatService {
             jooqUserRepository.createUser(new User() {{
                 setTelegramId(tgChatId);
             }});
-        } catch (
-            DuplicateKeyException e) {
+        } catch (DuplicateKeyException | IntegrityConstraintViolationException e) {
             throw new EntityAlreadyExistsError("Пользователь с таким telegramId уже существует!");
         }
     }
