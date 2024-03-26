@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 public class HelpHandler implements MethodProcessor {
 
-    private static final String PAPER_EMOJI = "\uD83D\uDCC4";
+    public static final String PAPER_EMOJI = "\uD83D\uDCC4";
     private List<MethodProcessor> methodProcessors;
 
     public HelpHandler(List<MethodProcessor> methodProcessors) {

@@ -11,7 +11,7 @@ import static edu.java.bot.processor.Constants.EMPTY_LIST_MESSAGE;
 public class ListHandler implements MethodProcessor {
 
     private static final int CONST_LIMIT = 25;
-    private static final String LENS_EMOJI = "\uD83D\uDD0E";
+    public static final String LENS_EMOJI = "\uD83D\uDD0E";
     private ScrapperClient scrapperClient;
 
     public ListHandler(ScrapperClient scrapperClient) {
