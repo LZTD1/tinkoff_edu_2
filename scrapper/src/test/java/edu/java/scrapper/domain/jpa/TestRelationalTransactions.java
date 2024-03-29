@@ -39,7 +39,7 @@ public class TestRelationalTransactions extends IntegrationTest {
         userRepository.save(user);
 
         var link = new Link();
-        link.setLink(URI.create("vk.com"));
+        link.setLink(URI.create("https://vk.com"));
         linkRepository.save(link);
 
         var userLinkRel = new UserLinkRel();
@@ -49,7 +49,7 @@ public class TestRelationalTransactions extends IntegrationTest {
 
         List<UserLinkRel> res = userLinkRelRepository.findByUserTelegramId(123L);
 
-        assertThat(res.getFirst().getLink().getLink()).isEqualTo(URI.create("vk.com"));
+        assertThat(res.getFirst().getLink().getLink()).isEqualTo(URI.create("https://vk.com"));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TestRelationalTransactions extends IntegrationTest {
         userRepository.save(user);
 
         var link = new Link();
-        link.setLink(URI.create("vk.com"));
+        link.setLink(URI.create("https://vk.com"));
         linkRepository.save(link);
 
         var userLinkRel = new UserLinkRel();
