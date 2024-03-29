@@ -15,11 +15,12 @@ public class JpaTgChatService implements TgChatService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public void register(long tgChatId) {
         User user = new User();
         user.setTelegramId(tgChatId);
         try {
-            userRepository.saveAndFlush(user);
+            userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new EntityAlreadyExistsError("Пользователь с таким telegramId уже существует!");
         }

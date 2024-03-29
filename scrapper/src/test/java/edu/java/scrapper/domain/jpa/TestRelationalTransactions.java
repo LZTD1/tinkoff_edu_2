@@ -36,16 +36,16 @@ public class TestRelationalTransactions extends IntegrationTest {
     void testFindAllByUserid_TelegramId() {
         var user = new User();
         user.setTelegramId(123L);
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
         var link = new Link();
         link.setLink(URI.create("vk.com"));
-        linkRepository.saveAndFlush(link);
+        linkRepository.save(link);
 
         var userLinkRel = new UserLinkRel();
         userLinkRel.setUser(user);
         userLinkRel.setLink(link);
-        userLinkRelRepository.saveAndFlush(userLinkRel);
+        userLinkRelRepository.save(userLinkRel);
 
         List<UserLinkRel> res = userLinkRelRepository.findByUserTelegramId(123L);
 
@@ -58,16 +58,16 @@ public class TestRelationalTransactions extends IntegrationTest {
     void testFindByLinkid_Id() {
         var user = new User();
         user.setTelegramId(123L);
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
         var link = new Link();
         link.setLink(URI.create("vk.com"));
-        linkRepository.saveAndFlush(link);
+        linkRepository.save(link);
 
         var userLinkRel = new UserLinkRel();
         userLinkRel.setUser(user);
         userLinkRel.setLink(link);
-        userLinkRelRepository.saveAndFlush(userLinkRel);
+        userLinkRelRepository.save(userLinkRel);
 
         List<UserLinkRel> res = userLinkRelRepository.findByLinkId(link.getId());
 

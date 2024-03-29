@@ -35,7 +35,7 @@ public class JpaLinkService implements LinkService {
             var newLink = new Link();
             newLink.setLink(url);
 
-            existingLink = linkRepository.saveAndFlush(newLink);
+            existingLink = linkRepository.save(newLink);
         }
 
         UserLinkRel userLinkRel = new UserLinkRel();
@@ -43,7 +43,7 @@ public class JpaLinkService implements LinkService {
         userLinkRel.setUser(userRepository.getUserByTelegramId(tgChatId));
 
         try {
-            userLinkRelRepository.saveAndFlush(userLinkRel);
+            userLinkRelRepository.save(userLinkRel);
         } catch (DataIntegrityViolationException e) {
             throw new LinkAlreadyExistsException("Current link already tracked!");
         }
@@ -74,6 +74,8 @@ public class JpaLinkService implements LinkService {
 
         return response.stream()
             .map(e -> LinkResponseMapper.map(e.getLink()))
+            .skip(offset)
+            .limit(limit)
             .toList();
     }
 
