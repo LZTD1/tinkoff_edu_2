@@ -12,11 +12,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,7 +40,6 @@ public class UpdatesController {
         produces = {"application/json"},
         consumes = {"application/json"}
     )
-    @ResponseStatus(HttpStatus.OK)
     public void updatesPost(
         @NotNull @Parameter(name = "LinkUpdate", description = "", required = true) @Valid @RequestBody
         LinkUpdate linkUpdate
