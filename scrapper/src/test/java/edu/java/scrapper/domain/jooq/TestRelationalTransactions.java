@@ -9,6 +9,8 @@ import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import org.jooq.Record;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,10 +135,8 @@ public class TestRelationalTransactions extends IntegrationTest {
             }}
         );
 
-        ArrayList<Long> resultList = new ArrayList<>();
-        Iterator<Record> result = jooqUserLinkRelRepository.getAllUsersIdWithLink(link);
-        result.forEachRemaining(e -> resultList.add((Long) e.get("telegramid")));
+        List<User> result = jooqUserLinkRelRepository.getAllUsersIdWithLink(link);
 
-        assertThat(resultList.size()).isEqualTo(2);
+        assertThat(result.size()).isEqualTo(2);
     }
 }

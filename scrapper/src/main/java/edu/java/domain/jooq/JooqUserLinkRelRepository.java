@@ -1,11 +1,12 @@
 package edu.java.domain.jooq;
 
+import edu.java.domain.jdbc.mappers.LinkMapper;
+import edu.java.domain.jdbc.mappers.UserMapper;
 import edu.java.dto.Link;
 import edu.java.dto.User;
-import java.util.Iterator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.springframework.stereotype.Repository;
 import static edu.java.domain.jooq.tables.Tables.LINKS;
 import static edu.java.domain.jooq.tables.Tables.USERS;
@@ -32,7 +33,7 @@ public class JooqUserLinkRelRepository {
             .execute();
     }
 
-    public Iterator<Record> getAllLinksByTgId(long tgChatId, int limit, int offset) {
+    public List<Link> getAllLinksByTgId(long tgChatId, int limit, int offset) {
         return dslContext
             .select()
             .from(USERS_LINKS)
@@ -42,10 +43,10 @@ public class JooqUserLinkRelRepository {
             .limit(limit)
             .offset(offset)
             .fetch()
-            .iterator();
+            .map(LinkMapper::mapFromRecord);
     }
 
-    public Iterator<Record> getAllUsersIdWithLink(Long id) {
+    public List<User> getAllUsersIdWithLink(Long id) {
         return dslContext
             .select()
             .from(USERS_LINKS)
@@ -53,6 +54,6 @@ public class JooqUserLinkRelRepository {
             .join(LINKS).on(USERS_LINKS.LINKID.eq(LINKS.ID))
             .where(LINKS.ID.eq(id))
             .fetch()
-            .iterator();
+            .map(UserMapper::mapFromRecord);
     }
 }

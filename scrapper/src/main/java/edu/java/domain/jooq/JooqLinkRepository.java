@@ -1,10 +1,10 @@
 package edu.java.domain.jooq;
 
+import edu.java.domain.jdbc.mappers.LinkMapper;
 import edu.java.dto.Link;
 import java.time.OffsetDateTime;
-import java.util.Iterator;
+import java.util.List;
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 import static edu.java.domain.jooq.tables.Tables.LINKS;
@@ -37,15 +37,14 @@ public class JooqLinkRepository {
             .getFirst();
     }
 
-    public Iterator<Record> getLinksNotUpdates(int limit) {
+    public List<Link> getLinksNotUpdates(int limit) {
         return dslContext
             .select(LINKS.fields())
             .from(LINKS)
             .orderBy(LINKS.UPDATETIME.sortDesc())
             .limit(limit)
             .fetch()
-            .iterator();
-
+            .map(LinkMapper::mapFromRecord);
     }
 
     public void updateLastSendTime(Long idLink, OffsetDateTime newSendTime) {

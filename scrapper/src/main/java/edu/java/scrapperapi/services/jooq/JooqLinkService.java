@@ -1,25 +1,21 @@
 package edu.java.scrapperapi.services.jooq;
 
-import edu.java.domain.jdbc.mappers.LinkMapper;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.domain.jooq.JooqLinkRepository;
 import edu.java.domain.jooq.JooqUserLinkRelRepository;
 import edu.java.domain.jooq.JooqUserRepository;
 import edu.java.dto.Link;
+import edu.java.dto.User;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.services.LinkService;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.jooq.Record;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
-import static edu.java.domain.jooq.tables.Tables.LINKS;
 
 @RequiredArgsConstructor
 public class JooqLinkService implements LinkService {
@@ -65,37 +61,28 @@ public class JooqLinkService implements LinkService {
 
     @Override
     public List<LinkResponse> listAll(long tgChatId, int limit, int offset) {
-        Iterator<Record> iterator = jooqUserLinkRelRepository.getAllLinksByTgId(tgChatId, limit, offset);
-
-        ArrayList<LinkResponse> responses = new ArrayList<>();
-        while (iterator.hasNext()) {
-            responses.add(
-                LinkResponseMapper.map(iterator.next())
-            );
-        }
-        return responses;
+        return jooqUserLinkRelRepository
+            .getAllLinksByTgId(tgChatId, limit, offset)
+            .stream().map(LinkResponseMapper::map
+            )
+            .toList();
     }
 
     @Override
     public List<Link> listScheduler(int minutes, int limit) {
-        Iterator<Record> iterator = jooqLinkRepository.getLinksNotUpdates(limit);
+        List<Link> links = jooqLinkRepository.getLinksNotUpdates(limit);
 
-        ArrayList<Link> responses = new ArrayList<>();
-        while (iterator.hasNext()) {
-            Record currentRecord = iterator.next();
-            if (Math.abs(
+        links
+            .stream()
+            .filter((e) -> Math.abs(
                 Duration
                     .between(
-                        currentRecord.get(LINKS.UPDATETIME), OffsetDateTime.now()
+                        e.getUpdatetime(), OffsetDateTime.now()
                     )
-                    .toMinutes()) > minutes) {
-                responses.add(
-                    LinkMapper.mapFromRecord(currentRecord)
-                );
-            }
-        }
+                    .toMinutes()) > minutes)
+            .toList();
 
-        return responses;
+        return links;
     }
 
     @Override
@@ -105,16 +92,10 @@ public class JooqLinkService implements LinkService {
 
     @Override
     public List<Long> getAllUsersWithLink(Link link) {
-        Iterator<Record> iterator = jooqUserLinkRelRepository.getAllUsersIdWithLink(link.getId());
-
-        ArrayList<Long> responses = new ArrayList<>();
-        while (iterator.hasNext()) {
-            Record currentRecord = iterator.next();
-            responses.add(
-                (Long) currentRecord.get("telegramid")
-            );
-        }
-
-        return responses;
+        return jooqUserLinkRelRepository
+            .getAllUsersIdWithLink(link.getId())
+            .stream()
+            .map(User::getTelegramId)
+            .toList();
     }
 }

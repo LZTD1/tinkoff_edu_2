@@ -10,6 +10,8 @@ import java.sql.Types;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import org.jooq.Record;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +78,9 @@ public class TestLinkTransactions extends IntegrationTest {
             new int[] {Types.VARCHAR, Types.TIMESTAMP}
         );
 
-        ArrayList<Link> linksList = new ArrayList<>();
-        Iterator<Record> links = jooqLinkRepository.getLinksNotUpdates(5);
-        links.forEachRemaining((e) -> {
-            linksList.add(LinkMapper.mapFromRecord(e));
-        });
+        List<Link> links = jooqLinkRepository.getLinksNotUpdates(5);
 
-        assertThat(linksList.size()).isEqualTo(2);
+        assertThat(links.size()).isEqualTo(2);
     }
 
     @Test
