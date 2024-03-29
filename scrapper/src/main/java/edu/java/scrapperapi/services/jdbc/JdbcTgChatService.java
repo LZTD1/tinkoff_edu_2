@@ -5,15 +5,13 @@ import edu.java.domain.jdbc.JdbcUserRepository;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 
+@RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {
 
     private JdbcUserRepository jdbcUserRepository;
-
-    public JdbcTgChatService(JdbcUserRepository jdbcUserRepository) {
-        this.jdbcUserRepository = jdbcUserRepository;
-    }
 
     @Override
     public void register(long tgChatId) {

@@ -4,7 +4,7 @@ import edu.java.bot.dto.LinkUpdate;
 import edu.java.clients.GithubClient;
 import edu.java.clients.dto.githubDto.commit.CommitsDto;
 import edu.java.clients.dto.githubDto.pull.PullDto;
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.parsers.WebHandler;
 import edu.java.parsers.githubPullsHandler.CreateEventHandler;
 import edu.java.parsers.githubPullsHandler.MessageHandler;
@@ -15,9 +15,11 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class WebGithub implements WebHandler {
 
     public static final String SPEAKING_HEAD_EMOJI = "\uD83D\uDDE3";
@@ -28,11 +30,6 @@ public class WebGithub implements WebHandler {
         put("CreateEvent", new CreateEventHandler());
         put("PullRequestEvent", new PullRequestEvent());
     }};
-
-    public WebGithub(GithubClient githubClient, LinkService linkService) {
-        this.githubClient = githubClient;
-        this.linkService = linkService;
-    }
 
     @Override
     public String getHost() {

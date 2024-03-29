@@ -1,6 +1,6 @@
-package edu.java.database.dto;
+package edu.java.dto;
 
-import edu.java.database.dto.converters.UriConverter;
+import edu.java.dto.converters.UriConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;

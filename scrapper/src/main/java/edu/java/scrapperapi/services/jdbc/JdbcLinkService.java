@@ -13,24 +13,16 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
 
-    private JdbcLinkRepository jdbcLinkRepository;
-    private JdbcUserRepository jdbcUserRepository;
-    private JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
-
-    public JdbcLinkService(
-        JdbcLinkRepository jdbcLinkRepository,
-        JdbcUserRepository jdbcUserRepository,
-        JdbcUserLinkRelRepository jdbcUserLinkRelRepository
-    ) {
-        this.jdbcLinkRepository = jdbcLinkRepository;
-        this.jdbcUserRepository = jdbcUserRepository;
-        this.jdbcUserLinkRelRepository = jdbcUserLinkRelRepository;
-    }
+    private final JdbcLinkRepository jdbcLinkRepository;
+    private final JdbcUserRepository jdbcUserRepository;
+    private final JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
 
     @Override
     @Transactional
@@ -72,7 +64,7 @@ public class JdbcLinkService implements LinkService {
             return jdbcUserLinkRelRepository.getAllLinksByTgId(tgChatId, limit, offset)
                 .stream()
                 .map(entry -> LinkResponseMapper.map(
-                    entry.getLinkid()
+                    entry.getLink()
                 ))
                 .toList();
 

@@ -1,6 +1,6 @@
 package edu.java.domain.jdbc.mappers;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
 import java.sql.ResultSet;

@@ -1,6 +1,7 @@
 package edu.java.bot.processor.processors;
 
 import edu.java.bot.clients.ScrapperClient;
+import edu.java.bot.clients.exceptions.BadLinkEntityException;
 import edu.java.bot.processor.MethodProcessor;
 import edu.java.bot.processor.linkValidator.LinkValidator;
 import java.net.URI;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -41,10 +43,23 @@ public class TrackHandler implements MethodProcessor {
     public String handle(Update update) {
         String[] param = update.getMessage().getText().split(" ");
 
+        String failTrackMessage = paramValidator(param);
+        if (failTrackMessage != null) {
+            return failTrackMessage;
+        }
+
+        try {
+            scrapperClient.addTrackLink(update.getMessage().getChatId(), URI.create(param[1]));
+            return SUCCESSFUL_TRACK_MESSAGE;
+        } catch (BadLinkEntityException e) {
+            return e.getMessage();
+        }
+    }
+
+    @Nullable private String paramValidator(String[] param) {
         if (param.length != 2) {
             return FAIL_TRACK_MESSAGE;
         }
-
         URI uriParam = URI.create(param[1]);
         if (!validatorsMap.containsKey(uriParam.getHost())) {
             return UNSUPPORTED_TRACK_LINK + "\n" + getSupportedResources();
@@ -54,9 +69,7 @@ public class TrackHandler implements MethodProcessor {
         if (!uriParam.getPath().matches(validator.getPathValidator())) {
             return INCORRECT_LINK_TYPE + validator.getExample();
         }
-
-        scrapperClient.addTrackLink(update.getMessage().getChatId(), URI.create(param[1]));
-        return SUCCESSFUL_TRACK_MESSAGE;
+        return null;
     }
 
     private String getSupportedResources() {

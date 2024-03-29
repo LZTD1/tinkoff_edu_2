@@ -1,9 +1,9 @@
 package edu.java.domain.jdbc;
 
-import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
-import edu.java.database.dto.UserLinkRel;
 import edu.java.domain.jdbc.mappers.UserLinkRelMapper;
+import edu.java.dto.Link;
+import edu.java.dto.User;
+import edu.java.dto.UserLinkRel;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

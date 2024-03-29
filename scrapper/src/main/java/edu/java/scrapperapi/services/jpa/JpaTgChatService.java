@@ -2,26 +2,26 @@ package edu.java.scrapperapi.services.jpa;
 
 import edu.java.database.dto.User;
 import edu.java.domain.jpa.JpaUserRepository;
+import edu.java.domain.jpa.UserRepository;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 
+@RequiredArgsConstructor
 public class JpaTgChatService implements TgChatService {
 
     private JpaUserRepository jpaUserRepository;
 
-    public JpaTgChatService(JpaUserRepository jpaUserRepository) {
-        this.jpaUserRepository = jpaUserRepository;
-    }
-
     @Override
+    @Transactional
     public void register(long tgChatId) {
         User user = new User();
         user.setTelegramId(tgChatId);
         try {
-            jpaUserRepository.saveAndFlush(user);
+            jpaUserRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new EntityAlreadyExistsError("Пользователь с таким telegramId уже существует!");
         }

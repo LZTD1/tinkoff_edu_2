@@ -1,5 +1,6 @@
 package edu.java.bot.clients;
 
+import edu.java.bot.clients.exceptions.BadLinkEntityException;
 import edu.java.bot.clients.exceptions.BadQueryParamsException;
 import edu.java.bot.clients.exceptions.ConflictError;
 import edu.java.bot.clients.exceptions.LinkNotFoundException;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class ScrapperClient {
     private final static String BASE_URL = "http://localhost:8080";
+    private static final String UNCORRECT_LINK = "Получена ссылка в не верном формате!";
     private final String headerLimit = "limit";
     private final String headerOffset = "offset";
     private final WebClient client;
@@ -60,6 +62,11 @@ public class ScrapperClient {
             .retrieve()
             .onStatus(httpStatusCode -> httpStatusCode.value() == HttpStatus.BAD_REQUEST.value(), clientResponse ->
                 Mono.error(new BadQueryParamsException(exceptionMessage)))
+            .onStatus(
+                httpStatusCode -> httpStatusCode.value() == HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                clientResponse ->
+                    Mono.error(new BadLinkEntityException(UNCORRECT_LINK))
+            )
             .bodyToMono(Void.class)
             .block();
     }
