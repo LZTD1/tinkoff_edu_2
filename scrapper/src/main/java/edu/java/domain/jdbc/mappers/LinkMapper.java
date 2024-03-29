@@ -1,6 +1,6 @@
-package edu.java.domain.mappers;
+package edu.java.domain.jdbc.mappers;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import java.net.URI;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;

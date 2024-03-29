@@ -1,53 +1,111 @@
 package hw1.processors;
 
+import edu.java.bot.clients.ScrapperClient;
+import edu.java.bot.processor.linkValidator.GithubValidator;
+import edu.java.bot.processor.linkValidator.LinkValidator;
+import edu.java.bot.processor.linkValidator.StackoverflowValidator;
 import edu.java.bot.processor.processors.TrackHandler;
-import edu.java.database.SimpleDatabase;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.bot.processor.Constants.FAIL_TRACK_MESSAGE;
+import static edu.java.bot.processor.Constants.INCORRECT_LINK_TYPE;
 import static edu.java.bot.processor.Constants.SUCCESSFUL_TRACK_MESSAGE;
-import static edu.java.database.SimpleDatabase.getInstance;
+import static edu.java.bot.processor.Constants.UNSUPPORTED_TRACK_LINK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestTrackHandler {
+    @Test
+    public void testTrackFail_Length() {
+        // Setting mockUpdate
+        var mockUpdate = Mockito.mock(Update.class);
+        var mockedMessage = Mockito.mock(Message.class);
+        Mockito.when(mockUpdate.getMessage()).thenReturn(mockedMessage);
+        Mockito.when(mockUpdate.getMessage().getText()).thenReturn("/track hello test");
 
-    private static final SimpleDatabase db = getInstance();
+        // Setting mock scrapperClient
+        var mockScrapperClient = Mockito.mock(ScrapperClient.class);
 
-    @BeforeEach
-    void dropDb() {
-        db.dropAll();
+        // Assertions
+        var method = new TrackHandler(mockScrapperClient, List.of());
+        assertThat(method.handle(mockUpdate)).isEqualTo(FAIL_TRACK_MESSAGE);
     }
 
     @Test
-    public void testTrackFail() {
-        var mock = Mockito.mock(Update.class);
+    public void testTrackFail_UnsupportedTrackLink() {
+        // Setting mockUpdate
+        var mockUpdate = Mockito.mock(Update.class);
         var mockedMessage = Mockito.mock(Message.class);
-        Mockito.when(mock.getMessage()).thenReturn(mockedMessage);
-        Mockito.when(mock.getMessage().getChatId()).thenReturn(1L);
-        Mockito.when(mock.getMessage().getText()).thenReturn(
-            new TrackHandler().getName() + " test test"
+        Mockito.when(mockUpdate.getMessage()).thenReturn(mockedMessage);
+        Mockito.when(mockUpdate.getMessage().getText()).thenReturn("/track vk.com");
+
+        // Setting mock scrapperClient
+        var mockScrapperClient = Mockito.mock(ScrapperClient.class);
+
+        // Creating args
+        var validators = List.of(
+            new GithubValidator(),
+            new StackoverflowValidator()
         );
 
-        var method = new TrackHandler();
-        assertThat(method.handle(mock)).isEqualTo(FAIL_TRACK_MESSAGE);
-        assertThat(db.getUserLinksById(1L)).isEmpty();
+        // Assertions
+        var method = new TrackHandler(mockScrapperClient, validators);
+        assertThat(method.handle(mockUpdate)).isEqualTo(
+            UNSUPPORTED_TRACK_LINK + "\n" + getSupportedResources(validators));
     }
 
     @Test
-    public void testTrackSucessfull() {
-        var mock = Mockito.mock(Update.class);
+    public void testTrackFail_INCORRECT_LINK_TYPE() {
+        // Setting mockUpdate
+        var mockUpdate = Mockito.mock(Update.class);
         var mockedMessage = Mockito.mock(Message.class);
-        Mockito.when(mock.getMessage()).thenReturn(mockedMessage);
-        Mockito.when(mock.getMessage().getChatId()).thenReturn(1L);
-        Mockito.when(mock.getMessage().getText()).thenReturn(
-            new TrackHandler().getName() + " test"
+        Mockito.when(mockUpdate.getMessage()).thenReturn(mockedMessage);
+        Mockito.when(mockUpdate.getMessage().getText()).thenReturn("/track https://github.com/LZ");
+
+        // Setting mock scrapperClient
+        var mockScrapperClient = Mockito.mock(ScrapperClient.class);
+
+        // Creating args
+        var validators = List.of(
+            new GithubValidator(),
+            new StackoverflowValidator()
         );
 
-        var method = new TrackHandler();
-        assertThat(method.handle(mock)).isEqualTo(SUCCESSFUL_TRACK_MESSAGE);
-        assertThat(db.getUserLinksById(1L)).isNotEmpty();
+        // Assertions
+        var method = new TrackHandler(mockScrapperClient, validators);
+        assertThat(method.handle(mockUpdate)).isEqualTo(INCORRECT_LINK_TYPE + validators.getFirst().getExample());
+    }
+
+    @Test
+    public void testTrackFail_SUCCESSFUL_TRACK_MESSAGE() {
+        // Setting mockUpdate
+        var mockUpdate = Mockito.mock(Update.class);
+        var mockedMessage = Mockito.mock(Message.class);
+        Mockito.when(mockUpdate.getMessage()).thenReturn(mockedMessage);
+        Mockito.when(mockUpdate.getMessage().getText()).thenReturn("/track https://github.com/lztd1/tinkoff_edu");
+
+        // Setting mock scrapperClient
+        var mockScrapperClient = Mockito.mock(ScrapperClient.class);
+
+        // Creating args
+        var validators = List.of(
+            new GithubValidator(),
+            new StackoverflowValidator()
+        );
+
+        // Assertions
+        var method = new TrackHandler(mockScrapperClient, validators);
+        assertThat(method.handle(mockUpdate)).isEqualTo(SUCCESSFUL_TRACK_MESSAGE);
+    }
+
+    private String getSupportedResources(List<LinkValidator> validators) {
+        return String.join(
+            "\n",
+            validators.stream()
+                .map(LinkValidator::getHost)
+                .toList()
+        );
     }
 }

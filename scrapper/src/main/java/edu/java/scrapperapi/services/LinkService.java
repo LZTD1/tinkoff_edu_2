@@ -1,6 +1,6 @@
 package edu.java.scrapperapi.services;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import java.net.URI;
 import java.time.OffsetDateTime;

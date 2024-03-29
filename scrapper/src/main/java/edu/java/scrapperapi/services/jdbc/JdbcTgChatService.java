@@ -1,19 +1,17 @@
 package edu.java.scrapperapi.services.jdbc;
 
-import edu.java.database.dto.User;
-import edu.java.domain.UsersDao;
+import edu.java.domain.jdbc.UsersDao;
+import edu.java.dto.User;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 
+@RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {
 
-    private UsersDao usersDao;
-
-    public JdbcTgChatService(UsersDao usersDao) {
-        this.usersDao = usersDao;
-    }
+    private final UsersDao usersDao;
 
     @Override
     public void register(long tgChatId) {

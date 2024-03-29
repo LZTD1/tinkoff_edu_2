@@ -28,6 +28,17 @@ public class ExceptionApiHandler {
         }};
     }
 
+    @ExceptionHandler(LinkIsNotValidException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ApiErrorResponse linkIsNotValid(LinkIsNotValidException exception) {
+        return new ApiErrorResponse() {{
+            setCode(HttpStatus.UNPROCESSABLE_ENTITY.toString());
+            setExceptionName("linkIsNotValid");
+            setStacktrace(getStackTraceList(exception));
+            setExceptionMessage(exception.getMessage());
+        }};
+    }
+
     @ExceptionHandler(EntityAlreadyExistsError.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiErrorResponse entityAlreadyExists(EntityAlreadyExistsError exception) {

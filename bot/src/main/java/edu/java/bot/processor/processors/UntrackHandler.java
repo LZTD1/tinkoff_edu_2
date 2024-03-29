@@ -1,29 +1,30 @@
 package edu.java.bot.processor.processors;
 
+import edu.java.bot.clients.ScrapperClient;
 import edu.java.bot.processor.MethodProcessor;
-import edu.java.database.Database;
+import java.net.URI;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.bot.processor.Constants.FAIL_UNTRACK_MESSAGE;
 import static edu.java.bot.processor.Constants.SUCCESSFUL_UNTRACK_MESSAGE;
-import static edu.java.database.SimpleDatabase.getInstance;
 
+@Component
+@RequiredArgsConstructor
 public class UntrackHandler implements MethodProcessor {
 
-    private final Database database;
-
-    public UntrackHandler() {
-        this.database = getInstance();
-    }
+    private final ScrapperClient scrapperClient;
 
     @Override
     public String handle(Update update) {
         String[] param = update.getMessage().getText().split(" ");
-        if (param.length == 2) {
-            this.database.removeLink(update.getMessage().getChatId(), param[1]);
-            return SUCCESSFUL_UNTRACK_MESSAGE;
-        } else {
+
+        if (param.length != 2) {
             return FAIL_UNTRACK_MESSAGE;
         }
+
+        scrapperClient.deleteTrackLink(update.getMessage().getChatId(), URI.create(param[1]));
+        return SUCCESSFUL_UNTRACK_MESSAGE;
     }
 
     @Override
