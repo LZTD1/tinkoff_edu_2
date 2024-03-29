@@ -1,10 +1,10 @@
 package edu.java.scrapper.domain.jooq;
 
-import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
 import edu.java.domain.jooq.JooqLinkRepository;
 import edu.java.domain.jooq.JooqUserLinkRelRepository;
 import edu.java.domain.jooq.JooqUserRepository;
+import edu.java.dto.Link;
+import edu.java.dto.User;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
 import java.util.ArrayList;

@@ -1,11 +1,11 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
-import edu.java.database.dto.UserLinkRel;
 import edu.java.domain.jdbc.JdbcLinkRepository;
 import edu.java.domain.jdbc.JdbcUserLinkRelRepository;
 import edu.java.domain.jdbc.JdbcUserRepository;
+import edu.java.dto.Link;
+import edu.java.dto.User;
+import edu.java.dto.UserLinkRel;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
 import java.util.List;
@@ -120,8 +120,8 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
 
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.getFirst().getUserid().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLinkid().getLink().toString()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
+        assertThat(result.getFirst().getLink().getLink().toString()).isEqualTo("vk.com");
     }
 
     @Test
@@ -163,8 +163,8 @@ public class TestRelationalTransactions extends IntegrationTest {
         );
 
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.getFirst().getUserid().getTelegramId()).isEqualTo(505L);
-        assertThat(result.getFirst().getLinkid().getLink().toString()).isEqualTo("vk.com");
+        assertThat(result.getFirst().getUser().getTelegramId()).isEqualTo(505L);
+        assertThat(result.getFirst().getLink().getLink().toString()).isEqualTo("vk.com");
     }
 
     @Test

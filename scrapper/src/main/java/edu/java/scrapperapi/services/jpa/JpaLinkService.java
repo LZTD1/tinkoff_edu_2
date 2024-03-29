@@ -1,13 +1,13 @@
 package edu.java.scrapperapi.services.jpa;
 
-import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
-import edu.java.database.dto.UserLinkRel;
-import edu.java.database.dto.UsersLinkId;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.domain.jpa.JpaLinkRepository;
 import edu.java.domain.jpa.JpaUserLinkRelRepository;
 import edu.java.domain.jpa.JpaUserRepository;
+import edu.java.dto.Link;
+import edu.java.dto.User;
+import edu.java.dto.UserLinkRel;
+import edu.java.dto.UsersLinkId;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.services.LinkService;
@@ -54,7 +54,7 @@ public class JpaLinkService implements LinkService {
     @Override
     public LinkResponse remove(long tgChatId, URI url) {
         Link existingLink = jpaLinkRepository.findLinkByLink(url);
-        User user = jpaLinkRepository.getUserByTelegramId(tgChatId);
+        User user = jpaUserRepository.getUserByTelegramId(tgChatId);
 
         UserLinkRel userLinkRel = new UserLinkRel();
         userLinkRel.setId(new UsersLinkId() {{

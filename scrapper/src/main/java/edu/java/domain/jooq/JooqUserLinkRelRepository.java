@@ -1,7 +1,7 @@
 package edu.java.domain.jooq;
 
-import edu.java.database.dto.Link;
-import edu.java.database.dto.User;
+import edu.java.dto.Link;
+import edu.java.dto.User;
 import java.util.Iterator;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;

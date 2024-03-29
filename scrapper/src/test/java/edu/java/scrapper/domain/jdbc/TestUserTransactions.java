@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.database.dto.User;
 import edu.java.domain.jdbc.JdbcUserRepository;
+import edu.java.dto.User;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

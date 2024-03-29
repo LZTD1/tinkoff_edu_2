@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.jpa;
 
-import edu.java.database.dto.Link;
 import edu.java.domain.jpa.JpaLinkRepository;
+import edu.java.dto.Link;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
 import java.time.Duration;
@@ -28,7 +28,7 @@ public class TestLinkTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testFindLinkByLink() {
-        String url = "vk.com";
+        String url = "https://vk.com";
 
         jdbcTemplate.update("INSERT INTO links (link) VALUES ('" + url + "') ");
 
@@ -41,7 +41,7 @@ public class TestLinkTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testGetLinksNotUpdates() {
-        String url = "vk.com";
+        String url = "https://vk.com";
 
         jdbcTemplate.update(
             "INSERT INTO links (link, updatetime) VALUES ('" + url + "', '2023-03-13 21:39:44.907092 +03:00') ");
@@ -56,7 +56,7 @@ public class TestLinkTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testUpdateLastsendtimeById() {
-        String url = "vk.com";
+        String url = "https://vk.com";
         String offsetDateTime = "2023-03-13 21:39:44.907092 +03:00";
 
         Long id = jdbcTemplate.queryForObject(

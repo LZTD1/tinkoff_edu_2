@@ -39,16 +39,14 @@ public class Keys {
         Internal.createUniqueKey(Links.LINKS, DSL.name("links_pkey"), new TableField[] {Links.LINKS.ID}, true);
     public static final UniqueKey<LinksRecord> UNIQUE_LINK =
         Internal.createUniqueKey(Links.LINKS, DSL.name("unique_link"), new TableField[] {Links.LINKS.LINK}, true);
-    public static final UniqueKey<UsersRecord> UNIQUE_TELEGRAMID = Internal.createUniqueKey(
-        Users.USERS,
+    public static final UniqueKey<UsersRecord> UNIQUE_TELEGRAMID = Internal.createUniqueKey(Users.USERS,
         DSL.name("unique_telegramid"),
         new TableField[] {Users.USERS.TELEGRAMID},
         true
     );
     public static final UniqueKey<UsersRecord> USERS_PKEY =
         Internal.createUniqueKey(Users.USERS, DSL.name("users_pkey"), new TableField[] {Users.USERS.ID}, true);
-    public static final UniqueKey<UsersLinksRecord> USERS_LINKS_PKEY = Internal.createUniqueKey(
-        UsersLinks.USERS_LINKS,
+    public static final UniqueKey<UsersLinksRecord> USERS_LINKS_PKEY = Internal.createUniqueKey(UsersLinks.USERS_LINKS,
         DSL.name("users_links_pkey"),
         new TableField[] {UsersLinks.USERS_LINKS.USERID, UsersLinks.USERS_LINKS.LINKID},
         true
@@ -59,8 +57,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final ForeignKey<UsersLinksRecord, LinksRecord> USERS_LINKS__FK_RELLINK_LINKID =
-        Internal.createForeignKey(
-            UsersLinks.USERS_LINKS,
+        Internal.createForeignKey(UsersLinks.USERS_LINKS,
             DSL.name("fk_rellink_linkid"),
             new TableField[] {UsersLinks.USERS_LINKS.LINKID},
             Keys.LINKS_PKEY,
@@ -68,8 +65,7 @@ public class Keys {
             true
         );
     public static final ForeignKey<UsersLinksRecord, UsersRecord> USERS_LINKS__FK_RELUSER_USERID =
-        Internal.createForeignKey(
-            UsersLinks.USERS_LINKS,
+        Internal.createForeignKey(UsersLinks.USERS_LINKS,
             DSL.name("fk_reluser_userid"),
             new TableField[] {UsersLinks.USERS_LINKS.USERID},
             Keys.USERS_PKEY,

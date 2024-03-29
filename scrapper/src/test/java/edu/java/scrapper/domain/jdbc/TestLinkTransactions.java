@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.database.dto.Link;
 import edu.java.domain.jdbc.JdbcLinkRepository;
+import edu.java.dto.Link;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
 import java.sql.Timestamp;

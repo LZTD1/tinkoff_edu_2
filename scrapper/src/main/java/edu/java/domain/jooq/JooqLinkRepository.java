@@ -1,6 +1,6 @@
 package edu.java.domain.jooq;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import java.time.OffsetDateTime;
 import java.util.Iterator;
 import org.jooq.DSLContext;

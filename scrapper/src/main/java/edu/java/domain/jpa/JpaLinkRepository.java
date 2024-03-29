@@ -1,6 +1,6 @@
 package edu.java.domain.jpa;
 
-import edu.java.database.dto.Link;
+import edu.java.dto.Link;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;

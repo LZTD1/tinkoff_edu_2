@@ -1,11 +1,11 @@
 package edu.java.scrapperapi.services.jooq;
 
-import edu.java.database.dto.Link;
 import edu.java.domain.jdbc.mappers.LinkMapper;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
 import edu.java.domain.jooq.JooqLinkRepository;
 import edu.java.domain.jooq.JooqUserLinkRelRepository;
 import edu.java.domain.jooq.JooqUserRepository;
+import edu.java.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.services.LinkService;

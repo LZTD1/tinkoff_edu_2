@@ -53,8 +53,7 @@ public class Links extends TableImpl<LinksRecord> {
     /**
      * The column <code>public.links.updatetime</code>.
      */
-    public final TableField<LinksRecord, OffsetDateTime> UPDATETIME = createField(
-        DSL.name("updatetime"),
+    public final TableField<LinksRecord, OffsetDateTime> UPDATETIME = createField(DSL.name("updatetime"),
         SQLDataType.TIMESTAMPWITHTIMEZONE(6)
             .defaultValue(DSL.field(DSL.raw("CURRENT_TIMESTAMP"), SQLDataType.TIMESTAMPWITHTIMEZONE)),
         this,
@@ -63,8 +62,7 @@ public class Links extends TableImpl<LinksRecord> {
     /**
      * The column <code>public.links.lastsendtime</code>.
      */
-    public final TableField<LinksRecord, OffsetDateTime> LASTSENDTIME = createField(
-        DSL.name("lastsendtime"),
+    public final TableField<LinksRecord, OffsetDateTime> LASTSENDTIME = createField(DSL.name("lastsendtime"),
         SQLDataType.TIMESTAMPWITHTIMEZONE(6)
             .defaultValue(DSL.field(DSL.raw("CURRENT_TIMESTAMP"), SQLDataType.TIMESTAMPWITHTIMEZONE)),
         this,

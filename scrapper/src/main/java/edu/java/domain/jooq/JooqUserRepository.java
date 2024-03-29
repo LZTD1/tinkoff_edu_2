@@ -1,6 +1,6 @@
 package edu.java.domain.jooq;
 
-import edu.java.database.dto.User;
+import edu.java.dto.User;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import static edu.java.domain.jooq.tables.Tables.USERS;

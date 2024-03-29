@@ -1,10 +1,10 @@
 package edu.java.scrapperapi.services.jdbc;
 
-import edu.java.database.dto.Link;
 import edu.java.domain.jdbc.JdbcLinkRepository;
 import edu.java.domain.jdbc.JdbcUserLinkRelRepository;
 import edu.java.domain.jdbc.JdbcUserRepository;
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
+import edu.java.dto.Link;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapperapi.exceptions.LinkAlreadyExistsException;
 import edu.java.scrapperapi.exceptions.UserIsNotDefindedException;

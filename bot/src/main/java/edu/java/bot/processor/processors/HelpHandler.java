@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class HelpHandler implements MethodProcessor {
 
-    private final List<MethodProcessor> methodProcessors;
     public static final String PAPER_EMOJI = "\uD83D\uDCC4";
+    private final List<MethodProcessor> methodProcessors;
 
     @Override
     public String handle(Update update) {

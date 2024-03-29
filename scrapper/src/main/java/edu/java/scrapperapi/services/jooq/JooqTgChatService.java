@@ -1,7 +1,7 @@
 package edu.java.scrapperapi.services.jooq;
 
-import edu.java.database.dto.User;
 import edu.java.domain.jooq.JooqUserRepository;
+import edu.java.dto.User;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
 import edu.java.scrapperapi.services.TgChatService;
