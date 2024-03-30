@@ -5,6 +5,7 @@ import edu.java.bot.clients.exceptions.BadLinkEntityException;
 import edu.java.bot.processor.MethodProcessor;
 import edu.java.bot.processor.linkValidator.LinkValidator;
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -62,12 +63,12 @@ public class TrackHandler implements MethodProcessor {
         }
         URI uriParam = URI.create(param[1]);
         if (!validatorsMap.containsKey(uriParam.getHost())) {
-            return UNSUPPORTED_TRACK_LINK + "\n" + getSupportedResources();
+            return MessageFormat.format("{0}\n{1}", UNSUPPORTED_TRACK_LINK, getSupportedResources());
         }
 
         LinkValidator validator = validatorsMap.get(uriParam.getHost());
         if (!uriParam.getPath().matches(validator.getPathValidator())) {
-            return INCORRECT_LINK_TYPE + validator.getExample();
+            return MessageFormat.format("{0}{1}", INCORRECT_LINK_TYPE, validator.getExample());
         }
         return null;
     }

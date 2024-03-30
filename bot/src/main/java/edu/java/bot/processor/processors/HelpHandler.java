@@ -1,6 +1,7 @@
 package edu.java.bot.processor.processors;
 
 import edu.java.bot.processor.MethodProcessor;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class HelpHandler implements MethodProcessor {
                 methodProcessors
                     .stream()
                     .filter(e -> !e.getClass().equals(DefaultHandler.class))
-                    .map(entry -> entry.getName() + " - " + entry.getDescription() + " \n")
+                    .map(entry -> MessageFormat.format("{0} - {1} \n", entry.getName(), entry.getDescription()))
                     .collect(Collectors.joining())
             )
             .toString();

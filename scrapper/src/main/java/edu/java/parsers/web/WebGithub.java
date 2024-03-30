@@ -42,13 +42,12 @@ public class WebGithub implements WebHandler {
         List<PullDto> pullDtoList = getGitPulls(link);
         List<LinkUpdate> linkUpdateList = new ArrayList<>();
 
-//        OffsetDateTime lastCommitTime = gitCommitsProcessing(link, commitsDtoList, linkUpdateList);
+        OffsetDateTime lastCommitTime = gitCommitsProcessing(link, commitsDtoList, linkUpdateList);
         OffsetDateTime lastPullsTime = gitPullsProcessing(link, pullDtoList, linkUpdateList);
 
-//        OffsetDateTime newSendTime = lastCommitTime.isAfter(lastPullsTime) ? lastCommitTime : lastPullsTime;
+        OffsetDateTime newSendTime = lastCommitTime.isAfter(lastPullsTime) ? lastCommitTime : lastPullsTime;
 
-//        linkService.updateLastSendTime(link.getId(), newSendTime);
-        linkService.updateLastSendTime(link.getId(), lastPullsTime);
+        linkService.updateLastSendTime(link.getId(), newSendTime);
 
         return linkUpdateList;
     }

@@ -6,6 +6,7 @@ import edu.java.bot.processor.processors.DefaultHandler;
 import edu.java.bot.processor.processors.HelpHandler;
 import edu.java.bot.processor.processors.StartHandler;
 import edu.java.bot.processor.processors.UntrackHandler;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class TestHelpHandler {
                 mockProcessHolder.getAllCommands()
                     .stream()
                     .filter(e -> !e.getClass().equals(DefaultHandler.class))
-                    .map(entry -> entry.getName() + " - " + entry.getDescription() + " \n")
+                    .map(entry -> MessageFormat.format("{0} - {1} \n", entry.getName(), entry.getDescription()))
                     .collect(Collectors.joining())
             )
             .toString();
