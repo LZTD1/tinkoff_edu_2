@@ -13,8 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface LinkRepository extends JpaRepository<Link, Long> {
-
+public interface JpaLinkRepository extends JpaRepository<Link, Long> {
     Link findLinkByLink(URI link);
 
     @Query(

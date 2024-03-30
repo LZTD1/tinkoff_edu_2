@@ -1,23 +1,20 @@
 package edu.java.clients.dto.githubDto.pull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.java.clients.dto.githubDto.UserDto;
-import java.net.URI;
 import java.time.OffsetDateTime;
 import lombok.Data;
 
 @Data
 public class PullDto {
 
-    @JsonProperty("html_url")
-    private URI htmlUrl;
+    private String type; // PullRequestEvent or CreateEvent
 
-    private Long id;
+    private Payload payload;
 
-    private String body;
+    private Repo repo;
+
+    private Actor actor;
 
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
-
-    private UserDto user;
 }

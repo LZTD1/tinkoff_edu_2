@@ -6,10 +6,14 @@ import edu.java.clients.dto.githubDto.commit.CommitsDto;
 import edu.java.clients.dto.githubDto.pull.PullDto;
 import edu.java.dto.Link;
 import edu.java.parsers.WebHandler;
+import edu.java.parsers.githubPullsHandler.CreateEventHandler;
+import edu.java.parsers.githubPullsHandler.MessageHandler;
+import edu.java.parsers.githubPullsHandler.PullRequestEvent;
 import edu.java.scrapperapi.services.LinkService;
 import java.text.MessageFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,10 +22,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class WebGithub implements WebHandler {
 
-    private static final String SPEAKING_HEAD_EMOJI = "\uD83D\uDDE3";
-    private static final int MAX_MESSAGE_LENGTH = 20;
+    public static final String SPEAKING_HEAD_EMOJI = "\uD83D\uDDE3";
+    private static final int MAX_MESSAGE_LENGTH = 200;
     private final GithubClient githubClient;
     private final LinkService linkService;
+    private HashMap<String, MessageHandler> messageHandlers = new HashMap<>() {{
+        put("CreateEvent", new CreateEventHandler());
+        put("PullRequestEvent", new PullRequestEvent());
+    }};
 
     @Override
     public String getHost() {
@@ -48,13 +56,15 @@ public class WebGithub implements WebHandler {
         OffsetDateTime newSendTime = link.getLastsendtime();
         for (PullDto entry : pullDtoList) {
             if (link.getLastsendtime().isBefore(entry.getCreatedAt())) {
-                linkUpdateList.add(new LinkUpdate() {{
-                    setDescription(getDescriptionMessage(entry));
-                    setId(link.getId());
-                    setUrl(link.getLink());
-                    setTgChatIds(linkService.getAllUsersWithLink(link));
-                }});
-
+                String message = getDescriptionMessage(entry);
+                if (message != null) {
+                    linkUpdateList.add(new LinkUpdate() {{
+                        setDescription(message);
+                        setId(link.getId());
+                        setUrl(link.getLink());
+                        setTgChatIds(linkService.getAllUsersWithLink(link));
+                    }});
+                }
                 if (newSendTime.isBefore(entry.getCreatedAt())) {
                     newSendTime = entry.getCreatedAt();
                 }
@@ -88,20 +98,22 @@ public class WebGithub implements WebHandler {
     @SuppressWarnings("MultipleStringLiterals")
     private String getDescriptionMessage(CommitsDto entry) {
         return new StringBuilder()
-            .append(SPEAKING_HEAD_EMOJI)
-            .append("Нашел новый коммит!\n")
+            .append(SPEAKING_HEAD_EMOJI).append("Нашел новый коммит!")
+            .append("\n\n")
             .append(MessageFormat.format(
-                "[{0}]({1})",
-                getRepos(entry.getHtmlUrl().getPath()),
-                entry.getHtmlUrl().toString()
+                "<b>Репозиторий:</b> <a href=''{0}''>{1}</a>",
+                entry.getHtmlUrl().toString(),
+                getRepos(entry.getHtmlUrl().getPath())
             ))
+            .append("\n")
             .append(MessageFormat.format(
-                "Автор: [{0}]({1})",
-                entry.getAuthor().getLogin(),
-                entry.getAuthor().getHtmlUrl().toString()
+                "<b>Автор коммита:</b> <a href=''{0}''>{1}</a>",
+                entry.getAuthor().getHtmlUrl().toString(),
+                entry.getAuthor().getLogin()
             ))
+            .append("\n")
             .append(MessageFormat.format(
-                    "Сообщение: {0}",
+                    "<b>Сообщение:</b> {0}",
                     trimMessage(entry.getCommit().getMessage())
                 )
             )
@@ -109,24 +121,11 @@ public class WebGithub implements WebHandler {
     }
 
     private String getDescriptionMessage(PullDto entry) {
-        return new StringBuilder()
-            .append(SPEAKING_HEAD_EMOJI + " Нашел новый пулл!\n")
-            .append(MessageFormat.format(
-                "[{0}]({1})",
-                getRepos(entry.getHtmlUrl().getPath()),
-                entry.getHtmlUrl().toString()
-            ))
-            .append(MessageFormat.format(
-                "Автор: [{0}]({1})",
-                entry.getUser().getLogin(),
-                entry.getUser().getHtmlUrl().toString()
-            ))
-            .append(MessageFormat.format(
-                    "Сообщение: {0}",
-                    trimMessage(entry.getBody())
-                )
-            )
-            .toString();
+        var handler = messageHandlers.get(entry.getType());
+        if (handler != null) {
+            return handler.getMessage(entry);
+        }
+        return null;
     }
 
     private String trimMessage(String message) {

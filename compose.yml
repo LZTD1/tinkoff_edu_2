@@ -13,7 +13,8 @@ services:
   liquibase-migrations:
     image: liquibase/liquibase:4.25
     command:
-      - --changelog-file=/liquibase/changelog/master.yaml
+      - --search-path=/liquibase/changelog/liquibase/changelog
+      - --changelog-file=master.yaml
       - --driver=org.postgresql.Driver
       - --url=jdbc:postgresql://postgresql:5432/scrapper
       - --username=postgres

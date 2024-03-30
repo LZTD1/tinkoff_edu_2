@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.jpa;
 
-import edu.java.domain.jpa.LinkRepository;
+import edu.java.domain.jpa.JpaLinkRepository;
 import edu.java.dto.Link;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestLinkTransactions extends IntegrationTest {
 
     @Autowired
-    private LinkRepository linkRepository;
+    private JpaLinkRepository jpaLinkRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -32,7 +32,7 @@ public class TestLinkTransactions extends IntegrationTest {
 
         jdbcTemplate.update("INSERT INTO links (link) VALUES ('" + url + "') ");
 
-        Link link = linkRepository.findLinkByLink(URI.create(url));
+        Link link = jpaLinkRepository.findLinkByLink(URI.create(url));
 
         assertThat(link.getLink()).isEqualTo(URI.create(url));
     }
@@ -46,7 +46,7 @@ public class TestLinkTransactions extends IntegrationTest {
         jdbcTemplate.update(
             "INSERT INTO links (link, updatetime) VALUES ('" + url + "', '2023-03-13 21:39:44.907092 +03:00') ");
 
-        List<Link> links = linkRepository.getLinksNotUpdates(Duration.ofMinutes(5));
+        List<Link> links = jpaLinkRepository.getLinksNotUpdates(Duration.ofMinutes(5));
 
         assertThat(links.size()).isEqualTo(1);
         assertThat(links.getFirst().getLink()).isEqualTo(URI.create(url));
@@ -64,9 +64,9 @@ public class TestLinkTransactions extends IntegrationTest {
                 offsetDateTime + "') RETURNING id;",
             (rs, rowNum) -> rs.getLong("id")
         );
-        linkRepository.updateLastsendtimeById(OffsetDateTime.now(), id);
+        jpaLinkRepository.updateLastsendtimeById(OffsetDateTime.now(), id);
 
-        Link link = linkRepository.getReferenceById(id);
+        Link link = jpaLinkRepository.getReferenceById(id);
 
         assertThat(link.getLastsendtime().toString()).isNotEqualTo(offsetDateTime);
         assertThat(link.getUpdatetime().toString()).isNotEqualTo(offsetDateTime);

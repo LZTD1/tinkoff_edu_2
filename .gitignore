@@ -37,3 +37,17 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### jooq-codegen ###
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/Databasechangeloglock.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/records/DatabasechangeloglockRecord.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/DefaultCatalog.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/Keys.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/Links.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/records/LinksRecord.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/Public.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/Tables.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/Users.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/UsersLinks.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/records/UsersLinksRecord.java
+/scrapper-jooq/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/records/UsersRecord.java

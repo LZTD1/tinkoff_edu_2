@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static edu.java.bot.processor.Constants.EMPTY_LIST_MESSAGE;
+import static edu.java.bot.processor.processors.ListHandler.LENS_EMOJI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestListHandler {
@@ -67,9 +68,14 @@ public class TestListHandler {
     }
 
     private String convertToString(ListLinksResponse hasOneListLinks) {
-        return String.join(
-            "\n",
-            hasOneListLinks.getLinks().stream().map(e -> e.getUrl().toString()).toList()
-        );
+        return new StringBuilder()
+            .append(LENS_EMOJI).append("Список трекаемых ссылок: \n\n")
+            .append(
+                String.join(
+                    "\n",
+                    hasOneListLinks.getLinks().stream().map(e -> e.getUrl().toString()).toList()
+                )
+            )
+            .toString();
     }
 }

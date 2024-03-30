@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.jpa;
 
-import edu.java.domain.jpa.UserRepository;
+import edu.java.domain.jpa.JpaUserRepository;
 import edu.java.dto.User;
 import edu.java.scrapper.domain.IntegrationTest;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestUserTransactions extends IntegrationTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private JpaUserRepository jpaUserRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -25,7 +25,7 @@ public class TestUserTransactions extends IntegrationTest {
     @Rollback
     void testDeleteByTelegramId() {
         jdbcTemplate.update("INSERT INTO users(telegramid) values (123)");
-        User user = userRepository.getUserByTelegramId(123L);
+        User user = jpaUserRepository.getUserByTelegramId(123L);
 
         assertThat(user.getTelegramId()).isEqualTo(123L);
     }
@@ -36,7 +36,7 @@ public class TestUserTransactions extends IntegrationTest {
     void testGetUserByTelegramId() {
         jdbcTemplate.update("INSERT INTO users(telegramid) values (123)");
 
-        var rows = userRepository.deleteByTelegramId(123L);
+        var rows = jpaUserRepository.deleteByTelegramId(123L);
 
         assertThat(rows).isOne();
     }

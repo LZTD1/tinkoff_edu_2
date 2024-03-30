@@ -1,8 +1,8 @@
 package edu.java.configuration.AccessTypes;
 
-import edu.java.domain.jdbc.LinksDao;
-import edu.java.domain.jdbc.UserLinkRelationDao;
-import edu.java.domain.jdbc.UsersDao;
+import edu.java.domain.jdbc.JdbcLinkRepository;
+import edu.java.domain.jdbc.JdbcUserLinkRelRepository;
+import edu.java.domain.jdbc.JdbcUserRepository;
 import edu.java.scrapperapi.services.LinkService;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.scrapperapi.services.jdbc.JdbcLinkService;
@@ -17,18 +17,18 @@ public class JdbcAccessConfiguration {
 
     @Bean
     public LinkService linkService(
-        LinksDao linksDao,
-        UsersDao usersDao,
-        UserLinkRelationDao userLinkRelationDao
+        JdbcLinkRepository jdbcLinkRepository,
+        JdbcUserRepository jdbcUserRepository,
+        JdbcUserLinkRelRepository jdbcUserLinkRelRepository
     ) {
-        return new JdbcLinkService(linksDao, usersDao, userLinkRelationDao);
+        return new JdbcLinkService(jdbcLinkRepository, jdbcUserRepository, jdbcUserLinkRelRepository);
     }
 
     @Bean
     public TgChatService tgChatService(
-        UsersDao usersDao
+        JdbcUserRepository jdbcUserRepository
     ) {
-        return new JdbcTgChatService(usersDao);
+        return new JdbcTgChatService(jdbcUserRepository);
     }
 
 }

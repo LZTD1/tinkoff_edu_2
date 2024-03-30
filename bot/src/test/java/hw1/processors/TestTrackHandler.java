@@ -5,11 +5,15 @@ import edu.java.bot.processor.linkValidator.GithubValidator;
 import edu.java.bot.processor.linkValidator.LinkValidator;
 import edu.java.bot.processor.linkValidator.StackoverflowValidator;
 import edu.java.bot.processor.processors.TrackHandler;
+
+import java.text.MessageFormat;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
 import static edu.java.bot.processor.Constants.FAIL_TRACK_MESSAGE;
 import static edu.java.bot.processor.Constants.INCORRECT_LINK_TYPE;
 import static edu.java.bot.processor.Constants.SUCCESSFUL_TRACK_MESSAGE;
@@ -53,7 +57,7 @@ public class TestTrackHandler {
         // Assertions
         var method = new TrackHandler(mockScrapperClient, validators);
         assertThat(method.handle(mockUpdate)).isEqualTo(
-            UNSUPPORTED_TRACK_LINK + "\n" + getSupportedResources(validators));
+            MessageFormat.format("{0}\n{1}", UNSUPPORTED_TRACK_LINK, getSupportedResources(validators)));
     }
 
     @Test
@@ -75,7 +79,11 @@ public class TestTrackHandler {
 
         // Assertions
         var method = new TrackHandler(mockScrapperClient, validators);
-        assertThat(method.handle(mockUpdate)).isEqualTo(INCORRECT_LINK_TYPE + validators.getFirst().getExample());
+        assertThat(method.handle(mockUpdate)).isEqualTo(MessageFormat.format(
+            "{0}{1}",
+            INCORRECT_LINK_TYPE,
+            validators.getFirst().getExample()
+        ));
     }
 
     @Test

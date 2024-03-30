@@ -5,7 +5,7 @@ app:
     force-check-delay: 10000
   linkDelay: 5
   limitPerCheck: 10
-  database-access-type: jpa
+  database-access-type: jooq
 
 springdoc:
   swagger-ui:
@@ -31,3 +31,9 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+  level:
+    org:
+      jooq:
+        tools:
+          LoggerListener: DEBUG

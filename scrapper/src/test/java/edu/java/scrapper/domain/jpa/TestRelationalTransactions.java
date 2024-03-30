@@ -1,8 +1,8 @@
 package edu.java.scrapper.domain.jpa;
 
-import edu.java.domain.jpa.LinkRepository;
-import edu.java.domain.jpa.UserLinkRelRepository;
-import edu.java.domain.jpa.UserRepository;
+import edu.java.domain.jpa.JpaLinkRepository;
+import edu.java.domain.jpa.JpaUserLinkRelRepository;
+import edu.java.domain.jpa.JpaUserRepository;
 import edu.java.dto.Link;
 import edu.java.dto.User;
 import edu.java.dto.UserLinkRel;
@@ -21,11 +21,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestRelationalTransactions extends IntegrationTest {
 
     @Autowired
-    private UserLinkRelRepository userLinkRelRepository;
+    private JpaUserLinkRelRepository jpaUserLinkRelRepository;
     @Autowired
-    private UserRepository userRepository;
+    private JpaUserRepository jpaUserRepository;
     @Autowired
-    private LinkRepository linkRepository;
+    private JpaLinkRepository jpaLinkRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -36,18 +36,18 @@ public class TestRelationalTransactions extends IntegrationTest {
     void testFindAllByUserid_TelegramId() {
         var user = new User();
         user.setTelegramId(123L);
-        userRepository.save(user);
+        jpaUserRepository.saveAndFlush(user);
 
         var link = new Link();
         link.setLink(URI.create("https://vk.com"));
-        linkRepository.save(link);
+        jpaLinkRepository.saveAndFlush(link);
 
         var userLinkRel = new UserLinkRel();
         userLinkRel.setUser(user);
         userLinkRel.setLink(link);
-        userLinkRelRepository.save(userLinkRel);
+        jpaUserLinkRelRepository.saveAndFlush(userLinkRel);
 
-        List<UserLinkRel> res = userLinkRelRepository.findByUserTelegramId(123L);
+        List<UserLinkRel> res = jpaUserLinkRelRepository.findByUserTelegramId(123L);
 
         assertThat(res.getFirst().getLink().getLink()).isEqualTo(URI.create("https://vk.com"));
     }
@@ -58,18 +58,18 @@ public class TestRelationalTransactions extends IntegrationTest {
     void testFindByLinkid_Id() {
         var user = new User();
         user.setTelegramId(123L);
-        userRepository.save(user);
+        jpaUserRepository.saveAndFlush(user);
 
         var link = new Link();
         link.setLink(URI.create("https://vk.com"));
-        linkRepository.save(link);
+        jpaLinkRepository.saveAndFlush(link);
 
         var userLinkRel = new UserLinkRel();
         userLinkRel.setUser(user);
         userLinkRel.setLink(link);
-        userLinkRelRepository.save(userLinkRel);
+        jpaUserLinkRelRepository.saveAndFlush(userLinkRel);
 
-        List<UserLinkRel> res = userLinkRelRepository.findByLinkId(link.getId());
+        List<UserLinkRel> res = jpaUserLinkRelRepository.findByLinkId(link.getId());
 
         assertThat(res.getFirst().getUser().getTelegramId()).isEqualTo(123L);
     }

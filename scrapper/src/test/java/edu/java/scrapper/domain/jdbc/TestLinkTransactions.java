@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.domain.jdbc.LinksDao;
+import edu.java.domain.jdbc.JdbcLinkRepository;
 import edu.java.dto.Link;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestLinkTransactions extends IntegrationTest {
 
     @Autowired
-    private LinksDao linksDao;
+    private JdbcLinkRepository jdbcLinkRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -30,7 +30,7 @@ public class TestLinkTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testAdd() {
-        linksDao.createLink(
+        jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
@@ -50,17 +50,17 @@ public class TestLinkTransactions extends IntegrationTest {
     @Rollback
     void testFindAll() {
         for (int i = 0; i < 5; i++) {
-            linksDao.createLink(
+            jdbcLinkRepository.createLink(
                 new Link() {{
                     setLink(URI.create(UUID.randomUUID().toString()));
                 }}
             );
         }
 
-        List<Link> result = linksDao.getAllLinks(3, 0);
+        List<Link> result = jdbcLinkRepository.getAllLinks(3, 0);
         assertThat(result.size()).isEqualTo(3);
 
-        List<Link> result2 = linksDao.getAllLinks(3, 3);
+        List<Link> result2 = jdbcLinkRepository.getAllLinks(3, 3);
         assertThat(result2.size()).isEqualTo(2);
     }
 
@@ -68,13 +68,13 @@ public class TestLinkTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testGetById() {
-        Long id = linksDao.createLink(
+        Long id = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
         );
 
-        Link dbObject = linksDao.getLinkById(id);
+        Link dbObject = jdbcLinkRepository.getLinkById(id);
 
         assertThat(dbObject.getLink().toString()).isEqualTo("vk.com");
     }
@@ -83,13 +83,13 @@ public class TestLinkTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testGetByLink() {
-        Long id = linksDao.createLink(
+        Long id = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
         );
 
-        Link dbObject = linksDao.getLinkByLink("vk.com");
+        Link dbObject = jdbcLinkRepository.getLinkByLink("vk.com");
 
         assertThat(dbObject.getId()).isEqualTo(id);
     }
@@ -108,7 +108,7 @@ public class TestLinkTransactions extends IntegrationTest {
             new int[] {Types.VARCHAR, Types.TIMESTAMP}
         );
 
-        List<Link> links = linksDao.getLinksNotUpdates(5, 2);
+        List<Link> links = jdbcLinkRepository.getLinksNotUpdates(5, 2);
 
         assertThat(links.size()).isEqualTo(1);
     }
@@ -117,14 +117,14 @@ public class TestLinkTransactions extends IntegrationTest {
     @Rollback
     @Transactional
     void testUpdateTimeAndHash() {
-        Long id = linksDao.createLink(new Link() {{
+        Long id = jdbcLinkRepository.createLink(new Link() {{
             setLink(URI.create("vk.com"));
         }});
-        Link before = linksDao.getAllLinks(1, 0).getFirst();
+        Link before = jdbcLinkRepository.getAllLinks(1, 0).getFirst();
 
-        linksDao.updateLastSendTime(before.getId(), OffsetDateTime.now());
+        jdbcLinkRepository.updateLastSendTime(before.getId(), OffsetDateTime.now());
 
-        Link after = linksDao.getAllLinks(1, 0).getFirst();
+        Link after = jdbcLinkRepository.getAllLinks(1, 0).getFirst();
 
         assertThat(before.getLastsendtime().toString()).isNotEqualTo(after.getLastsendtime().toString());
     }

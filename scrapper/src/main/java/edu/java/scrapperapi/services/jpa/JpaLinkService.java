@@ -1,9 +1,9 @@
 package edu.java.scrapperapi.services.jpa;
 
 import edu.java.domain.jdbc.mappers.LinkResponseMapper;
-import edu.java.domain.jpa.LinkRepository;
-import edu.java.domain.jpa.UserLinkRelRepository;
-import edu.java.domain.jpa.UserRepository;
+import edu.java.domain.jpa.JpaLinkRepository;
+import edu.java.domain.jpa.JpaUserLinkRelRepository;
+import edu.java.domain.jpa.JpaUserRepository;
 import edu.java.dto.Link;
 import edu.java.dto.User;
 import edu.java.dto.UserLinkRel;
@@ -22,28 +22,28 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JpaLinkService implements LinkService {
 
-    private final LinkRepository linkRepository;
-    private final UserRepository userRepository;
-    private final UserLinkRelRepository userLinkRelRepository;
+    private final JpaLinkRepository jpaLinkRepository;
+    private final JpaUserRepository jpaUserRepository;
+    private final JpaUserLinkRelRepository jpaUserLinkRelRepository;
 
     @Override
     @Transactional
     public Long createLink(long tgChatId, URI url) {
-        Link existingLink = linkRepository.findLinkByLink(url);
+        Link existingLink = jpaLinkRepository.findLinkByLink(url);
 
         if (existingLink == null) {
             var newLink = new Link();
             newLink.setLink(url);
 
-            existingLink = linkRepository.save(newLink);
+            existingLink = jpaLinkRepository.save(newLink);
         }
 
         UserLinkRel userLinkRel = new UserLinkRel();
         userLinkRel.setLink(existingLink);
-        userLinkRel.setUser(userRepository.getUserByTelegramId(tgChatId));
+        userLinkRel.setUser(jpaUserRepository.getUserByTelegramId(tgChatId));
 
         try {
-            userLinkRelRepository.save(userLinkRel);
+            jpaUserLinkRelRepository.save(userLinkRel);
         } catch (DataIntegrityViolationException e) {
             throw new LinkAlreadyExistsException("Current link already tracked!");
         }
@@ -53,8 +53,8 @@ public class JpaLinkService implements LinkService {
 
     @Override
     public LinkResponse remove(long tgChatId, URI url) {
-        Link existingLink = linkRepository.findLinkByLink(url);
-        User user = userRepository.getUserByTelegramId(tgChatId);
+        Link existingLink = jpaLinkRepository.findLinkByLink(url);
+        User user = jpaUserRepository.getUserByTelegramId(tgChatId);
 
         UserLinkRel userLinkRel = new UserLinkRel();
         userLinkRel.setId(new UsersLinkId() {{
@@ -62,7 +62,7 @@ public class JpaLinkService implements LinkService {
             setUserid(user.getId());
         }});
 
-        userLinkRelRepository.delete(userLinkRel);
+        jpaUserLinkRelRepository.delete(userLinkRel);
 
         return LinkResponseMapper.map(existingLink);
     }
@@ -70,7 +70,7 @@ public class JpaLinkService implements LinkService {
     @Override
     public List<LinkResponse> listAll(long tgChatId, int limit, int offset) {
 
-        List<UserLinkRel> response = userLinkRelRepository.findByUserTelegramId(tgChatId);
+        List<UserLinkRel> response = jpaUserLinkRelRepository.findByUserTelegramId(tgChatId);
 
         return response.stream()
             .map(e -> LinkResponseMapper.map(e.getLink()))
@@ -81,7 +81,7 @@ public class JpaLinkService implements LinkService {
 
     @Override
     public List<Link> listScheduler(int minutes, int limit) {
-        return linkRepository.getLinksNotUpdates(Duration.ofMinutes(minutes))
+        return jpaLinkRepository.getLinksNotUpdates(Duration.ofMinutes(minutes))
             .stream()
             .limit(limit)
             .toList();
@@ -89,14 +89,14 @@ public class JpaLinkService implements LinkService {
 
     @Override
     public void updateLastSendTime(Long idLink, OffsetDateTime newSendTime) {
-        linkRepository.updateLastsendtimeById(newSendTime, idLink);
+        jpaLinkRepository.updateLastsendtimeById(newSendTime, idLink);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Long> getAllUsersWithLink(Link link) {
 
-        return userLinkRelRepository
+        return jpaUserLinkRelRepository
             .findByLinkId(link.getId())
             .stream().map(e -> e.getUser().getTelegramId())
             .toList();

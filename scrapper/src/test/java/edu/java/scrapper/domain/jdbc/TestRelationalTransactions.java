@@ -1,8 +1,8 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.domain.jdbc.LinksDao;
-import edu.java.domain.jdbc.UserLinkRelationDao;
-import edu.java.domain.jdbc.UsersDao;
+import edu.java.domain.jdbc.JdbcLinkRepository;
+import edu.java.domain.jdbc.JdbcUserLinkRelRepository;
+import edu.java.domain.jdbc.JdbcUserRepository;
 import edu.java.dto.Link;
 import edu.java.dto.User;
 import edu.java.dto.UserLinkRel;
@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestRelationalTransactions extends IntegrationTest {
 
     @Autowired
-    private UserLinkRelationDao userLinkRelationDao;
+    private JdbcUserLinkRelRepository jdbcUserLinkRelRepository;
 
     @Autowired
-    private UsersDao usersDao;
+    private JdbcUserRepository jdbcUserRepository;
 
     @Autowired
-    private LinksDao linksDao;
+    private JdbcLinkRepository jdbcLinkRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -36,20 +36,20 @@ public class TestRelationalTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testAdd() {
-        var userId = usersDao.createUser(
+        var userId = jdbcUserRepository.createUser(
             new User() {{
                 setTelegramId(505L);
             }}
         );
-        var linkId = linksDao.createLink(
+        var linkId = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
         );
 
-        userLinkRelationDao.createRelational(
-            usersDao.getUserById(userId),
-            linksDao.getLinkById(linkId)
+        jdbcUserLinkRelRepository.createRelational(
+            jdbcUserRepository.getUserById(userId),
+            jdbcLinkRepository.getLinkById(linkId)
         );
 
         int count = jdbcTemplate.queryForObject(
@@ -66,24 +66,24 @@ public class TestRelationalTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testDelete() {
-        var userId = usersDao.createUser(
+        var userId = jdbcUserRepository.createUser(
             new User() {{
                 setTelegramId(505L);
             }}
         );
-        var linkId = linksDao.createLink(
+        var linkId = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
         );
 
-        userLinkRelationDao.createRelational(
-            usersDao.getUserById(userId),
-            linksDao.getLinkById(linkId)
+        jdbcUserLinkRelRepository.createRelational(
+            jdbcUserRepository.getUserById(userId),
+            jdbcLinkRepository.getLinkById(linkId)
         );
-        userLinkRelationDao.deleteRelational(
-            usersDao.getUserById(userId),
-            linksDao.getLinkById(linkId)
+        jdbcUserLinkRelRepository.deleteRelational(
+            jdbcUserRepository.getUserById(userId),
+            jdbcLinkRepository.getLinkById(linkId)
         );
 
         int count = jdbcTemplate.queryForObject(
@@ -100,22 +100,22 @@ public class TestRelationalTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testFindAll() {
-        var userId = usersDao.createUser(
+        var userId = jdbcUserRepository.createUser(
             new User() {{
                 setTelegramId(505L);
             }}
         );
-        var linkId = linksDao.createLink(
+        var linkId = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
         );
 
-        userLinkRelationDao.createRelational(
-            usersDao.getUserById(userId),
-            linksDao.getLinkById(linkId)
+        jdbcUserLinkRelRepository.createRelational(
+            jdbcUserRepository.getUserById(userId),
+            jdbcLinkRepository.getLinkById(linkId)
         );
-        List<UserLinkRel> result = userLinkRelationDao.getAllRelational(
+        List<UserLinkRel> result = jdbcUserLinkRelRepository.getAllRelational(
             5, 0
         );
 
@@ -128,37 +128,37 @@ public class TestRelationalTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testFindAllByTgId() {
-        var user1 = usersDao.createUser(
+        var user1 = jdbcUserRepository.createUser(
             new User() {{
                 setTelegramId(505L);
             }}
         );
-        var user2 = usersDao.createUser(
+        var user2 = jdbcUserRepository.createUser(
             new User() {{
                 setTelegramId(404L);
             }}
         );
-        var link1 = linksDao.createLink(
+        var link1 = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
         );
-        var link2 = linksDao.createLink(
+        var link2 = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("github.com"));
             }}
         );
 
-        userLinkRelationDao.createRelational(
-            usersDao.getUserById(user1),
-            linksDao.getLinkById(link1)
+        jdbcUserLinkRelRepository.createRelational(
+            jdbcUserRepository.getUserById(user1),
+            jdbcLinkRepository.getLinkById(link1)
         );
-        userLinkRelationDao.createRelational(
-            usersDao.getUserById(user2),
-            linksDao.getLinkById(link2)
+        jdbcUserLinkRelRepository.createRelational(
+            jdbcUserRepository.getUserById(user2),
+            jdbcLinkRepository.getLinkById(link2)
         );
 
-        List<UserLinkRel> result = userLinkRelationDao.getAllLinksByTgId(
+        List<UserLinkRel> result = jdbcUserLinkRelRepository.getAllLinksByTgId(
             505L, 5, 0
         );
 
@@ -171,22 +171,22 @@ public class TestRelationalTransactions extends IntegrationTest {
     @Transactional
     @Rollback
     void testGetAllUsersIdWithLink() {
-        var user1 = usersDao.createUser(
+        var user1 = jdbcUserRepository.createUser(
             new User() {{
                 setTelegramId(505L);
             }}
         );
-        var user2 = usersDao.createUser(
+        var user2 = jdbcUserRepository.createUser(
             new User() {{
                 setTelegramId(404L);
             }}
         );
-        var link = linksDao.createLink(
+        var link = jdbcLinkRepository.createLink(
             new Link() {{
                 setLink(URI.create("vk.com"));
             }}
         );
-        userLinkRelationDao.createRelational(
+        jdbcUserLinkRelRepository.createRelational(
             new User() {{
                 setId(user1);
             }},
@@ -194,7 +194,7 @@ public class TestRelationalTransactions extends IntegrationTest {
                 setId(link);
             }}
         );
-        userLinkRelationDao.createRelational(
+        jdbcUserLinkRelRepository.createRelational(
             new User() {{
                 setId(user2);
             }},
@@ -202,7 +202,7 @@ public class TestRelationalTransactions extends IntegrationTest {
                 setId(link);
             }}
         );
-        List<Long> result = userLinkRelationDao.getAllUsersIdWithLink(link);
+        List<Long> result = jdbcUserLinkRelRepository.getAllUsersIdWithLink(link);
 
         assertThat(result.size()).isEqualTo(2);
     }

@@ -1,6 +1,6 @@
 package edu.java.scrapperapi.services.jdbc;
 
-import edu.java.domain.jdbc.UsersDao;
+import edu.java.domain.jdbc.JdbcUserRepository;
 import edu.java.dto.User;
 import edu.java.scrapperapi.exceptions.EntityAlreadyExistsError;
 import edu.java.scrapperapi.exceptions.EntityDeleteException;
@@ -11,12 +11,12 @@ import org.springframework.dao.DuplicateKeyException;
 @RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {
 
-    private final UsersDao usersDao;
+    private final JdbcUserRepository jdbcUserRepository;
 
     @Override
     public void register(long tgChatId) {
         try {
-            usersDao.createUser(new User() {{
+            jdbcUserRepository.createUser(new User() {{
                 setTelegramId(tgChatId);
             }});
         } catch (DuplicateKeyException e) {
@@ -26,7 +26,7 @@ public class JdbcTgChatService implements TgChatService {
 
     @Override
     public void unregister(long tgChatId) {
-        var rowsAffected = usersDao.deleteUser(new User() {{
+        var rowsAffected = jdbcUserRepository.deleteUser(new User() {{
             setTelegramId(tgChatId);
         }});
         if (rowsAffected == 0) {
