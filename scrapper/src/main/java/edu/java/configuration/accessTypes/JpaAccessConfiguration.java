@@ -1,4 +1,4 @@
-package edu.java.configuration.AccessTypes;
+package edu.java.configuration.accessTypes;
 
 import edu.java.domain.jpa.JpaLinkRepository;
 import edu.java.domain.jpa.JpaUserLinkRelRepository;

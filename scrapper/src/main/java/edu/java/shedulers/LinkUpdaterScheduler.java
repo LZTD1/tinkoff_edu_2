@@ -2,8 +2,6 @@ package edu.java.shedulers;
 
 import edu.java.bot.dto.LinkUpdate;
 import edu.java.clients.BotClient;
-import edu.java.clients.GithubClient;
-import edu.java.clients.StackoverflowClient;
 import edu.java.dto.Link;
 import edu.java.parsers.WebHandler;
 import edu.java.scrapperapi.services.LinkService;
@@ -27,8 +25,6 @@ public class LinkUpdaterScheduler {
     private final static Logger LOGGER = LogManager.getLogger();
     private final List<WebHandler> webHandlers;
     private final LinkService linkService;
-    private final GithubClient githubClient;
-    private final StackoverflowClient stackoverflowClient;
     private final BotClient botClient;
 
     @Value("${app.linkDelay}")

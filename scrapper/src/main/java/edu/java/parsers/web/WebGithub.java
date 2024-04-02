@@ -136,14 +136,14 @@ public class WebGithub implements WebHandler {
         return githubClient.getCommitsByRepos(
             getOwner(link.getLink().getPath()),
             getRepos(link.getLink().getPath())
-        ).collectList().block();
+        );
     }
 
     private List<PullDto> getGitPulls(Link link) {
         return githubClient.getPullsByRepos(
             getOwner(link.getLink().getPath()),
             getRepos(link.getLink().getPath())
-        ).collectList().block();
+        );
     }
 
     private String getRepos(String path) {

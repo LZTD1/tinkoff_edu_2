@@ -6,6 +6,9 @@ app:
   linkDelay: 5
   limitPerCheck: 10
   database-access-type: jooq
+  retryable-config:
+    status-codes: 429, 403, 404
+    backoff-type: exponent
 
 springdoc:
   swagger-ui:
@@ -23,7 +26,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
 
 
 server:
@@ -31,9 +33,3 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
-
-  level:
-    org:
-      jooq:
-        tools:
-          LoggerListener: DEBUG

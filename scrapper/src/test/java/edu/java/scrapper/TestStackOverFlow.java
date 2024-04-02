@@ -11,8 +11,13 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.retry.RetryCallback;
+import org.springframework.retry.RetryContext;
+import org.springframework.retry.support.RetryTemplate;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -51,8 +56,22 @@ public class TestStackOverFlow {
             }});
         }});
     }};
+    private static RetryTemplate mockRetryTemplate;
+    private static RetryContext mockContext;
 
     WireMockServer wireMockServer;
+
+    @BeforeAll
+    static void beforeAll(){
+        mockRetryTemplate = Mockito.mock(RetryTemplate.class);
+        mockContext = Mockito.mock(RetryContext.class);
+
+        Mockito.when(mockContext.getRetryCount()).thenReturn(1);
+        Mockito.when(mockRetryTemplate.execute(Mockito.any())).thenAnswer(invocation -> {
+            RetryCallback callback = invocation.getArgument(0);
+            return callback.doWithRetry(mockContext);
+        });
+    }
 
     @BeforeEach
     public void setup() {
@@ -68,9 +87,10 @@ public class TestStackOverFlow {
 
     @Test
     public void sofAnswersTest() {
-        StackOverFlowDto response = new StackoverflowClient("http://localhost:3000")
-            .getAnswersByQuestion(1)
-            .block();
+
+
+        StackOverFlowDto response = new StackoverflowClient("http://localhost:3000", mockRetryTemplate)
+            .getAnswersByQuestion(1);
 
         assertThat(response.getItems().size()).isEqualTo(1);
         assertThat(response.getItems().getFirst().getBody()).isEqualTo(IDEAL_ANSWERS_DTO.getItems().getFirst()
@@ -83,9 +103,8 @@ public class TestStackOverFlow {
 
     @Test
     public void sofCommentsTest() {
-        StackOverFlowDto response = new StackoverflowClient("http://localhost:3000")
-            .getCommentsByQuestion(1)
-            .block();
+        StackOverFlowDto response = new StackoverflowClient("http://localhost:3000", mockRetryTemplate)
+            .getCommentsByQuestion(1);
 
         assertThat(response.getItems().size()).isEqualTo(1);
         assertThat(response.getItems().getFirst().getBody()).isEqualTo(IDEAL_COMMENTS_DTO.getItems().getFirst()

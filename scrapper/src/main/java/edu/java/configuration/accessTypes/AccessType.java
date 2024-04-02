@@ -1,4 +1,4 @@
-package edu.java.configuration.AccessTypes;
+package edu.java.configuration.accessTypes;
 
 public enum AccessType {
     JDBC, JPA, JOOQ
