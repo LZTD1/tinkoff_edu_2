@@ -54,7 +54,7 @@ public class GithubClient {
         });
     }
 
-    private static void warnIfRetry(String repos, RetryContext context, String target) {
+    private void warnIfRetry(String repos, RetryContext context, String target) {
         if (context.getRetryCount() > 0) {
             LOGGER.warn(
                 "[GITHUB] Повторный парсинг {}, репозиторий - {} ({} попытка)",

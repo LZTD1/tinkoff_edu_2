@@ -1,6 +1,9 @@
 app:
   telegramToken: ${TELEGRAM_KEY}
   telegramName: ${TELEGRAM_NAME}
+  retryable-config:
+    backoff-type: linear
+    status-codes: 429
 
 springdoc:
   swagger-ui:

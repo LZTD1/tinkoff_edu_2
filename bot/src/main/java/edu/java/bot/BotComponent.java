@@ -4,10 +4,14 @@ import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.processor.MethodProcessor;
 import edu.java.bot.processor.ProcessorHolder;
 import edu.java.bot.processor.processors.DefaultHandler;
+import edu.java.bot.telegramExceptions.RuntimeTelegramApiRequestException;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.retry.RetryContext;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -15,18 +19,16 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 @Component
+@RequiredArgsConstructor
 public class BotComponent extends TelegramLongPollingBot {
 
     private final static Logger LOGGER = LogManager.getLogger();
     private final ApplicationConfig config;
-    private ProcessorHolder processorHolder;
-
-    public BotComponent(ApplicationConfig applicationConfig, ProcessorHolder processorHolder) {
-        this.config = applicationConfig;
-        this.processorHolder = processorHolder;
-    }
+    private final ProcessorHolder processorHolder;
+    private final RetryTemplate retry;
 
     @Override
     public String getBotUsername() {
@@ -71,28 +73,35 @@ public class BotComponent extends TelegramLongPollingBot {
     }
 
     public void sendMessage(long chatId, String text) {
-
-        SendMessage message = new SendMessage(String.valueOf(chatId), text);
-        message.setParseMode("markdown");
-        message.disableWebPagePreview();
-
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+        sendMessage(chatId, text, Parsemode.MARKDOWN);
     }
 
     public void sendMessage(long chatId, String text, Parsemode parseMode) {
-
         SendMessage message = new SendMessage(String.valueOf(chatId), text);
         message.setParseMode(parseMode.getString());
         message.disableWebPagePreview();
 
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+        retry.execute(context -> {
+            warnIfRetry(chatId, context);
+
+            try {
+                execute(message);
+            } catch (TelegramApiRequestException e) {
+                throw new RuntimeTelegramApiRequestException(e);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
+        });
+    }
+
+    private void warnIfRetry(Long chatId, RetryContext context) {
+        if (context.getRetryCount() > 0) {
+            LOGGER.warn(
+                "[TG] Повторная попытка отправки сообщения юзеру - {} ({} попытка)",
+                chatId,
+                context.getRetryCount() + 1
+            );
         }
     }
 }
