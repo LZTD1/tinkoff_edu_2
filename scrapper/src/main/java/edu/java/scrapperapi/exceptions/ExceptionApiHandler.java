@@ -27,6 +27,7 @@ public class ExceptionApiHandler {
             setExceptionMessage(exception.getMessage());
         }};
     }
+
     @ExceptionHandler(TooManyRequests.class)
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
     public ApiErrorResponse tooManyRequests(TooManyRequests exception) {
