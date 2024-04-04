@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableConfigurationProperties(ApplicationConfig.class)
 @EnableScheduling
-@EnableRetry
 public class ScrapperApplication {
     public static void main(String[] args) {
         SpringApplication.run(ScrapperApplication.class, args);

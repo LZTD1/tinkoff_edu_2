@@ -9,6 +9,10 @@ app:
   retryable-config:
     status-codes: 429, 403, 404
     backoff-type: exponent
+  bucket-config:
+    tokens: 100
+    millis-of-refill: 1000
+    refill-tokens: 1
 
 springdoc:
   swagger-ui:

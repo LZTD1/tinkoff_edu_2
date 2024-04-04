@@ -1,5 +1,7 @@
 package edu.java.scrapperapi.controllers;
 
+import edu.java.scrapperapi.RateLimiterByIp;
+import edu.java.scrapperapi.exceptions.TooManyRequests;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TgChatController {
 
     private final TgChatService tgChatService;
+    private final RateLimiterByIp limiter;
 
     @Operation(
         operationId = "tgChatIdPost",
@@ -40,9 +44,13 @@ public class TgChatController {
         produces = {"application/json"}
     )
     public void tgChatPost(
+        HttpServletRequest request,
         @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id", required = true) Long id
     ) {
+        if (!limiter.tryConsume(request.getRemoteAddr())) {
+            throw new TooManyRequests();
+        }
         tgChatService.register(id);
     }
 
@@ -61,9 +69,13 @@ public class TgChatController {
         produces = {"application/json"}
     )
     public void tgChatDelete(
+        HttpServletRequest request,
         @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id", required = true) Long id
     ) {
+        if (!limiter.tryConsume(request.getRemoteAddr())) {
+            throw new TooManyRequests();
+        }
         tgChatService.unregister(id);
     }
 

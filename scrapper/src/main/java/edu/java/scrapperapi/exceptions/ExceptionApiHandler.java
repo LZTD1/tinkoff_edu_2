@@ -27,6 +27,16 @@ public class ExceptionApiHandler {
             setExceptionMessage(exception.getMessage());
         }};
     }
+    @ExceptionHandler(TooManyRequests.class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    public ApiErrorResponse tooManyRequests(TooManyRequests exception) {
+        return new ApiErrorResponse() {{
+            setCode(HttpStatus.TOO_MANY_REQUESTS.toString());
+            setExceptionName("tooManyRequests");
+            setStacktrace(getStackTraceList(exception));
+            setExceptionMessage(exception.getMessage());
+        }};
+    }
 
     @ExceptionHandler(LinkIsNotValidException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)

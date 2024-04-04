@@ -18,11 +18,15 @@ public record ApplicationConfig(
     int limitPerCheck,
     AccessType databaseAccessType,
 
-    RetryableConfig retryableConfig
+    RetryableConfig retryableConfig,
+    BucketConfig bucketConfig
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
     public record RetryableConfig(List<Integer> statusCodes, BackoffType backoffType) {
+    }
+
+    public record BucketConfig(Long tokens, Long refillTokens, Long millisOfRefill) {
     }
 }
