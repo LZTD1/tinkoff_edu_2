@@ -4,6 +4,8 @@ import edu.java.scrapper.dto.AddLinkRequest;
 import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.LinkResponse;
 import edu.java.scrapper.dto.ListLinksResponse;
+import edu.java.scrapperapi.RateLimiterByIp;
+import edu.java.scrapperapi.exceptions.TooManyRequests;
 import edu.java.scrapperapi.services.LinkService;
 import edu.java.shared.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LinksController {
 
     private final LinkService linkService;
+    private final RateLimiterByIp limiter;
 
     @Operation(
         operationId = "linksDelete",
@@ -53,12 +57,17 @@ public class LinksController {
         produces = {"application/json"}
     )
     public void linksDelete(
+        HttpServletRequest request,
+
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
 
         @Parameter(name = "DeleteLinkRequest", description = "", required = true)
         @Valid @RequestBody DeleteLinkRequest deleteLinkRequest
     ) {
+        if (!limiter.tryConsume(request.getRemoteAddr())) {
+            throw new TooManyRequests();
+        }
         linkService.remove(tgChatId, deleteLinkRequest.getLink());
     }
 
@@ -79,6 +88,8 @@ public class LinksController {
         produces = {"application/json"}
     )
     public ListLinksResponse linksGet(
+        HttpServletRequest request,
+
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
 
@@ -89,6 +100,9 @@ public class LinksController {
         @RequestHeader(value = "offset", required = true) int offset
 
     ) {
+        if (!limiter.tryConsume(request.getRemoteAddr())) {
+            throw new TooManyRequests();
+        }
         return new ListLinksResponse() {{
             List<LinkResponse> links = linkService.listAll(tgChatId, limit, offset);
 
@@ -115,12 +129,17 @@ public class LinksController {
         consumes = {"application/json"}
     )
     public void linksPost(
+        HttpServletRequest request,
+
         @NotNull @Parameter(name = "Tg-Chat-Id", description = "", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id", required = true) Long tgChatId,
 
         @Parameter(name = "AddLinkRequest", description = "", required = true)
         @Valid @RequestBody AddLinkRequest addLinkRequest
     ) {
+        if (!limiter.tryConsume(request.getRemoteAddr())) {
+            throw new TooManyRequests();
+        }
         linkService.createLink(
             tgChatId,
             addLinkRequest.getLink()

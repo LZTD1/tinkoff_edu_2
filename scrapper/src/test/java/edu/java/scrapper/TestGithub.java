@@ -17,8 +17,13 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.retry.RetryCallback;
+import org.springframework.retry.RetryContext;
+import org.springframework.retry.support.RetryTemplate;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -91,7 +96,22 @@ public class TestGithub {
         );
     }};
 
+    private static RetryTemplate mockRetryTemplate;
+    private static RetryContext mockContext;
+
     WireMockServer wireMockServer;
+
+    @BeforeAll
+    static void beforeAll(){
+        mockRetryTemplate = Mockito.mock(RetryTemplate.class);
+        mockContext = Mockito.mock(RetryContext.class);
+
+        Mockito.when(mockContext.getRetryCount()).thenReturn(1);
+        Mockito.when(mockRetryTemplate.execute(Mockito.any())).thenAnswer(invocation -> {
+            RetryCallback callback = invocation.getArgument(0);
+            return callback.doWithRetry(mockContext);
+        });
+    }
 
     @BeforeEach
     public void setup() {
@@ -107,10 +127,8 @@ public class TestGithub {
 
     @Test
     public void gitPullsTest() {
-        List<PullDto> response = new GithubClient("http://localhost:3000")
-            .getPullsByRepos("LZTD1", "tinkoff_edu_2")
-            .collectList()
-            .block();
+        List<PullDto> response = new GithubClient("http://localhost:3000", mockRetryTemplate)
+            .getPullsByRepos("LZTD1", "tinkoff_edu_2");
 
         assertThat(response.size()).isEqualTo(2);
 
@@ -130,10 +148,8 @@ public class TestGithub {
 
     @Test
     public void gitCommitsTest() {
-        List<CommitsDto> response = new GithubClient("http://localhost:3000")
-            .getCommitsByRepos("LZTD1", "Voronezh-Hakaton")
-            .collectList()
-            .block();
+        List<CommitsDto> response = new GithubClient("http://localhost:3000", mockRetryTemplate)
+            .getCommitsByRepos("LZTD1", "Voronezh-Hakaton");
 
         assertThat(response.size()).isEqualTo(1);
         assertThat(response.getFirst().getNodeId()).isEqualTo(IDEAL_RESPONSE_COMMIT.getNodeId());

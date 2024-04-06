@@ -1,8 +1,10 @@
 package edu.java.configuration;
 
-import edu.java.configuration.AccessTypes.AccessType;
+import edu.java.configuration.accessTypes.AccessType;
+import edu.java.configuration.retryConfiguration.BackoffType;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
+import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,8 +16,17 @@ public record ApplicationConfig(
 
     int linkDelay,
     int limitPerCheck,
-    AccessType databaseAccessType
+    AccessType databaseAccessType,
+
+    RetryableConfig retryableConfig,
+    BucketConfig bucketConfig
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
+    }
+
+    public record RetryableConfig(List<Integer> statusCodes, BackoffType backoffType) {
+    }
+
+    public record BucketConfig(Long tokens, Long refillTokens, Long millisOfRefill) {
     }
 }

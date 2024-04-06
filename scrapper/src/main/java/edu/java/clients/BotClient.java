@@ -25,6 +25,7 @@ public class BotClient {
 
     public void sendUpdate(Long id, URI url, String description, List<Long> tgChatIds) {
         try {
+
             client
                 .post()
                 .uri("/updates")
@@ -39,6 +40,7 @@ public class BotClient {
                     Mono.error(new BadQueryParamsException("Некорректные параметры запроса")))
                 .bodyToMono(Void.class)
                 .block();
+
         } catch (WebClientRequestException e) {
             LOGGER.warn("Не возможно установить соединение с bot сервером!");
         }

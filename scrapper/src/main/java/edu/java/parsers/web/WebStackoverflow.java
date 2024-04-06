@@ -123,13 +123,13 @@ public class WebStackoverflow implements WebHandler {
     @Nullable private StackOverFlowDto getSofAnswers(Link link) {
         return stackoverflowClient.getAnswersByQuestion(
             Integer.parseInt(getId(link.getLink().getPath()))
-        ).block();
+        );
     }
 
     @Nullable private StackOverFlowDto getSofComments(Link link) {
         return stackoverflowClient.getCommentsByQuestion(
             Integer.parseInt(getId(link.getLink().getPath()))
-        ).block();
+        );
     }
 
     private String getId(String path) {
