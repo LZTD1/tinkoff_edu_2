@@ -13,6 +13,7 @@ app:
     tokens: 100
     millis-of-refill: 1000
     refill-tokens: 1
+  use-queue: true
 
 springdoc:
   swagger-ui:

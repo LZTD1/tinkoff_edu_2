@@ -19,7 +19,8 @@ public record ApplicationConfig(
     AccessType databaseAccessType,
 
     RetryableConfig retryableConfig,
-    BucketConfig bucketConfig
+    BucketConfig bucketConfig,
+    boolean useQueue
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
