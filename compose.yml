@@ -133,7 +133,6 @@ services:
       kafka-topics --bootstrap-server kafka1:9091,kafka2:9092,kafka3:9093 --list
 
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server kafka1:9091,kafka2:9092,kafka3:9093 --create --if-not-exists --topic messages.string --replication-factor 2 --partitions 2
       kafka-topics --bootstrap-server kafka1:9091,kafka2:9092,kafka3:9093 --create --if-not-exists --topic messages.protobuf --replication-factor 2 --partitions 2
 
       echo -e 'Successfully created the following topics:'
