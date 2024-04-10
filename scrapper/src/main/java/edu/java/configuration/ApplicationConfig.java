@@ -20,7 +20,8 @@ public record ApplicationConfig(
 
     RetryableConfig retryableConfig,
     BucketConfig bucketConfig,
-    boolean useQueue
+    boolean useQueue,
+    String bootstrapServers
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

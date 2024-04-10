@@ -4,6 +4,7 @@ app:
   retryable-config:
     backoff-type: linear
     status-codes: 429
+  bootstrap-servers: localhost:29091
 
 springdoc:
   swagger-ui:

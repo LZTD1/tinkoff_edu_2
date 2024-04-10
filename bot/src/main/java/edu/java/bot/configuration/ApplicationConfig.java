@@ -13,7 +13,8 @@ public record ApplicationConfig(
     String telegramToken,
     @NotEmpty
     String telegramName,
-    RetryableConfig retryableConfig
+    RetryableConfig retryableConfig,
+    String bootstrapServers
 ) {
     public record RetryableConfig(List<Integer> statusCodes, BackoffType backoffType) {
     }

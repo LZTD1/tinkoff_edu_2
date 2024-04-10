@@ -14,6 +14,7 @@ app:
     millis-of-refill: 1000
     refill-tokens: 1
   use-queue: true
+  bootstrap-servers: localhost:9091
 
 springdoc:
   swagger-ui:
