@@ -2,9 +2,8 @@ package edu.java.bot.configuration.kafka;
 
 import edu.java.bot.serdes.LinkUpdateDeserializer;
 import edu.java.kafka.messages.LinkUpdateOuterClass;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
@@ -19,24 +18,24 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.listener.CommonErrorHandler;
-import org.springframework.kafka.listener.ConsumerRecordRecoverer;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
-import java.util.Map;
 
 @Configuration
 public class KafkaConfiguration {
 
-    private final Logger LOGGER = LogManager.getLogger();
+    private final static Logger LOGGER = LogManager.getLogger();
+    public static final long INTERVAL = 1000L;
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, LinkUpdateOuterClass.LinkUpdate> protobufMessageKafkaListenerContainerFactory(
+    public ConcurrentKafkaListenerContainerFactory<String, LinkUpdateOuterClass.LinkUpdate>
+    protobufMessageKafkaListenerContainerFactory(
         @Value("app.bootstrap-servers") String bootstrapServers
     ) {
-        ConcurrentKafkaListenerContainerFactory<String, LinkUpdateOuterClass.LinkUpdate> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, LinkUpdateOuterClass.LinkUpdate> factory =
+            new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(Map.of(
             ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
@@ -47,7 +46,7 @@ public class KafkaConfiguration {
 
         DeadLetterPublishingRecoverer dlqPublisher = new DeadLetterPublishingRecoverer(
             retryableTopicKafkaTemplate(bootstrapServers),
-            (r, e) ->{
+            (r, e) -> {
                 LOGGER.warn("[KAFKA] Невалидное сообщение в топике! Отослано в dlq");
                 return new TopicPartition("messages.protobuf-dlq", r.partition());
             }
@@ -55,7 +54,7 @@ public class KafkaConfiguration {
 
         factory.setCommonErrorHandler(new DefaultErrorHandler(
             dlqPublisher,
-            new FixedBackOff(1000L, 2)
+            new FixedBackOff(INTERVAL, 2)
         ));
 
         return factory;

@@ -1,6 +1,5 @@
 package edu.java.configuration;
 
-import edu.java.clients.BotClient;
 import edu.java.clients.GithubClient;
 import edu.java.clients.StackoverflowClient;
 import org.springframework.context.annotation.Bean;

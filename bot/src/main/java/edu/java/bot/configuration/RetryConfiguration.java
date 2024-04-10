@@ -13,10 +13,9 @@ import org.springframework.retry.support.RetryTemplate;
 @RequiredArgsConstructor
 public class RetryConfiguration {
 
+    private final BackOffPolicy backOffPolicy;
     @Value("${app.retryable-config.status-codes}")
     private List<Integer> retryableStatusCodes;
-
-    private final BackOffPolicy backOffPolicy;
 
     @Bean
     public RetryTemplate retryTemplate() {

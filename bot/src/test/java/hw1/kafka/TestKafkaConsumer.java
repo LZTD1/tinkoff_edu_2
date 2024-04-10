@@ -7,7 +7,6 @@ import edu.java.bot.botapi.services.CommunicatorService;
 import edu.java.bot.configuration.kafka.KafkaConfiguration;
 import edu.java.kafka.messages.LinkUpdateOuterClass;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testcontainers.containers.KafkaContainer;
@@ -19,10 +18,9 @@ import static org.mockito.ArgumentMatchers.any;
 @Testcontainers
 public class TestKafkaConsumer {
 
-    private static KafkaController KafkaController;
-
     @Container
     public static KafkaContainer container = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"));
+    private static KafkaController KafkaController;
 
     @SneakyThrows
     @Test

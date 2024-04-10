@@ -2,7 +2,6 @@ package edu.java.scrapper.kafkaTest;
 
 import edu.java.clients.KafkaClient;
 import edu.java.configuration.kafka.ProtobufKafkaProducerConfiguration;
-import edu.java.kafka.messages.LinkUpdateOuterClass;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Collections;
@@ -21,36 +20,14 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 public class TestKafkaProducer {
 
-    private static KafkaClient kafkaClient;
-    private static Properties consumerProps;
-
     @Container
     public static KafkaContainer container = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"));
-
-    @SneakyThrows
-    @Test
-    void testSendUpdate() {
-
-        kafkaClient.sendUpdate(
-            1L,
-            URI.create("vk.com"),
-            "desc",
-            List.of()
-        );
-        Thread.sleep(500);
-
-        try (KafkaConsumer<String, byte[]> consumer = new KafkaConsumer<>(consumerProps)) {
-            consumer.subscribe(Collections.singletonList("messages.protobuf"));
-            ConsumerRecords<String, byte[]> records = consumer.poll(Duration.ofMillis(1000));
-
-            assertEquals(1, records.count());
-        }
-    }
+    private static KafkaClient kafkaClient;
+    private static Properties consumerProps;
 
     @BeforeAll
     static void setUpKafkaClient() {
@@ -70,5 +47,25 @@ public class TestKafkaProducer {
             ByteArrayDeserializer.class.getName()
         );
         consumerProps.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+    }
+
+    @SneakyThrows
+    @Test
+    void testSendUpdate() {
+
+        kafkaClient.sendUpdate(
+            1L,
+            URI.create("vk.com"),
+            "desc",
+            List.of()
+        );
+        Thread.sleep(500);
+
+        try (KafkaConsumer<String, byte[]> consumer = new KafkaConsumer<>(consumerProps)) {
+            consumer.subscribe(Collections.singletonList("messages.protobuf"));
+            ConsumerRecords<String, byte[]> records = consumer.poll(Duration.ofMillis(1000));
+
+            assertEquals(1, records.count());
+        }
     }
 }

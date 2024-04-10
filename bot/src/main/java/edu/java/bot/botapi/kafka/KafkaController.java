@@ -16,9 +16,8 @@ import static edu.java.bot.botapi.map.LinkUpdateOuterMap.mapFromOuter;
 @RequiredArgsConstructor
 public class KafkaController {
 
-    private final CommunicatorService communicatorService;
-
     private final static Logger LOGGER = LogManager.getLogger();
+    private final CommunicatorService communicatorService;
     private final KafkaTemplate<String, byte[]> kafkaTemplate;
 
     @KafkaListener(

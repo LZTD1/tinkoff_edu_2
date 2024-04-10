@@ -62,7 +62,7 @@ public class TestStackOverFlow {
     WireMockServer wireMockServer;
 
     @BeforeAll
-    static void beforeAll(){
+    static void beforeAll() {
         mockRetryTemplate = Mockito.mock(RetryTemplate.class);
         mockContext = Mockito.mock(RetryContext.class);
 
@@ -87,7 +87,6 @@ public class TestStackOverFlow {
 
     @Test
     public void sofAnswersTest() {
-
 
         StackOverFlowDto response = new StackoverflowClient("http://localhost:3000", mockRetryTemplate)
             .getAnswersByQuestion(1);
