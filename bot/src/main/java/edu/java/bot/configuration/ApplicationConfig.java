@@ -18,6 +18,7 @@ public record ApplicationConfig(
 ) {
     public record RetryableConfig(List<Integer> statusCodes, BackoffType backoffType) {
     }
+
     public record KafkaConfiguration(
         String bootstrapServers,
         String topicName,
@@ -28,6 +29,7 @@ public record ApplicationConfig(
             String name,
             int maxAttemptsBeforeDlq,
             Long intervalBetweenAttempts
-        ){}
+        ) {
+        }
     }
 }
