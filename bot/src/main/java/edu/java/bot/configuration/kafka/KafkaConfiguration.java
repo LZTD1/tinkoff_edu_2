@@ -1,11 +1,11 @@
 package edu.java.bot.configuration.kafka;
 
+import edu.java.bot.botapi.kafka.KafkaDlq;
 import edu.java.bot.serdes.LinkUpdateDeserializer;
 import edu.java.kafka.messages.LinkUpdateOuterClass;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -46,10 +46,7 @@ public class KafkaConfiguration {
 
         DeadLetterPublishingRecoverer dlqPublisher = new DeadLetterPublishingRecoverer(
             retryableTopicKafkaTemplate(bootstrapServers),
-            (r, e) -> {
-                LOGGER.warn("[KAFKA] Невалидное сообщение в топике! Отослано в dlq");
-                return new TopicPartition("messages.protobuf-dlq", r.partition());
-            }
+            KafkaDlq.getFunctionByDlq()
         );
 
         factory.setCommonErrorHandler(new DefaultErrorHandler(

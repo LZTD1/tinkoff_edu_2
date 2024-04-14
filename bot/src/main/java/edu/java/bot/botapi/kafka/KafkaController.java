@@ -10,6 +10,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
+
 import static edu.java.bot.botapi.map.LinkUpdateOuterMap.mapFromOuter;
 
 @Component
@@ -34,8 +35,7 @@ public class KafkaController {
             communicatorService.sendMessage(mapFromOuter(linkUpdate));
             LOGGER.info("[KAFKA] Получено сообщение в {} топик, {} партиции", topic, partition);
         } catch (Exception e) {
-            LOGGER.warn("[KAFKA] Ошибка обработки! Сообщение улетело в dlq");
-            kafkaTemplate.send("messages.protobuf-dlq", linkUpdate.toByteArray());
+            KafkaDlq.send(linkUpdate, kafkaTemplate);
         }
     }
 }
