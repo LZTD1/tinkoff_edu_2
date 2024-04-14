@@ -4,17 +4,26 @@ import edu.java.bot.dto.LinkUpdate;
 import edu.java.kafka.messages.LinkUpdateOuterClass;
 import java.net.URI;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true")
 public class KafkaClient implements ProducerClient {
 
     private final KafkaTemplate<String, LinkUpdateOuterClass.LinkUpdate> template;
+    private final String topicName;
+
+    public KafkaClient(
+        KafkaTemplate<String, LinkUpdateOuterClass.LinkUpdate> template,
+        @Value("${app.kafka-configuration.topic-name}")
+        String topicName
+    ) {
+        this.template = template;
+        this.topicName = topicName;
+    }
 
     @Override
     public void sendUpdates(List<LinkUpdate> linkUpdateList) {
@@ -35,6 +44,6 @@ public class KafkaClient implements ProducerClient {
             .addAllTgChatIds(tgChatIds)
             .build();
 
-        template.send("messages.protobuf", link);
+        template.send(topicName, link);
     }
 }

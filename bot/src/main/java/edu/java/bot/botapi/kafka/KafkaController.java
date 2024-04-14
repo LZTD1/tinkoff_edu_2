@@ -10,7 +10,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-
 import static edu.java.bot.botapi.map.LinkUpdateOuterMap.mapFromOuter;
 
 @Component
@@ -20,10 +19,11 @@ public class KafkaController {
     private final static Logger LOGGER = LogManager.getLogger();
     private final CommunicatorService communicatorService;
     private final KafkaTemplate<String, byte[]> kafkaTemplate;
+    private final KafkaDlq kafkaDlq;
 
     @KafkaListener(
-        topics = "messages.protobuf",
-        groupId = "messages-group",
+        topics = "${app.kafka-configuration.topic-name}",
+        groupId = "${app.kafka-configuration.group-id}",
         containerFactory = "protobufMessageKafkaListenerContainerFactory"
     )
     public void listenMessages(
@@ -35,7 +35,7 @@ public class KafkaController {
             communicatorService.sendMessage(mapFromOuter(linkUpdate));
             LOGGER.info("[KAFKA] Получено сообщение в {} топик, {} партиции", topic, partition);
         } catch (Exception e) {
-            KafkaDlq.send(linkUpdate, kafkaTemplate);
+            kafkaDlq.send(linkUpdate, kafkaTemplate);
         }
     }
 }

@@ -4,13 +4,13 @@ import edu.java.bot.botapi.kafka.KafkaDlq;
 import edu.java.bot.serdes.LinkUpdateDeserializer;
 import edu.java.kafka.messages.LinkUpdateOuterClass;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,15 +24,21 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
 
 @Configuration
+@RequiredArgsConstructor
 public class KafkaConfiguration {
 
-    private final static Logger LOGGER = LogManager.getLogger();
-    public static final long INTERVAL = 1000L;
+    @Value("${app.kafka-configuration.dlq-configuration.interval-between-attempts}")
+    private long interval;
+
+    @Value("${app.kafka-configuration.dlq-configuration.max-attempts-before-dlq}")
+    private long maxAttempts;
+
+    private final KafkaDlq kafkaDlq;
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, LinkUpdateOuterClass.LinkUpdate>
     protobufMessageKafkaListenerContainerFactory(
-        @Value("app.bootstrap-servers") String bootstrapServers
+        @Value("${app.kafka-configuration.bootstrap-servers}") String bootstrapServers
     ) {
         ConcurrentKafkaListenerContainerFactory<String, LinkUpdateOuterClass.LinkUpdate> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
@@ -46,12 +52,12 @@ public class KafkaConfiguration {
 
         DeadLetterPublishingRecoverer dlqPublisher = new DeadLetterPublishingRecoverer(
             retryableTopicKafkaTemplate(bootstrapServers),
-            KafkaDlq.getFunctionByDlq()
+            kafkaDlq.getFunctionByDlq()
         );
 
         factory.setCommonErrorHandler(new DefaultErrorHandler(
             dlqPublisher,
-            new FixedBackOff(INTERVAL, 2)
+            new FixedBackOff(interval, maxAttempts)
         ));
 
         return factory;
@@ -59,7 +65,7 @@ public class KafkaConfiguration {
 
     @Bean
     public KafkaTemplate<String, byte[]> retryableTopicKafkaTemplate(
-        @Value("app.bootstrap-servers") String bootstrapServers
+        @Value("${app.kafka-configuration.bootstrap-servers}") String bootstrapServers
     ) {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(Map.of(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,

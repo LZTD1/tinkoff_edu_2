@@ -15,6 +15,8 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -33,8 +35,9 @@ public class TestKafkaProducer {
     static void setUpKafkaClient() {
         var producer = new ProtobufKafkaProducerConfiguration().protobufMessageKafkaTemplate(
             container.getHost() + ":" + container.getFirstMappedPort());
-        kafkaClient = new KafkaClient(producer);
+        kafkaClient = new KafkaClient(producer, "messages.protobuf");
     }
+
 
     @BeforeAll
     static void setUpConsumerProps() {

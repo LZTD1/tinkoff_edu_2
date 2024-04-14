@@ -14,8 +14,20 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramName,
     RetryableConfig retryableConfig,
-    String bootstrapServers
+    KafkaConfiguration kafkaConfiguration
 ) {
     public record RetryableConfig(List<Integer> statusCodes, BackoffType backoffType) {
+    }
+    public record KafkaConfiguration(
+        String bootstrapServers,
+        String topicName,
+        String groupId,
+        DlqConfiguration dlqConfiguration
+    ) {
+        public record DlqConfiguration(
+            String name,
+            int maxAttemptsBeforeDlq,
+            Long intervalBetweenAttempts
+        ){}
     }
 }

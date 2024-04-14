@@ -21,7 +21,7 @@ public record ApplicationConfig(
     RetryableConfig retryableConfig,
     BucketConfig bucketConfig,
     boolean useQueue,
-    String bootstrapServers
+    KafkaConfiguration kafkaConfiguration
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -30,5 +30,11 @@ public record ApplicationConfig(
     }
 
     public record BucketConfig(Long tokens, Long refillTokens, Long millisOfRefill) {
+    }
+
+    public record KafkaConfiguration(
+        String bootstrapServers,
+        String topicName
+    ) {
     }
 }

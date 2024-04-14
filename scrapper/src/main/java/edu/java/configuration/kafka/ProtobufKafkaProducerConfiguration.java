@@ -16,7 +16,7 @@ public class ProtobufKafkaProducerConfiguration {
 
     @Bean
     public KafkaTemplate<String, LinkUpdateOuterClass.LinkUpdate> protobufMessageKafkaTemplate(
-        @Value("app.bootstrap-servers") String bootstrapServers
+        @Value("${app.kafka-configuration.bootstrap-servers}") String bootstrapServers
     ) {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(Map.of(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
