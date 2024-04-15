@@ -4,6 +4,14 @@ app:
   retryable-config:
     backoff-type: linear
     status-codes: 429
+  kafka-configuration:
+    bootstrap-servers: localhost:29091
+    topic-name: messages.protobuf
+    group-id: messages-group
+    dlq-configuration:
+      interval-between-attempts: 1000
+      max-attempts-before-dlq: 3
+      name: messages.protobuf-dlq
 
 springdoc:
   swagger-ui:

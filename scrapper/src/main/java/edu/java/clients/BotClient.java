@@ -5,12 +5,17 @@ import edu.java.clients.exceptions.BadQueryParamsException;
 import java.net.URI;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
 
-public class BotClient {
+@Service
+@ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "false")
+public class BotClient implements ProducerClient {
+
     private final static String BASE_URL = "http://localhost:8090";
     private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger();
     private final WebClient client;

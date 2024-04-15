@@ -1,4 +1,5 @@
 services:
+  # DB SETUP
   postgresql:
     image: postgres:16
     restart: always
@@ -24,11 +25,77 @@ services:
       - ./migrations:/liquibase/changelog
     depends_on:
       - postgresql
+  #  KAFKA SETUP
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.1
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    volumes:
+      - type: volume
+        source: zookeeper-data
+        target: /var/lib/zookeeper/data
+      - type: volume
+        source: zookeeper-log
+        target: /var/lib/zookeeper/log
+      - type: volume
+        source: zookeeper-secrets
+        target: /etc/zookeeper/secrets
+  kafka1:
+    image: confluentinc/cp-kafka:7.2.1
+    hostname: kafka1
+    container_name: kafka1
+    ports:
+      - "29091:29091"
+    restart: on-failure
+    environment:
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9091,PLAINTEXT_HOST://localhost:29091
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9091,PLAINTEXT_HOST://0.0.0.0:29091
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: 1
+      BOOTSTRAP_SERVERS: kafka1:9091,kafka2:9092,kafka3:9093
+      ZOOKEEPER: zookeeper:2181
+    depends_on:
+      - zookeeper
+    volumes:
+      - type: volume
+        source: kafka1-data
+        target: /var/lib/kafka/data
+      - type: volume
+        source: kafka1-secrets
+        target: /etc/kafka/secrets
+
+  init-kafka:
+    image: confluentinc/cp-kafka:7.2.1
+    depends_on:
+      - kafka1
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka1:9091 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka1:9091 --create --if-not-exists --topic messages.protobuf --partitions 2
+      kafka-topics --bootstrap-server kafka1:9091 --create --if-not-exists --topic messages.protobuf-dlq --partitions 2
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka1:9091 --list
+      "
 
 volumes:
   postgresql: { }
-  pgadmin: { }
-  liquibase-migrations: { }
+
+  zookeeper-data:
+  zookeeper-log:
+  zookeeper-secrets:
+
+  kafka1-secrets:
+  kafka1-data:
 
 networks:
   backend: { }

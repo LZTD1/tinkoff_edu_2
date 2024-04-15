@@ -7,11 +7,7 @@ import edu.java.dto.Link;
 import edu.java.dto.User;
 import edu.java.scrapper.domain.IntegrationTest;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.jooq.Record;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

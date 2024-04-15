@@ -1,7 +1,7 @@
 package edu.java.shedulers;
 
 import edu.java.bot.dto.LinkUpdate;
-import edu.java.clients.BotClient;
+import edu.java.clients.ProducerClient;
 import edu.java.dto.Link;
 import edu.java.parsers.WebHandler;
 import edu.java.scrapperapi.services.LinkService;
@@ -25,7 +25,7 @@ public class LinkUpdaterScheduler {
     private final static Logger LOGGER = LogManager.getLogger();
     private final List<WebHandler> webHandlers;
     private final LinkService linkService;
-    private final BotClient botClient;
+    private final ProducerClient producerClient;
 
     @Value("${app.linkDelay}")
     private int linkDelay;
@@ -43,7 +43,7 @@ public class LinkUpdaterScheduler {
             entry -> {
                 WebHandler webHandler = handlerContainer.get(entry.getLink().getHost());
                 List<LinkUpdate> listUpdates = webHandler.getUpdate(entry);
-                botClient.sendUpdates(listUpdates);
+                producerClient.sendUpdates(listUpdates);
             }
         );
     }

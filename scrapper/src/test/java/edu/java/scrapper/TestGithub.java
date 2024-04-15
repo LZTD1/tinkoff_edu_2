@@ -102,7 +102,7 @@ public class TestGithub {
     WireMockServer wireMockServer;
 
     @BeforeAll
-    static void beforeAll(){
+    static void beforeAll() {
         mockRetryTemplate = Mockito.mock(RetryTemplate.class);
         mockContext = Mockito.mock(RetryContext.class);
 

@@ -13,6 +13,10 @@ app:
     tokens: 100
     millis-of-refill: 1000
     refill-tokens: 1
+  use-queue: true
+  kafka-configuration:
+    bootstrap-servers: localhost:9091
+    topic-name: messages.protobuf
 
 springdoc:
   swagger-ui:
