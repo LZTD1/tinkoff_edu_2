@@ -68,7 +68,6 @@ services:
       - type: volume
         source: kafka1-secrets
         target: /etc/kafka/secrets
-
   init-kafka:
     image: confluentinc/cp-kafka:latest
     depends_on:
@@ -87,6 +86,30 @@ services:
       kafka-topics --bootstrap-server kafka1:9091 --list
       "
 
+  # METRICS
+  prometheus:
+    image: prom/prometheus:latest
+    hostname: prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+#    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+  grafana:
+    image: grafana/grafana-oss:latest
+    hostname: grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
 volumes:
   postgresql: { }
 
@@ -96,6 +119,8 @@ volumes:
 
   kafka1-secrets:
   kafka1-data:
+
+  prometheus_data:
 
 networks:
   backend: { }
