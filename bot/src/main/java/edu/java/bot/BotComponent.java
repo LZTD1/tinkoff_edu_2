@@ -5,6 +5,9 @@ import edu.java.bot.processor.MethodProcessor;
 import edu.java.bot.processor.ProcessorHolder;
 import edu.java.bot.processor.processors.DefaultHandler;
 import edu.java.bot.telegramExceptions.RuntimeTelegramApiRequestException;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +32,15 @@ public class BotComponent extends TelegramLongPollingBot {
     private final ApplicationConfig config;
     private final ProcessorHolder processorHolder;
     private final RetryTemplate retry;
+    private final MeterRegistry meterRegistry;
+    private Counter receivedMessages;
+    private Counter processedMessages;
+
+    @PostConstruct
+    private void init() {
+        receivedMessages = meterRegistry.counter("receivedMessages");
+        processedMessages = meterRegistry.counter("processedMessages");
+    }
 
     @Override
     public String getBotUsername() {
@@ -49,6 +61,7 @@ public class BotComponent extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
 
             LOGGER.info("Пользователь {}, отправил - {}", chatId, messageText);
+            receivedMessages.increment();
 
             MethodProcessor processor = processorHolder.getCommandByName(messageText.split(" ")[0]);
             sendMessage(chatId, processor.handle(update), Parsemode.HTML);
@@ -91,6 +104,8 @@ public class BotComponent extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
+
+            processedMessages.increment();
             return null;
         });
     }
