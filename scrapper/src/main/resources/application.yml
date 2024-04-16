@@ -25,7 +25,7 @@ management:
     web:
       base-path: "/"
       exposure:
-        include: "info,prometheus"
+        include: "info,prometheus,health"
       path-mapping:
         prometheus: "metrics"
   metrics:
