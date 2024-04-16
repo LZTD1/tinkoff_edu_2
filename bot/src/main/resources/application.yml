@@ -13,6 +13,20 @@ app:
       max-attempts-before-dlq: 3
       name: messages.protobuf-dlq
 
+management:
+  server:
+    port: 7778
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: "info,prometheus"
+      path-mapping:
+        prometheus: "metrics"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 springdoc:
   swagger-ui:
     path: /swagger-ui
