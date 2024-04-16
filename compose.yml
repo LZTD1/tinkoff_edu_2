@@ -27,7 +27,7 @@ services:
       - postgresql
   #  KAFKA SETUP
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.2.1
+    image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -45,7 +45,7 @@ services:
         source: zookeeper-secrets
         target: /etc/zookeeper/secrets
   kafka1:
-    image: confluentinc/cp-kafka:7.2.1
+    image: confluentinc/cp-kafka:latest
     hostname: kafka1
     container_name: kafka1
     ports:
@@ -70,7 +70,7 @@ services:
         target: /etc/kafka/secrets
 
   init-kafka:
-    image: confluentinc/cp-kafka:7.2.1
+    image: confluentinc/cp-kafka:latest
     depends_on:
       - kafka1
     entrypoint: [ '/bin/sh', '-c' ]
