@@ -8,6 +8,8 @@ import edu.java.scrapperapi.RateLimiterByIp;
 import edu.java.scrapperapi.exceptions.TooManyRequests;
 import edu.java.scrapperapi.services.LinkService;
 import edu.java.shared.ApiErrorResponse;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +39,13 @@ public class LinksController {
 
     private final LinkService linkService;
     private final RateLimiterByIp limiter;
+    private final MeterRegistry meterRegistry;
+    private Counter receivedMessages;
+
+    @PostConstruct
+    private void init() {
+        receivedMessages = meterRegistry.counter("receivedMessages");
+    }
 
     @Operation(
         operationId = "linksDelete",
@@ -65,6 +75,8 @@ public class LinksController {
         @Parameter(name = "DeleteLinkRequest", description = "", required = true)
         @Valid @RequestBody DeleteLinkRequest deleteLinkRequest
     ) {
+        receivedMessages.increment();
+
         if (!limiter.tryConsume(request.getRemoteAddr())) {
             throw new TooManyRequests();
         }
@@ -100,6 +112,8 @@ public class LinksController {
         @RequestHeader(value = "offset", required = true) int offset
 
     ) {
+        receivedMessages.increment();
+
         if (!limiter.tryConsume(request.getRemoteAddr())) {
             throw new TooManyRequests();
         }
@@ -137,6 +151,8 @@ public class LinksController {
         @Parameter(name = "AddLinkRequest", description = "", required = true)
         @Valid @RequestBody AddLinkRequest addLinkRequest
     ) {
+        receivedMessages.increment();
+
         if (!limiter.tryConsume(request.getRemoteAddr())) {
             throw new TooManyRequests();
         }

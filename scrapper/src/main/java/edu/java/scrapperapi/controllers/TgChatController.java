@@ -4,6 +4,8 @@ import edu.java.scrapperapi.RateLimiterByIp;
 import edu.java.scrapperapi.exceptions.TooManyRequests;
 import edu.java.scrapperapi.services.TgChatService;
 import edu.java.shared.ApiErrorResponse;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,13 @@ public class TgChatController {
 
     private final TgChatService tgChatService;
     private final RateLimiterByIp limiter;
+    private final MeterRegistry meterRegistry;
+    private Counter receivedMessages;
+
+    @PostConstruct
+    private void init() {
+        receivedMessages = meterRegistry.counter("receivedMessages");
+    }
 
     @Operation(
         operationId = "tgChatIdPost",
@@ -48,6 +58,8 @@ public class TgChatController {
         @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id", required = true) Long id
     ) {
+        receivedMessages.increment();
+
         if (!limiter.tryConsume(request.getRemoteAddr())) {
             throw new TooManyRequests();
         }
@@ -73,6 +85,8 @@ public class TgChatController {
         @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id", required = true) Long id
     ) {
+        receivedMessages.increment();
+
         if (!limiter.tryConsume(request.getRemoteAddr())) {
             throw new TooManyRequests();
         }
