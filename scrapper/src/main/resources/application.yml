@@ -1,7 +1,7 @@
 app:
   scheduler:
     enable: true
-    interval: 10000
+    interval: 30000
     force-check-delay: 10000
   linkDelay: 5
   limitPerCheck: 10
@@ -18,9 +18,19 @@ app:
     bootstrap-servers: localhost:9091
     topic-name: messages.protobuf
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui
+management:
+  server:
+    port: 7777
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: "info,prometheus,health"
+      path-mapping:
+        prometheus: "metrics"
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 spring:
   liquibase:
@@ -41,3 +51,6 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
