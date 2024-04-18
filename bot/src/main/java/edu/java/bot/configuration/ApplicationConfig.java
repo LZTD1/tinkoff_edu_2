@@ -14,7 +14,8 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramName,
     RetryableConfig retryableConfig,
-    KafkaConfiguration kafkaConfiguration
+    KafkaConfiguration kafkaConfiguration,
+    String scrapperUrl
 ) {
     public record RetryableConfig(List<Integer> statusCodes, BackoffType backoffType) {
     }

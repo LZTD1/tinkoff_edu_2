@@ -1,11 +1,12 @@
 app:
   telegramToken: ${TELEGRAM_KEY}
   telegramName: ${TELEGRAM_NAME}
+  scrapperUrl: ${SCRAPPER_URL}
   retryable-config:
     backoff-type: linear
     status-codes: 429
   kafka-configuration:
-    bootstrap-servers: localhost:29091
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
     topic-name: messages.protobuf
     group-id: messages-group
     dlq-configuration:

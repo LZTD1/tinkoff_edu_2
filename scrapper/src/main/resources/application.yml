@@ -1,4 +1,5 @@
 app:
+  botUrl: ${BOT_URL}
   scheduler:
     enable: true
     interval: 30000
@@ -15,7 +16,7 @@ app:
     refill-tokens: 1
   use-queue: true
   kafka-configuration:
-    bootstrap-servers: localhost:9091
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
     topic-name: messages.protobuf
 
 management:
