@@ -8,6 +8,7 @@ import edu.java.scrapper.dto.AddLinkRequest;
 import edu.java.scrapper.dto.DeleteLinkRequest;
 import edu.java.scrapper.dto.ListLinksResponse;
 import java.net.URI;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,9 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class ScrapperClient {
-    private final static String BASE_URL = "http://localhost:8080";
+
+    @Value("${app.scrapperUrl}")
+    private String baseUrl;
     private static final String UNCORRECT_LINK = "Получена ссылка в не верном формате!";
     private final String headerLimit = "limit";
     private final String headerOffset = "offset";
@@ -26,7 +29,7 @@ public class ScrapperClient {
     private final String exceptionMessage = "Некорректные параметры запроса";
 
     public ScrapperClient() {
-        this.client = WebClient.create(BASE_URL);
+        this.client = WebClient.create(baseUrl);
     }
 
     public ScrapperClient(String baseUrl) {

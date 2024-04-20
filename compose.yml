@@ -54,7 +54,7 @@ services:
     restart: on-failure
     environment:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9091,PLAINTEXT_HOST://localhost:29091
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9091,PLAINTEXT_HOST://host.docker.internal:29091
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9091,PLAINTEXT_HOST://0.0.0.0:29091
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKER_ID: 1
@@ -110,7 +110,41 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-
+  # APPLICATIONS
+  scrapper:
+    build:
+      context: .
+      dockerfile: scrapper.Dockerfile
+    depends_on:
+      - liquibase-migrations
+      - init-kafka
+      - prometheus
+      - grafana
+    ports:
+      - 8080:8080
+    environment:
+      - JDBC_URL=jdbc:postgresql://host.docker.internal:5432/scrapper
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_NAME=postgres
+      - BOOTSTRAP_SERVER=host.docker.internal:9091
+      - BOT_URL=bot:8090
+  bot:
+    build:
+      context: .
+      dockerfile: bot.Dockerfile
+    depends_on:
+      - scrapper
+      - liquibase-migrations
+      - init-kafka
+      - prometheus
+      - grafana
+    ports:
+      - 8090:8090
+    environment:
+      - TELEGRAM_KEY=6375608618:AAGtdaMkpj4SIJt495eNHOgw4oy5MZ_TIY4
+      - TELEGRAM_NAME=scrapper_bot
+      - BOOTSTRAP_SERVER=host.docker.internal:29091
+      - SCRAPPER_URL=scrapper:8080
 volumes:
   postgresql: { }
 

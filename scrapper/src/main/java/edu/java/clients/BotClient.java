@@ -5,6 +5,7 @@ import edu.java.clients.exceptions.BadQueryParamsException;
 import java.net.URI;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,13 @@ import reactor.core.publisher.Mono;
 @ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "false")
 public class BotClient implements ProducerClient {
 
-    private final static String BASE_URL = "http://localhost:8090";
+    @Value("${app.botUrl}")
+    private String baseUrl;
     private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger();
     private final WebClient client;
 
     public BotClient() {
-        this.client = WebClient.create(BASE_URL);
+        this.client = WebClient.create(baseUrl);
     }
 
     public BotClient(String baseUrl) {
@@ -30,7 +32,6 @@ public class BotClient implements ProducerClient {
 
     public void sendUpdate(Long id, URI url, String description, List<Long> tgChatIds) {
         try {
-
             client
                 .post()
                 .uri("/updates")

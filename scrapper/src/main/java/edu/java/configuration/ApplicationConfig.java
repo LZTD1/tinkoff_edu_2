@@ -21,7 +21,8 @@ public record ApplicationConfig(
     RetryableConfig retryableConfig,
     BucketConfig bucketConfig,
     boolean useQueue,
-    KafkaConfiguration kafkaConfiguration
+    KafkaConfiguration kafkaConfiguration,
+    String botUrl
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
